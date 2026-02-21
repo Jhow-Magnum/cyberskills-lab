@@ -90,6 +90,16 @@ Access: http://localhost:5000
 5. Submit found flags
 6. Track your score on the scoreboard
 
+### Install as App (PWA)
+
+You can install the platform as an application:
+
+- **Chrome/Edge**: Click the install icon (⊕) in the address bar
+- **Firefox**: Menu → Install this site as an app
+- **Safari**: Share → Add to Home Screen
+
+The app will open in its own window without the browser bar.
+
 To stop:
 ```bash
 bash stop.sh

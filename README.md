@@ -90,6 +90,16 @@ Acesse: http://localhost:5000
 5. Submeta as flags encontradas
 6. Acompanhe sua pontuação no scoreboard
 
+### Instalar como Aplicativo (PWA)
+
+Você pode instalar a plataforma como um aplicativo:
+
+- **Chrome/Edge**: Clique no ícone de instalação (⊕) na barra de endereço
+- **Firefox**: Menu → Instalar este site como aplicativo
+- **Safari**: Compartilhar → Adicionar à Tela de Início
+
+O aplicativo abrirá em janela própria sem a barra do navegador.
+
 Para encerrar:
 ```bash
 bash stop.sh
