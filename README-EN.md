@@ -94,7 +94,7 @@ Access: http://localhost:5000
 
 You can install the platform as an application:
 
-- **Chrome/Edge**: Click the install icon (⊕) in the address bar
+- **Chrome/Edge/Brave**: Click the install icon (⊕) in the address bar
 - **Firefox**: Menu → Install this site as an app
 - **Safari**: Share → Add to Home Screen
 

@@ -94,7 +94,7 @@ Acesse: http://localhost:5000
 
 Você pode instalar a plataforma como um aplicativo:
 
-- **Chrome/Edge**: Clique no ícone de instalação (⊕) na barra de endereço
+- **Chrome/Edge/Brave**: Clique no ícone de instalação (⊕) na barra de endereço
 - **Firefox**: Menu → Instalar este site como aplicativo
 - **Safari**: Compartilhar → Adicionar à Tela de Início
 
