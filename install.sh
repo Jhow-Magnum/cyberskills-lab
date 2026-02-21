@@ -23,10 +23,9 @@ fi
 echo "📦 Instalando dependências Python..."
 pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages --quiet 2>/dev/null || pip3 install Flask flask-cors flask-sock pyyaml docker --quiet
 
-# Construir imagem de teste
-echo "🏭  Construindo imagem de teste..."
-cd scenarios/linux-basic && docker build -t ctf-senai/linux-basic:latest . > /dev/null 2>&1
-cd ../..
+# Construir todas as imagens Docker
+echo "🏭  Construindo imagens Docker (pode demorar alguns minutos)..."
+bash build-all.sh
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════╗"
