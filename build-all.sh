@@ -15,7 +15,7 @@ for scenario in "${SCENARIOS[@]}"; do
     if [ -d "scenarios/$scenario" ]; then
         cd "scenarios/$scenario"
         
-        if docker build -t "cyberskills-lab/$scenario:latest" . 2>&1 | grep -q "Successfully"; then
+        if docker build -t "cyberskills-lab/$scenario:latest" . > /dev/null 2>&1; then
             echo "✅ $scenario construído com sucesso!"
             ((SUCCESS++))
         else
