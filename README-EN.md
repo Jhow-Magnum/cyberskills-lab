@@ -7,7 +7,7 @@ Open-source cybersecurity training platform with isolated practical environments
 [![Python](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/docker-required-blue)](https://www.docker.com/)
 
-**[English](#english) | [Português](README.md)**
+**English | [Português](README.md)**
 
 ---
 
