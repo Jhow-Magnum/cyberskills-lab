@@ -1,0 +1,83 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: code-review
+  version: "1.0.0"
+  description: "Desafios de Code Review"
+  author: "SENAI"
+  difficulty: "medium"
+  duration: "75m"
+spec:
+  environment:
+    image: ctf-senai/code-review:latest
+    resources:
+      cpu: "1"
+      memory: "512Mi"
+    ports:
+      - container: 22
+    credentials:
+      user: root
+      password: root
+  challenges:
+    - id: 1
+      name: "Command Injection"
+      description: "Analise os scripts Python em /opt/vulnerable/. Encontre o código que executa comandos do sistema sem validação."
+      points: 25
+      hints:
+        - text: "Procure por os.system(), subprocess.call() ou exec() com input do usuário"
+      validation:
+        type: "flag"
+        flag: "CMD_1NJ3CT10N"
+        location: "/root/code_review/flag1.txt"
+    - id: 2
+      name: "SQL Injection"
+      description: "Revise o código JavaScript em /opt/vulnerable/. Identifique queries SQL vulneráveis."
+      points: 25
+      hints:
+        - text: "Procure por concatenação de strings em queries SQL sem prepared statements"
+      validation:
+        type: "flag"
+        flag: "SQL_1NJ3CT10N"
+        location: "/root/code_review/flag2.txt"
+    - id: 3
+      name: "Hardcoded Password"
+      description: "Procure por credenciais hardcoded nos arquivos de configuração em /opt/vulnerable/."
+      points: 25
+      hints:
+        - text: "Use grep para procurar: password, passwd, secret, api_key"
+      validation:
+        type: "flag"
+        flag: "H4RDC0D3D_P4SS"
+        location: "/root/code_review/flag3.txt"
+    - id: 4
+      name: "Code Execution"
+      description: "Encontre uso perigoso de eval() em arquivos PHP em /opt/vulnerable/."
+      points: 25
+      hints:
+        - text: "Procure por eval(), exec(), system() com input não sanitizado"
+      validation:
+        type: "flag"
+        flag: "C0D3_3X3C"
+        location: "/root/code_review/flag4.txt"
+    - id: 5
+      name: "API Key Leak"
+      description: "Procure por chaves de API expostas em arquivos de código ou .env em /opt/vulnerable/."
+      points: 25
+      hints:
+        - text: "Use grep -r 'API_KEY|SECRET_KEY|TOKEN' para encontrar"
+      validation:
+        type: "flag"
+        flag: "L34K3D_K3Y"
+        location: "/root/code_review/flag5.txt"
+    - id: 6
+      name: "XSS Vulnerability"
+      description: "Analise o código JavaScript em /opt/vulnerable/. Encontre innerHTML sem sanitização."
+      points: 25
+      hints:
+        - text: "Procure por innerHTML, document.write() com dados do usuário"
+      validation:
+        type: "flag"
+        flag: "XSS_VULN"
+        location: "/root/code_review/flag6.txt"
+  scoring:
+    total_points: 150

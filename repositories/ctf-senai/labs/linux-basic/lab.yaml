@@ -1,0 +1,413 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: linux-basic
+  version: "1.0.0"
+  description: "Desafios básicos de Linux para iniciantes em CTF"
+  author: "SENAI CyberSec Team"
+  difficulty: "easy"
+  duration: "60m"
+  created: "2024-01-15T10:00:00Z"
+  tags:
+    - linux
+    - bash
+    - comandos
+    - permissões
+
+spec:
+  environment:
+    image: ctf-senai/linux-basic:latest
+    dockerfile: ../../scenarios/linux-basic/Dockerfile
+    resources:
+      cpu: "1"
+      memory: "512Mi"
+    ports:
+      - container: 22
+        protocol: tcp
+        description: "SSH Access"
+    credentials:
+      user: root
+      password: root
+    setup_commands:
+      - "echo 'Bem-vindo ao desafio Linux Básico!' > /etc/motd"
+  
+  challenges:
+    - id: 1
+      name: "Primeiro Contato"
+      description: "Descubra qual usuário você é. Use um comando que mostre sua identidade no sistema."
+      category: "recon"
+      points: 10
+      order: 1
+      instructions: |
+        Você acabou de acessar um sistema Linux.
+        Sua primeira tarefa é descobrir qual usuário você é.
+        
+        💡 Dica: Existe um comando que mostra "quem sou eu" (who am i).
+      
+      hints:
+        - text: "O comando começa com 'who'"
+          cost: 2
+        - text: "Use o comando: whoami"
+          cost: 5
+      
+      validation:
+        type: "flag"
+        flag: "root"
+        flag_format: "text"
+        check_command: "whoami"
+        expected_output: "root"
+      
+      solution: |
+        Execute o comando:
+        $ whoami
+        
+        A resposta será: root
+        Esta é a flag do desafio 1.
+    
+    - id: 2
+      name: "Pasta SENAI"
+      description: "Navegue até /root/SENAI e leia o conteúdo do arquivo 'flag'."
+      category: "file-system"
+      points: 15
+      order: 2
+      instructions: |
+        Existe uma pasta chamada SENAI no diretório /root.
+        Dentro dela há um arquivo chamado 'flag' com a resposta.
+        
+        💡 Dica: Use comandos de navegação e listagem de arquivos.
+      
+      hints:
+        - text: "Use 'ls' para listar arquivos"
+          cost: 3
+        - text: "Use 'cd /root/SENAI' para entrar na pasta"
+          cost: 5
+        - text: "Use 'cat flag' para ler o arquivo"
+          cost: 8
+      
+      validation:
+        type: "flag"
+        flag: "pa$t4"
+        flag_format: "text"
+        location: "/root/SENAI/flag"
+      
+      solution: |
+        $ cd /root/SENAI
+        $ ls
+        $ cat flag
+        
+        A flag é: pa$t4
+    
+    - id: 3
+      name: "Script Oculto"
+      description: "Encontre e execute o script oculto em /root. Arquivos ocultos começam com ponto (.)"
+      category: "execution"
+      points: 20
+      order: 3
+      instructions: |
+        Há um script oculto no diretório /root.
+        Arquivos ocultos no Linux começam com ponto (.)
+        Encontre-o e execute-o para obter a flag.
+      
+      hints:
+        - text: "Use 'ls -a' para ver arquivos ocultos"
+          cost: 5
+        - text: "O script se chama .secret.sh"
+          cost: 8
+        - text: "Execute com: bash .secret.sh"
+          cost: 10
+      
+      validation:
+        type: "flag"
+        flag: "h1dd3n_scr1pt"
+        flag_format: "text"
+        location: "/root/.flag3.txt"
+      
+      solution: |
+        $ ls -a
+        $ bash .secret.sh
+        
+        A flag é: h1dd3n_scr1pt
+    
+    - id: 4
+      name: "Histórico de Comandos"
+      description: "Investigue o histórico de comandos do bash. A flag está registrada lá."
+      category: "forensics"
+      points: 15
+      order: 4
+      instructions: |
+        O usuário anterior deixou a flag no histórico de comandos.
+        Investigue o histórico do bash para encontrá-la.
+      
+      hints:
+        - text: "O histórico fica em ~/.bash_history"
+          cost: 5
+        - text: "Use o comando 'history'"
+          cost: 8
+      
+      validation:
+        type: "flag"
+        flag: "h1st0ry_m4tt3rs"
+        flag_format: "text"
+        location: "/root/.bash_history"
+      
+      solution: |
+        $ history
+        ou
+        $ cat ~/.bash_history
+        
+        A flag é: h1st0ry_m4tt3rs
+    
+    - id: 5
+      name: "Processos em Execução"
+      description: "Identifique o nome do processo com PID 1. Liste os processos do sistema."
+      category: "processes"
+      points: 20
+      order: 5
+      instructions: |
+        Todo sistema Linux tem um processo init (PID 1).
+        Descubra qual é o nome do processo com PID 1 neste sistema.
+      
+      hints:
+        - text: "Use 'ps aux' para listar processos"
+          cost: 5
+        - text: "Use 'ps -p 1' para ver o processo PID 1"
+          cost: 8
+      
+      validation:
+        type: "command"
+        check_command: "ps -p 1 -o comm="
+        expected_output: "systemd"
+      
+      solution: |
+        $ ps -p 1 -o comm=
+        
+        A resposta é: systemd
+    
+    - id: 6
+      name: "Arquivo Oculto"
+      description: "Conte quantos arquivos ocultos existem em /root. Não conte diretórios, apenas arquivos."
+      category: "file-system"
+      points: 15
+      order: 6
+      instructions: |
+        Quantos arquivos ocultos (começam com .) existem em /root?
+        Não conte diretórios, apenas arquivos.
+      
+      hints:
+        - text: "Use 'ls -la' para ver todos os arquivos"
+          cost: 5
+        - text: "Use 'find /root -maxdepth 1 -type f -name \".*\"'"
+          cost: 10
+      
+      validation:
+        type: "command"
+        check_command: "find /root -maxdepth 1 -type f -name '.*' | wc -l"
+        expected_output: "5"
+      
+      solution: |
+        $ find /root -maxdepth 1 -type f -name ".*" | wc -l
+        
+        A resposta é: 5
+    
+    - id: 7
+      name: "SUID Binaries"
+      description: "Conte quantos binários com permissão SUID existem em /usr/bin. Use find com -perm."
+      category: "permissions"
+      points: 25
+      order: 7
+      instructions: |
+        Binários SUID são executados com privilégios do dono.
+        Encontre quantos binários SUID existem em /usr/bin.
+      
+      hints:
+        - text: "SUID tem permissão 4000"
+          cost: 8
+        - text: "Use: find /usr/bin -perm -4000"
+          cost: 12
+      
+      validation:
+        type: "command"
+        check_command: "find /usr/bin -perm -4000 2>/dev/null | wc -l"
+        expected_output: "3"
+      
+      solution: |
+        $ find /usr/bin -perm -4000 2>/dev/null | wc -l
+        
+        A resposta é: 3
+    
+    - id: 8
+      name: "Cron Jobs"
+      description: "Liste as tarefas agendadas no crontab do root. A flag está lá."
+      category: "system"
+      points: 20
+      order: 8
+      instructions: |
+        Existe uma tarefa agendada no crontab do root.
+        Descubra qual comando está sendo executado.
+      
+      hints:
+        - text: "Use 'crontab -l' para listar tarefas"
+          cost: 5
+        - text: "Procure em /etc/crontab também"
+          cost: 10
+      
+      validation:
+        type: "flag"
+        flag: "cr0n_m4st3r"
+        flag_format: "text"
+        location: "/var/spool/cron/crontabs/root"
+      
+      solution: |
+        $ crontab -l
+        ou
+        $ cat /var/spool/cron/crontabs/root
+        
+        A flag é: cr0n_m4st3r
+    
+    - id: 9
+      name: "ACL Específica"
+      description: "Arquivo acessível apenas via grupo específico"
+      category: "permissions"
+      points: 25
+      order: 9
+      instructions: |
+        Existe um arquivo em /opt/secure/ que só pode ser lido pelo grupo 'ctfgroup'.
+        Você precisa se adicionar ao grupo para ler a flag.
+      
+      hints:
+        - text: "Verifique grupos com 'groups' e ACLs com 'getfacl'"
+          cost: 8
+      
+      validation:
+        type: "flag"
+        flag: "acl_m4st3r"
+        location: "/opt/secure/secret.txt"
+    
+    - id: 10
+      name: "PATH Hijacking"
+      description: "Binário falso prioritário no PATH"
+      category: "exploitation"
+      points: 30
+      order: 10
+      instructions: |
+        Existe um script em /usr/local/bin/check que chama 'ls'.
+        Crie um 'ls' falso em /tmp e ajuste o PATH para capturar a flag.
+      
+      hints:
+        - text: "Crie script em /tmp/ls e ajuste PATH=/tmp:$PATH"
+          cost: 10
+      
+      validation:
+        type: "flag"
+        flag: "p4th_pwn3d"
+    
+    - id: 11
+      name: "Variável Escondida"
+      description: "Flag em variável de ambiente oculta"
+      category: "environment"
+      points: 20
+      order: 11
+      instructions: |
+        A flag está armazenada em uma variável de ambiente.
+        Use comandos para listar todas as variáveis.
+      
+      hints:
+        - text: "Use 'env', 'printenv' ou verifique /proc/self/environ"
+          cost: 5
+      
+      validation:
+        type: "flag"
+        flag: "3nv_s3cr3t"
+    
+    - id: 12
+      name: "Processo Temporário"
+      description: "Monitore /tmp para capturar flag gerada por cron"
+      category: "monitoring"
+      points: 30
+      order: 12
+      instructions: |
+        Um processo cron gera um arquivo temporário em /tmp a cada 30 segundos.
+        Monitore o diretório e capture a flag antes que o arquivo seja deletado.
+      
+      hints:
+        - text: "Use 'watch ls /tmp' ou 'inotifywait' para monitorar"
+          cost: 10
+      
+      validation:
+        type: "flag"
+        flag: "t3mp_hunt3r"
+    
+    - id: 13
+      name: "Socket Unix"
+      description: "Conecte ao socket local para obter flag"
+      category: "networking"
+      points: 35
+      order: 13
+      instructions: |
+        Um serviço escuta em /var/run/ctf.sock
+        Conecte-se ao socket Unix para receber a flag.
+      
+      hints:
+        - text: "Use 'nc -U /var/run/ctf.sock' ou 'socat'"
+          cost: 12
+      
+      validation:
+        type: "flag"
+        flag: "s0ck3t_m4g1c"
+    
+    - id: 14
+      name: "Strings Ofuscadas"
+      description: "Flag fragmentada em binário"
+      category: "reverse-engineering"
+      points: 40
+      order: 14
+      instructions: |
+        Existe um binário em /opt/mystery que contém a flag fragmentada.
+        Use ferramentas de análise para extrair e reconstruir a flag.
+      
+      hints:
+        - text: "Use 'strings', 'xxd' ou 'objdump' para analisar o binário"
+          cost: 15
+      
+      validation:
+        type: "flag"
+        flag: "b1n_r3v3rs3d"
+
+  scoring:
+    total_points: 280
+    time_bonus:
+      enabled: true
+      max_bonus: 20
+      calculation: "linear"  # Bônus diminui linearmente com o tempo
+    
+    hint_penalty:
+      enabled: true
+      deduct_hint_cost: true
+    
+    completion_bonus:
+      enabled: true
+      all_challenges: 40
+  
+  resources:
+    - name: "Linux Command Cheat Sheet"
+      url: "https://www.linuxtrainingacademy.com/linux-commands-cheat-sheet/"
+      type: "external"
+    
+    - name: "Bash Scripting Guide"
+      url: "https://www.gnu.org/software/bash/manual/"
+      type: "external"
+
+  prerequisites:
+    - "Conhecimento básico de terminal"
+    - "Familiaridade com comandos Linux básicos"
+
+  learning_objectives:
+    - "Navegar no sistema de arquivos Linux"
+    - "Executar comandos básicos do bash"
+    - "Entender permissões de arquivos"
+    - "Trabalhar com processos"
+    - "Investigar histórico e logs"
+
+  next_challenges:
+    - "web-security"
+    - "network"

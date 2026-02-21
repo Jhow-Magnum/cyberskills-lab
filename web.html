@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CYBERSKILLS LAB - Cybersecurity Training Platform</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial; background: #1a1a1a; color: #fff; height: 100vh; overflow: hidden; }
+        .container { display: flex; height: 100vh; }
+        .sidebar { width: 320px; background: #2d2d30; padding: 15px; overflow-y: auto; }
+        .stats-box { background: #1a1a1a; padding: 12px; border-radius: 5px; margin-bottom: 15px; border: 2px solid #4ec9b0; }
+        .stats-box .stat-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .stats-box .stat-item:last-child { margin-bottom: 0; }
+        .stats-box .stat-label { color: #999; font-size: 11px; }
+        .stats-box .stat-value { color: #4ec9b0; font-weight: bold; font-size: 14px; }
+        .username-input { display: flex; gap: 8px; margin-bottom: 15px; }
+        .username-input input { flex: 1; padding: 8px; background: #0a0a0a; border: 2px solid #4ec9b0; color: #4ec9b0; border-radius: 4px; font-size: 13px; font-weight: 600; }
+        .username-input input:focus { outline: none; box-shadow: 0 0 10px rgba(78,201,176,0.5); }
+        .username-input.hidden { display: none; }
+        .username-display { background: #1a1a1a; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; text-align: center; border: 2px solid #4ec9b0; }
+        .username-display .name { color: #4ec9b0; font-weight: bold; font-size: 14px; }
+        .scoreboard-btn { background: #ffd700; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 14px; }
+        .scoreboard-btn:hover { background: #ffed4e; }
+        .main { flex: 1; display: flex; flex-direction: column; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); position: relative; }
+        .main::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 0; pointer-events: none; }
+        .main > * { position: relative; z-index: 1; }
+        .terminal { flex: 1; background: #000; padding: 10px; position: relative; z-index: 1; }
+        .logo-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .logo-header img { width: 50px; height: 50px; object-fit: contain; }
+        .logo-header h1 { margin: 0; color: #4ec9b0; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(78,201,176,0.5); font-weight: 700; }
+        .challenges { height: 50%; background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(26,26,26,0.95) 100%); padding: 25px; overflow-y: auto; border-top: 4px solid #4ec9b0; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+        .challenges-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .challenges-header img { width: 35px; height: 35px; object-fit: contain; }
+        .challenges-header h1 { margin: 0; color: #4ec9b0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(78,201,176,0.5); font-weight: 700; }
+        .lab { background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; }
+        .lab:hover { background: #333; }
+        .lab-title { font-weight: bold; color: #4ec9b0; margin-bottom: 5px; font-size: 14px; }
+        .lab-desc { font-size: 11px; color: #999; margin-bottom: 8px; }
+        .btn { background: #4ec9b0; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; width: 100%; }
+        .challenge { background: linear-gradient(145deg, #1e1e1e 0%, #121212 100%); padding: 18px; margin-bottom: 18px; border-radius: 10px; border: 2px solid #2a2a2a; border-left: 5px solid #4ec9b0; box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-height: 2000px; }
+        .challenge.completed { border-color: #4ec9b0; box-shadow: 0 0 30px rgba(78,201,176,0.6), inset 0 0 20px rgba(78,201,176,0.2); max-height: 0; padding: 0; margin: 0; opacity: 0; }
+        .challenge:hover { transform: translateY(-5px) translateX(5px); box-shadow: 0 15px 35px rgba(78,201,176,0.25), 0 0 20px rgba(78,201,176,0.15); border-left-width: 8px; border-color: #5fd9c0; }
+        .challenge h3 { color: #4ec9b0; margin-bottom: 10px; font-size: 17px; display: flex; align-items: center; gap: 10px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .challenge h3::before { content: '🎯'; font-size: 19px; filter: drop-shadow(0 2px 4px rgba(78,201,176,0.4)); }
+        .challenge p { color: #d4d4d4; margin-bottom: 15px; font-size: 14px; line-height: 1.7; padding-left: 29px; }
+        .challenge-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .difficulty-badge { padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .diff-easy { background: linear-gradient(135deg, #4ec9b0, #5fd9c0); color: #000; }
+        .diff-medium { background: linear-gradient(135deg, #ffa500, #ffb733); color: #000; }
+        .diff-hard { background: linear-gradient(135deg, #f48771, #ff6b6b); color: #000; }
+        .points-badge { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000; padding: 6px 14px; border-radius: 25px; font-size: 13px; font-weight: 800; box-shadow: 0 3px 12px rgba(255,215,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3); letter-spacing: 0.5px; }
+        .hint-section { margin: 15px 0; padding: 14px; background: rgba(255,215,0,0.03); border-radius: 8px; border: 1px solid rgba(255,215,0,0.15); }
+        .hint-warning { background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,215,0,0.05) 100%); border: 2px dashed rgba(255,215,0,0.4); padding: 10px 14px; border-radius: 6px; margin-bottom: 10px; color: #ffd700; font-size: 12px; text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .hint-warning::before { content: '⚠️'; font-size: 14px; }
+        .hint-btn { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 3px 10px rgba(255,215,0,0.4); display: flex; align-items: center; gap: 6px; width: fit-content; letter-spacing: 0.5px; }
+        .hint-btn::before { content: '💡'; font-size: 14px; }
+        .hint-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 20px rgba(255,215,0,0.6); }
+        .hint-btn:active { transform: translateY(-1px); }
+        .hint-box { background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,215,0,0.03) 100%); border-left: 4px solid #ffd700; padding: 14px 16px; margin-top: 10px; border-radius: 6px; color: #ffd700; font-size: 13px; line-height: 1.6; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+        .hint-item { display: none; margin-bottom: 10px; animation: slideIn 0.4s ease-out; }
+        .hint-item.show { display: block; }
+        .hint-item:last-child { margin-bottom: 0; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .flag-input { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(78,201,176,0.2); }
+        .flag-input input { flex: 3; padding: 12px 16px; background: #0a0a0a; border: 2px solid #2a2a2a; color: #4ec9b0; border-radius: 6px; font-size: 14px; font-family: 'Courier New', monospace; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 600; letter-spacing: 0.5px; }
+        .flag-input input:focus { outline: none; border-color: #4ec9b0; background: #0d0d0d; box-shadow: 0 0 15px rgba(78,201,176,0.3), inset 0 2px 8px rgba(0,0,0,0.4); transform: translateY(-2px); }
+        .flag-input input::placeholder { color: #555; font-weight: 400; }
+        .flag-input button { flex: 1; min-width: 110px; padding: 12px; font-size: 14px; font-weight: 800; letter-spacing: 1px; transition: all 0.3s ease; }
+        .status { padding: 10px 24px; border-radius: 25px; font-size: 16px; margin-left: 15px; font-weight: 800; letter-spacing: 1px; animation: statusPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-transform: uppercase; }
+        @keyframes statusPop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+        .correct { background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%); color: #000; box-shadow: 0 0 40px rgba(0,255,136,0.8), 0 6px 20px rgba(0,255,136,0.6), inset 0 2px 0 rgba(255,255,255,0.4); }
+        .wrong { background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); color: #fff; box-shadow: 0 0 40px rgba(255,68,68,0.8), 0 6px 20px rgba(255,68,68,0.6), inset 0 2px 0 rgba(255,255,255,0.2); }
+        .timer { position: fixed; top: 15px; right: 15px; background: #2d2d30; padding: 10px 20px; border-radius: 6px; font-size: 20px; font-weight: bold; color: #4ec9b0; border: 2px solid #4ec9b0; z-index: 1000; display: flex; gap: 15px; align-items: center; }
+        .timer button { background: #f48771; color: #000; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        #terminal { height: 100%; width: 100%; }
+        .hide { display: none; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 9999; flex-direction: column; }
+        .loading-overlay.show { display: flex; }
+        .spinner { border: 8px solid #333; border-top: 8px solid #4ec9b0; border-radius: 50%; width: 80px; height: 80px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: #4ec9b0; font-size: 20px; margin-top: 30px; font-weight: bold; }
+        .loading-steps { color: #999; font-size: 14px; margin-top: 15px; text-align: center; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-header">
+                <img src="/assets/logo.png" alt="Logo">
+                <h1>🔒 CYBERSKILLS LAB</h1>
+            </div>
+            <div class="username-input" id="usernameInput">
+                <input type="text" id="nameField" placeholder="Digite seu nome..." onkeypress="if(event.key=='Enter')setUsername()">
+            </div>
+            <div class="username-display" id="usernameDisplay" style="display:none;">
+                <div class="name" id="displayName"></div>
+            </div>
+            <div class="stats-box" id="statsBox" style="display:none;">
+                <div class="stat-item">
+                    <span class="stat-label">✅ Completados</span>
+                    <span class="stat-value" id="statCompleted">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">🎯 Total</span>
+                    <span class="stat-value" id="statTotal">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">⭐ Pontos</span>
+                    <span class="stat-value" id="statPoints">0</span>
+                </div>
+            </div>
+            <button class="scoreboard-btn" onclick="showScoreboard()">🏆 Scoreboard</button>
+            <div id="labs"></div>
+        </div>
+        <div class="main hide" id="main">
+            <div class="terminal"><div id="terminal"></div></div>
+            <div class="challenges"><div class="challenges-header"><img src="/assets/logo.png" alt="Logo"><h1>📝 Desafios</h1></div><div id="tasks"></div></div>
+        </div>
+    </div>
+    <div id="timer" class="timer" style="display:none;">
+        <span id="timerText">00:00</span>
+        <button onclick="endSession()">Encerrar</button>
+    </div>
+    
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">🚀 Iniciando desafio...</div>
+        <div class="loading-steps" id="loadingSteps">Aguarde enquanto preparamos o ambiente...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+    <script>
+        let term, fit, ws, session, timerInterval, completedCount = 0, totalChallenges = 0, totalPoints = 0, currentUser = '';
+        
+        window.addEventListener('load', async () => {
+            // NÃO carrega nome salvo - sempre mostra o campo
+            currentUser = '';
+            localStorage.removeItem('ctf_username');
+            
+            const savedSessionId = localStorage.getItem('ctf_session_id');
+            if (savedSessionId) {
+                try {
+                    await fetch(`/api/stop/${savedSessionId}`, {method: 'DELETE'});
+                } catch (error) {}
+                localStorage.removeItem('ctf_session_id');
+            }
+            
+            // Cria usuário desafio final
+            await fetch('/api/create-challenge-user', {method: 'POST'});
+        });
+        
+        // Ao fechar/recarregar página, tenta encerrar sessão (pode não funcionar sempre)
+        window.addEventListener('beforeunload', (e) => {
+            if (session && session.session_id) {
+                const sessionId = session.session_id;
+                // Tenta usar sendBeacon (mais confiável que fetch)
+                const blob = new Blob([JSON.stringify({})], {type: 'application/json'});
+                navigator.sendBeacon(`/api/stop/${sessionId}`, blob);
+                localStorage.removeItem('ctf_session_id');
+            }
+        });
+
+        
+        function setUsername() {
+            const name = document.getElementById('nameField').value.trim();
+            if (!name) return;
+            currentUser = name;
+            localStorage.setItem('ctf_username', currentUser);
+            document.getElementById('displayName').textContent = '👤 ' + currentUser;
+            document.getElementById('usernameInput').classList.add('hidden');
+            document.getElementById('usernameDisplay').style.display = 'block';
+        }
+        
+        fetch('/api/labs').then(r => r.json()).then(labs => {
+            document.getElementById('labs').innerHTML = labs.map((l, idx) => `
+                <div class="lab">
+                    <div class="lab-title">${l.name}</div>
+                    <div class="lab-desc">${l.description}</div>
+                    <div class="lab-desc">⏱️ ${l.duration} | 🎯 ${l.challenges} desafios</div>
+                    <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx})">Iniciar</button>
+                </div>
+            `).join('');
+        });
+
+        async function start(id, btnIndex) {
+            if (!currentUser) {
+                currentUser = 'Player_' + Date.now().toString().slice(-6);
+                localStorage.setItem('ctf_username', currentUser);
+            }
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const loadingSteps = document.getElementById('loadingSteps');
+            const btn = document.getElementById(`btn-${btnIndex}`);
+            
+            loadingOverlay.classList.add('show');
+            loadingText.textContent = '🚀 Iniciando desafio...';
+            loadingSteps.textContent = 'Aguarde enquanto preparamos o ambiente...';
+            
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            }
+            
+            try {
+                if (session) {
+                    loadingText.textContent = '🧹 Encerrando sessão anterior...';
+                    await endSession(true);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+                loadingText.textContent = '🐳 Criando container Docker...';
+                loadingSteps.textContent = 'Isso pode levar alguns segundos...';
+                
+                const r = await fetch('/api/start-lab', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({lab_id: id, user_id: currentUser})
+                });
+                const d = await r.json();
+                
+                if (!d.success) { 
+                    loadingOverlay.classList.remove('show');
+                    alert(d.error);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    }
+                    return;
+                }
+                
+                loadingText.textContent = '⚙️ Configurando desafios...';
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                session = d.session;
+                completedCount = 0;
+                totalChallenges = d.lab.challenges.length;
+                totalPoints = d.lab.challenges.reduce((sum, c) => sum + c.points, 0);
+                
+                // Mostra stats
+                document.getElementById('statsBox').style.display = 'block';
+                
+                // Busca total de labs disponíveis
+                fetch('/api/labs').then(r => r.json()).then(labs => {
+                    const totalLabs = labs.filter(l => l.id !== 'final-challenge').length;
+                    document.getElementById('statTotal').textContent = totalLabs;
+                });
+                
+                // Busca labs completados pelo usuário
+                fetch(`/api/user/${currentUser}/stats`).then(r => r.json()).then(stats => {
+                    const completedLabs = new Set();
+                    stats.sessions.forEach(s => {
+                        if (s.completed === s.total) {
+                            completedLabs.add(s.lab_id);
+                        }
+                    });
+                    document.getElementById('statCompleted').textContent = completedLabs.size;
+                    document.getElementById('statPoints').textContent = stats.total_score;
+                }).catch(() => {
+                    document.getElementById('statCompleted').textContent = 0;
+                    document.getElementById('statPoints').textContent = 0;
+                });
+                
+                // Salva session_id no localStorage
+                localStorage.setItem('ctf_session_id', session.session_id);
+                console.log('Sessão salva:', session.session_id);
+                
+                loadingText.textContent = '💻 Carregando terminal...';
+                
+                document.querySelector('.sidebar').classList.add('hide');
+                document.getElementById('main').classList.remove('hide');
+                
+                term = new Terminal({cursorBlink: true, fontSize: 14, theme: {background: '#000', foreground: '#fff'}});
+                fit = new FitAddon.FitAddon();
+                term.loadAddon(fit);
+                term.open(document.getElementById('terminal'));
+                fit.fit();
+                
+                ws = new WebSocket(`ws://localhost:5000/ws/terminal/${session.session_id}`);
+                ws.onopen = () => term.onData(data => ws.send(data));
+                ws.onmessage = e => term.write(e.data);
+                
+                document.getElementById('tasks').innerHTML = d.lab.challenges.map(c => `
+                    <div class="challenge">
+                        <div class="challenge-header">
+                            <h3>${c.id}. ${c.name} <span id="s${c.id}" class="status" style="display:none"></span></h3>
+                            <div style="display:flex;gap:8px;align-items:center">
+                                ${c.difficulty ? `<span class="difficulty-badge diff-${c.difficulty}">${c.difficulty}</span>` : ''}
+                                <span class="points-badge">${c.points} pts</span>
+                            </div>
+                        </div>
+                        <p>${c.description}</p>
+                        ${c.hints && c.hints.length > 0 ? `
+                            <div class="hint-section">
+                                <div class="hint-warning">
+                                    Esforce-se em procurar a flag antes de usar a dica!
+                                </div>
+                                <button class="hint-btn" onclick="toggleHint(${c.id}, ${c.hints.length})" id="hint-btn-${c.id}">Ver Dica 1</button>
+                                <div class="hint-box" id="hint-${c.id}">
+                                    ${c.hints.map((h, i) => `<div class="hint-item" id="hint-${c.id}-${i}"><strong>💡 Dica ${i+1}:</strong> ${h.text}</div>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="flag-input">
+                            <input id="f${c.id}" placeholder="Digite a flag aqui..." onkeypress="if(event.key=='Enter')submit(${c.id})">
+                            <button class="btn" onclick="submit(${c.id})">ENVIAR</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                let t = d.session.remaining_seconds;
+                const timer = document.getElementById('timer');
+                timer.style.display = 'flex';
+                
+                if (timerInterval) clearInterval(timerInterval);
+                
+                timerInterval = setInterval(() => {
+                    const mins = Math.floor(t/60);
+                    const secs = t%60;
+                    document.getElementById('timerText').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+                    
+                    if (t <= 0) {
+                        clearInterval(timerInterval);
+                        showResult();
+                    }
+                    t--;
+                }, 1000);
+                
+                loadingText.textContent = '✅ Pronto!';
+                loadingSteps.textContent = 'Ambiente configurado com sucesso!';
+                await new Promise(resolve => setTimeout(resolve, 500));
+                loadingOverlay.classList.remove('show');
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                loadingOverlay.classList.remove('show');
+                alert('Erro ao iniciar desafio. Tente novamente.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+            }
+        }
+        
+        function showResult() {
+            if (completedCount === totalChallenges) {
+                alert(`🎉 PARABÉNS!\n\nVocê completou todos os ${totalChallenges} desafios!\n\n🏆 Você é um excelente profissional em CyberSegurança!`);
+            } else {
+                alert(`⏰ Tempo Esgotado!\n\nVocê completou ${completedCount} de ${totalChallenges} desafios.\n\n🔄 Inicie o desafio e tente novamente!`);
+            }
+            endSession();
+        }
+        
+        async function endSession(silent = false) {
+            if (!session) return;
+            
+            const sessionId = session.session_id;
+            
+            if (ws) ws.close();
+            if (timerInterval) clearInterval(timerInterval);
+            if (term) term.dispose();
+            
+            try {
+                await fetch(`/api/stop/${sessionId}`, {method: 'DELETE'});
+                console.log('Container removido:', sessionId);
+            } catch (error) {
+                console.error('Erro ao remover container:', error);
+            }
+            
+            // Remove do localStorage
+            localStorage.removeItem('ctf_session_id');
+            
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('main').classList.add('hide');
+            document.querySelector('.sidebar').classList.remove('hide');
+            document.getElementById('terminal').innerHTML = '';
+            
+            session = null;
+            completedCount = 0;
+            totalChallenges = 0;
+            
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+        }
+
+        async function submit(id) {
+            const input = document.getElementById('f'+id);
+            const btn = input.nextElementSibling;
+            const flag = input.value.trim();
+            if (!flag) return;
+            
+            btn.disabled = true;
+            const originalBg = btn.style.background;
+            
+            const r = await fetch('/api/submit-flag', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({session_id: session.session_id, task_id: id, flag, user_id: currentUser})
+            });
+            const d = await r.json();
+            const s = document.getElementById('s'+id);
+            const challengeCard = input.closest('.challenge');
+            
+            if (d.correct) {
+                // Feedback verde NEON
+                btn.style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc66 100%)';
+                btn.style.transform = 'scale(1.1)';
+                btn.style.boxShadow = '0 0 30px rgba(0,255,136,0.8)';
+                
+                s.textContent = '✅ Correto!';
+                s.className = 'status correct';
+                s.style.display = 'inline';
+                input.disabled = true;
+                completedCount++;
+                
+                // Atualiza stats via API
+                fetch(`/api/user/${currentUser}/stats`).then(r => r.json()).then(stats => {
+                    const completedLabs = new Set();
+                    stats.sessions.forEach(sess => {
+                        if (sess.completed === sess.total) {
+                            completedLabs.add(sess.lab_id);
+                        }
+                    });
+                    document.getElementById('statCompleted').textContent = completedLabs.size;
+                    document.getElementById('statPoints').textContent = stats.total_score;
+                });
+                
+                // Borda verde NEON no card
+                challengeCard.style.borderColor = '#00ff88';
+                challengeCard.style.background = 'linear-gradient(145deg, #1e3e2e 0%, #0d1f15 100%)';
+                challengeCard.style.boxShadow = '0 0 50px rgba(0,255,136,0.8), inset 0 0 30px rgba(0,255,136,0.3)';
+                
+                // Após 5 segundos, recolhe o desafio
+                setTimeout(() => {
+                    challengeCard.classList.add('completed');
+                }, 5000);
+                
+            } else {
+                // Feedback vermelho NEON
+                btn.style.background = 'linear-gradient(135deg, #ff4444 0%, #cc0000 100%)';
+                btn.style.transform = 'scale(1.1)';
+                btn.style.boxShadow = '0 0 30px rgba(255,68,68,0.8)';
+                
+                // Borda vermelha no card temporariamente
+                challengeCard.style.borderColor = '#ff4444';
+                challengeCard.style.boxShadow = '0 0 30px rgba(255,68,68,0.6)';
+                
+                setTimeout(() => {
+                    btn.style.background = originalBg;
+                    btn.style.transform = 'scale(1)';
+                    btn.style.boxShadow = '';
+                    btn.disabled = false;
+                    challengeCard.style.borderColor = '#2a2a2a';
+                    challengeCard.style.boxShadow = '0 8px 25px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1)';
+                }, 1200);
+                
+                s.textContent = '❌ Errado';
+                s.className = 'status wrong';
+                s.style.display = 'inline';
+                input.value = '';
+                setTimeout(() => s.style.display = 'none', 3000);
+            }
+        }
+        
+        function toggleHint(id, totalHints) {
+            const hintBox = document.getElementById(`hint-${id}`);
+            const btn = document.getElementById(`hint-btn-${id}`);
+            
+            // Inicializa contador se não existir
+            if (!btn.dataset.currentHint) {
+                btn.dataset.currentHint = '0';
+            }
+            
+            let current = parseInt(btn.dataset.currentHint);
+            
+            // Se já mostrou todas, recolhe tudo
+            if (current >= totalHints) {
+                // Esconde todas as dicas
+                for (let i = 0; i < totalHints; i++) {
+                    const hintItem = document.getElementById(`hint-${id}-${i}`);
+                    if (hintItem) hintItem.classList.remove('show');
+                }
+                btn.dataset.currentHint = '0';
+                btn.textContent = 'Ver Dica 1';
+                return;
+            }
+            
+            // Mostra a próxima dica
+            const hintItem = document.getElementById(`hint-${id}-${current}`);
+            if (hintItem) {
+                hintItem.classList.add('show');
+            }
+            
+            current++;
+            btn.dataset.currentHint = current.toString();
+            
+            // Atualiza texto do botão
+            if (current >= totalHints) {
+                btn.textContent = 'Recolher Dicas';
+            } else {
+                btn.textContent = `Ver Dica ${current + 1}`;
+            }
+        }
+        
+        function updateStats() {
+            // Stats são atualizados via API, não localmente
+        }
+        
+        async function showScoreboard() {
+            const r = await fetch('/api/scoreboard');
+            const d = await r.json();
+            let html = '<div style="padding:20px">';
+            html += '<h2 style="color:#ffd700;margin-bottom:30px;text-align:center">🏆 Top 20 Jogadores</h2>';
+            html += '<table style="width:100%;color:#fff;border-collapse:collapse;margin-bottom:30px">';
+            html += '<thead><tr style="background:#1a1a1a;border-bottom:2px solid #4ec9b0"><th style="padding:15px;text-align:center;width:60px">#</th><th style="padding:15px;text-align:left">Usuário</th><th style="padding:15px;text-align:center;width:120px">Pontos</th><th style="padding:15px;text-align:center;width:100px">Sessões</th></tr></thead>';
+            html += '<tbody>';
+            d.scoreboard.forEach((u, i) => {
+                const bgColor = i === 0 ? '#2a4a2a' : (i % 2 ? '#2d2d30' : '#1a1a1a');
+                const trophy = i === 0 ? '🏆 ' : '';
+                html += `<tr style="background:${bgColor};border-bottom:1px solid #333">`;
+                html += `<td style="padding:15px;text-align:center;font-weight:bold;color:#4ec9b0">${i+1}</td>`;
+                html += `<td style="padding:15px;font-weight:${i<3?'bold':'normal'}">${trophy}${u.username}</td>`;
+                html += `<td style="padding:15px;text-align:center;color:#4ec9b0;font-weight:bold;font-size:16px">${u.score}</td>`;
+                html += `<td style="padding:15px;text-align:center;color:#999">${u.sessions}</td>`;
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            html += '<button class="btn" style="width:200px;margin:0 auto;display:block;padding:12px" onclick="location.reload()">Voltar</button>';
+            html += '</div>';
+            document.querySelector('.sidebar').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

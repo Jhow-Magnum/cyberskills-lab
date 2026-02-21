@@ -1,0 +1,53 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: web-security
+  version: "1.0.0"
+  description: "Desafios de Segurança Web"
+  author: "SENAI"
+  difficulty: "medium"
+  duration: "90m"
+spec:
+  environment:
+    image: ctf-senai/web-security:latest
+    resources:
+      cpu: "1"
+      memory: "1Gi"
+    ports:
+      - container: 22
+      - container: 80
+    credentials:
+      user: root
+      password: root
+  challenges:
+    - id: 1
+      name: "robots.txt"
+      description: "Acesse o servidor web local na porta 80. Verifique o arquivo robots.txt."
+      points: 50
+      hints:
+        - text: "Use curl http://localhost/robots.txt ou navegue em /var/www/html/"
+      validation:
+        type: "flag"
+        flag: "R0B0TS_TXT"
+        location: "/var/www/html/robots.txt"
+    - id: 2
+      name: "Comentário HTML"
+      description: "Inspecione o código fonte do index.html. A flag está em um comentário."
+      points: 50
+      hints:
+        - text: "Use cat /var/www/html/index.html ou curl http://localhost/"
+      validation:
+        type: "flag"
+        flag: "HTML_C0MM3NT"
+        location: "/var/www/html/index.html"
+    - id: 3
+      name: "SQL Injection"
+      description: "Encontre o script vulnerável a SQL Injection em /var/www/. Explore a vulnerabilidade."
+      points: 50
+      hints:
+        - text: "Procure por arquivos .php ou .sql. Teste payloads como ' OR '1'='1"
+      validation:
+        type: "flag"
+        flag: "SQL_1NJ3CT10N"
+  scoring:
+    total_points: 150

@@ -1,0 +1,86 @@
+apiVersion: v1
+generated: "2024-01-15T10:00:00Z"
+entries:
+  linux-basic:
+    - name: linux-basic
+      version: "1.0.0"
+      description: "Desafios básicos de Linux: comandos, permissões, processos"
+      difficulty: "easy"
+      duration: "45m"
+      keywords: [linux, bash, comandos, permissões]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/linux-basic/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 14
+      points: 280
+  
+  crypto:
+    - name: crypto
+      version: "1.0.0"
+      description: "Criptografia: Base64, MD5, ROT13, SHA256"
+      difficulty: "easy"
+      duration: "45m"
+      keywords: [criptografia, hash, encoding, cifras]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/crypto/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 8
+      points: 190
+  
+  web-security:
+    - name: web-security
+      version: "1.0.0"
+      description: "Vulnerabilidades web: SQL Injection, XSS, CSRF"
+      difficulty: "medium"
+      duration: "60m"
+      keywords: [web, sql-injection, xss, owasp]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/web-security/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 3
+      points: 150
+  
+  pentest:
+    - name: pentest
+      version: "1.0.0"
+      description: "Pentest: exploração, escalação de privilégios, reverse shell"
+      difficulty: "hard"
+      duration: "90m"
+      keywords: [pentest, exploitation, privilege-escalation, reverse-shell]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/pentest/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 5
+      points: 200
+  
+  network:
+    - name: network
+      version: "1.0.0"
+      description: "Network Security: scanning, sniffing, análise de tráfego"
+      difficulty: "medium"
+      duration: "60m"
+      keywords: [network, nmap, wireshark, scanning]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/network/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 3
+      points: 120
+  
+  code-review:
+    - name: code-review
+      version: "1.0.0"
+      description: "Code Review: vulnerabilidades em código Python, JS, PHP"
+      difficulty: "medium"
+      duration: "45m"
+      keywords: [code-review, vulnerabilities, secure-coding, sast]
+      maintainers: ["SENAI <ctf@senai.br>"]
+      author: "SENAI CyberSec Team"
+      url: "file://labs/code-review/lab.yaml"
+      created: "2024-01-15T10:00:00Z"
+      challenges: 6
+      points: 150

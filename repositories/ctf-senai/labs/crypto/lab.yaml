@@ -1,0 +1,113 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: crypto
+  version: "1.0.0"
+  description: "Desafios de Criptografia"
+  author: "SENAI"
+  difficulty: "easy"
+  duration: "60m"
+spec:
+  environment:
+    image: ctf-senai/crypto:latest
+    resources:
+      cpu: "1"
+      memory: "512Mi"
+    ports:
+      - container: 22
+    credentials:
+      user: root
+      password: root
+  challenges:
+    - id: 1
+      name: "Mensagem Codificada"
+      description: "Procure por arquivos de desafios no sistema. A mensagem está em Base64 em /opt/challenges/crypto/."
+      difficulty: "easy"
+      points: 20
+      hints:
+        - text: "Use ls -R em /opt ou find para localizar arquivos. Decodifique com base64 -d"
+      validation:
+        type: "flag"
+        flag: "GORD_Master_2025"
+        location: "/opt/challenges/crypto/message.txt"
+    - id: 2
+      name: "Assinatura Digital"
+      description: "Calcule o hash MD5 da palavra 'Gelt_Cyber'. Use md5sum no terminal."
+      difficulty: "easy"
+      points: 20
+      hints:
+        - text: "Use: echo -n 'Gelt_Cyber' | md5sum. O -n evita quebra de linha"
+      validation:
+        type: "flag"
+        flag: "fd6aa30e90a21237fabaf9fb110d8773"
+    - id: 3
+      name: "Cifra Rotacional"
+      description: "Procure nos logs do sistema em /var/log. Há uma mensagem cifrada em ROT13."
+      difficulty: "easy"
+      points: 20
+      hints:
+        - text: "Logs do CTF estão em /var/log/ctf/. Use tr para decodificar ROT13"
+      validation:
+        type: "flag"
+        flag: "CIPHER_SIMPLE"
+        location: "/var/log/ctf/encrypted.log"
+    - id: 4
+      name: "Hash Moderno"
+      description: "Calcule SHA256 de 'Gelt_Cyber' e pegue os primeiros 8 caracteres."
+      difficulty: "easy"
+      points: 20
+      hints:
+        - text: "Use: echo -n 'Gelt_Cyber' | sha256sum | cut -c1-8"
+      validation:
+        type: "flag"
+        flag: "50e29cfb"
+    - id: 5
+      name: "Cifra de Byte"
+      description: "Encontre o arquivo criptografado em /tmp/backup/. Quebre a cifra XOR testando valores."
+      difficulty: "medium"
+      points: 25
+      hints:
+        - text: "Arquivo .enc em /tmp/backup/. Teste XOR com loop: for i in {0..255}"
+        - text: "Use python ou bash loop: for i in {0..255}; do ... done"
+      validation:
+        type: "flag"
+        flag: "x0r_s1mpl3"
+        location: "/tmp/backup/data.enc"
+    - id: 6
+      name: "Senha Fraca"
+      description: "Encontre o hash MD5 em /etc e quebre usando wordlist. Teste senhas comuns."
+      difficulty: "medium"
+      points: 25
+      hints:
+        - text: "Procure arquivos do CTF em /etc. Wordlists estão em /usr/share/wordlists"
+        - text: "Loop: while read word; do echo -n $word | md5sum; done"
+      validation:
+        type: "flag"
+        flag: "password123"
+    - id: 7
+      name: "Cifra Clássica"
+      description: "Procure arquivos ocultos no home do usuário. A mensagem usa cifra de César (ROT)."
+      difficulty: "hard"
+      points: 30
+      hints:
+        - text: "Arquivos ocultos em /home/ctfuser/. Use ls -la para encontrar"
+        - text: "Use tr para rotacionar: tr 'A-Za-z' 'B-ZA-Ab-za-a' (ROT1)"
+        - text: "A rotação correta é ROT7: tr 'A-Za-z' 'H-ZA-Gh-za-g'"
+      validation:
+        type: "flag"
+        flag: "c43s4r_cr4ck3d"
+        location: "/home/ctfuser/.secrets/note.txt"
+    - id: 8
+      name: "Arquivo Danificado"
+      description: "Encontre o arquivo ZIP corrompido em /srv. Repare o magic number e extraia."
+      difficulty: "hard"
+      points: 35
+      hints:
+        - text: "Use file para identificar. Magic number ZIP: 50 4B 03 04 (primeiros bytes)"
+        - text: "O magic number correto é: 50 4B 03 04 (primeiros 4 bytes)"
+        - text: "Corrija com: printf '\x50\x4B' | dd of=/srv/archives/backup.zip bs=1 count=2 conv=notrunc"
+      validation:
+        type: "flag"
+        flag: "z1p_r3p41r3d"
+  scoring:
+    total_points: 190

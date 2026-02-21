@@ -1,0 +1,53 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: network
+  version: "1.0.0"
+  description: "Desafios de Network Security"
+  author: "SENAI"
+  difficulty: "medium"
+  duration: "90m"
+spec:
+  environment:
+    image: ctf-senai/network:latest
+    resources:
+      cpu: "1"
+      memory: "512Mi"
+    ports:
+      - container: 22
+    credentials:
+      user: root
+      password: root
+  challenges:
+    - id: 1
+      name: "IP do Container"
+      description: "Descubra o endereço IP interno do container. Use comandos de rede."
+      points: 40
+      hints:
+        - text: "Use ip addr, ifconfig ou hostname -I para ver o IP"
+      validation:
+        type: "flag"
+        flag: "172.18.0.2"
+        location: "/root/network/ip_flag.txt"
+    - id: 2
+      name: "Portas Abertas"
+      description: "Conte quantas portas TCP estão em estado LISTEN. Use netstat ou ss."
+      points: 40
+      hints:
+        - text: "Use: netstat -tuln | grep LISTEN | wc -l ou ss -tuln"
+      validation:
+        type: "flag"
+        flag: "5"
+        location: "/root/network/ports_flag.txt"
+    - id: 3
+      name: "Porta SSH"
+      description: "Identifique em qual porta o serviço SSH está escutando."
+      points: 40
+      hints:
+        - text: "Use: netstat -tuln | grep ssh ou cat /etc/ssh/sshd_config"
+      validation:
+        type: "flag"
+        flag: "22"
+        location: "/root/network/ssh_port_flag.txt"
+  scoring:
+    total_points: 120
