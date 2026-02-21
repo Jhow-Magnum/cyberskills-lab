@@ -9,7 +9,7 @@ metadata:
   duration: "90m"
 spec:
   environment:
-    image: ctf-senai/web-security:latest
+    image: cyberskills-lab/web-security:latest
     resources:
       cpu: "1"
       memory: "1Gi"

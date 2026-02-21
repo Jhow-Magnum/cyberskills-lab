@@ -9,7 +9,7 @@ metadata:
   duration: "60m"
 spec:
   environment:
-    image: ctf-senai/crypto:latest
+    image: cyberskills-lab/crypto:latest
     resources:
       cpu: "1"
       memory: "512Mi"

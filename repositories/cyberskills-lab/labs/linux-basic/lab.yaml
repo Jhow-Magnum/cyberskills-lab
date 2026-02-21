@@ -16,7 +16,7 @@ metadata:
 
 spec:
   environment:
-    image: ctf-senai/linux-basic:latest
+    image: cyberskills-lab/linux-basic:latest
     dockerfile: ../../scenarios/linux-basic/Dockerfile
     resources:
       cpu: "1"
