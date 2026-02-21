@@ -1,122 +1,112 @@
-# 🎯 CYBERSKILLS LAB - Cybersecurity Training Platform
+# CYBERSKILLS LAB
 
-<p align="center">
-  <img src="assets/banner.png" alt="CyberSkills Lab Banner" width="100%"/>
-</p>
+Open-source cybersecurity training platform with isolated practical environments via Docker.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" />
-  <img src="https://img.shields.io/badge/status-stable-green" />
-  <img src="https://img.shields.io/badge/license-MIT-green" />
-  <img src="https://img.shields.io/badge/docker-required-blue" />
-  <img src="https://img.shields.io/badge/python-3.8+-blue" />
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
-</p>
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/Jhow-Magnum/cyberskills-lab)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/docker-required-blue)](https://www.docker.com/)
 
 **[English](#english) | [Português](README.md)**
 
 ---
 
-## 📖 About
+## About
 
-**CYBERSKILLS LAB** is an open-source platform featuring interactive laboratories for hands-on training in **Cybersecurity, Penetration Testing, Linux, and Capture The Flag (CTF)** challenges, designed for anyone studying cybersecurity and Linux.
+CYBERSKILLS LAB is an educational platform for hands-on information security training. It offers 40 challenges across 6 categories, running in isolated Docker containers with integrated web terminal.
 
-### ✨ Key Features
+### Key Features
 
-- ✅ **Self-Hosted**: Runs locally on your machine via Docker
-- ✅ **Dynamic Timer**: Each lab has specific duration (60-120 min)
-- ✅ **Stop Button**: End your session anytime
-- ✅ **Auto-Destruction**: Containers are automatically removed
-- ✅ **Integrated Web Terminal**: xterm.js terminal in browser
-- ✅ **Web Interface**: Access via browser (port 5000)
-- ✅ **User System**: Each person has their own profile
-- ✅ **Visual Feedback**: Visual indicators for correct/incorrect answers
-- ✅ **Scoreboard**: Ranking with top 20 players
-- ✅ **Secret Final Challenge**: Unlocked after completing all labs
+- Local execution via Docker
+- Integrated web terminal (xterm.js)
+- Scoring and ranking system
+- Auto-destruction of containers after use
+- Responsive interface
+- Support for multiple simultaneous users
 
-## 🎮 Available Scenarios
+## Available Labs
 
-| Scenario | Challenges | Points | Duration | Difficulty |
-|----------|-----------|--------|----------|------------|
-| 🐧 Linux Basics | 14 | 280 | 60 min | Easy |
-| 🔐 Cryptography | 8 | 190 | 60 min | Easy |
-| 🌐 Web Security | 3 | 150 | 90 min | Medium |
-| 🌐 Network | 3 | 120 | 90 min | Medium |
-| 💻 Code Review | 6 | 150 | 75 min | Medium |
-| 🎯 Pentest | 5 | 200 | 120 min | Hard |
-| 🏆 Final Challenge | 1 | 100 | 10 min | Legendary |
+| Category | Challenges | Points | Duration | Level |
+|----------|-----------|--------|----------|-------|
+| Linux Basics | 14 | 280 | 60 min | Beginner |
+| Cryptography | 8 | 190 | 60 min | Beginner |
+| Web Security | 3 | 150 | 90 min | Intermediate |
+| Network Analysis | 3 | 120 | 90 min | Intermediate |
+| Code Review | 6 | 150 | 75 min | Intermediate |
+| Penetration Testing | 5 | 200 | 120 min | Advanced |
+| **Final Challenge** | 1 | 100 | 10 min | Special |
 
-**Total: 40 challenges | 1190 points**
+**Total: 40 challenges | 1,190 points**
 
-## 🚀 Quick Installation
+## System Requirements
 
-### Prerequisites
+- Docker 20.10+
+- Python 3.8+
+- Linux (Debian/Ubuntu recommended)
+- 4GB RAM minimum
+- 10GB disk space
 
-- **Docker** installed ([Installation Guide](https://docs.docker.com/get-docker/))
-- **Linux** (Debian/Ubuntu recommended)
-- **Python 3.8+**
-- **4GB RAM** minimum
-- **10GB** disk space
+## Installation
 
-### Step 1: Install Docker
+### 1. Install Docker
 
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
+sudo usermod -aG docker $USER
 ```
 
-### Step 2: Clone Repository
+Log out and log back in to apply permissions.
+
+### 2. Clone Repository
 
 ```bash
 git clone https://github.com/Jhow-Magnum/cyberskills-lab.git
 cd cyberskills-lab
 ```
 
-### Step 3: Run Installation
+### 3. Install Dependencies
 
 ```bash
 bash install.sh
 ```
 
-### Step 4: Start Platform
+### 4. Start Platform
 
 ```bash
 bash start.sh
 ```
 
-Access: **http://localhost:5000**
+Access: http://localhost:5000
 
-## 📁 Project Structure
+## Usage
+
+1. Open browser at `http://localhost:5000`
+2. Enter your username
+3. Select a lab
+4. Solve challenges in the integrated terminal
+5. Submit found flags
+6. Track your score on the scoreboard
+
+To stop:
+```bash
+bash stop.sh
+```
+
+## Project Structure
 
 ```
 cyberskills-lab/
+├── ctf-simple.py           # Flask backend
+├── web.html                # Web interface
+├── requirements.txt        # Python dependencies
 ├── install.sh              # Installation script
 ├── start.sh                # Start platform
 ├── stop.sh                 # Stop platform
-├── build-all.sh            # Build all Docker images
-├── ctf-simple.py           # Flask backend with WebSocket
-├── web.html                # Main web interface
-├── requirements.txt        # Python dependencies
-├── ctf_scores.db           # SQLite database
-├── LICENSE                 # MIT License
-├── CONTRIBUTING.md         # Contribution guide
-├── MAPA_FLAGS.md           # Map of all flags
-├── repositories/           # YAML repository of labs
-│   └── ctf-senai/
-│       ├── index.yaml      # Labs index
-│       └── labs/           # YAML definitions for each lab
-│           ├── linux-basic/
-│           ├── crypto/
-│           ├── web-security/
-│           ├── network/
-│           ├── code-review/
-│           └── pentest/
-└── scenarios/              # Dockerfiles for scenarios
+├── build-all.sh            # Build Docker images
+├── repositories/           # YAML lab definitions
+│   └── cyberskills-lab/
+│       └── labs/
+└── scenarios/              # Environment Dockerfiles
     ├── linux-basic/
     ├── crypto/
     ├── web-security/
@@ -125,184 +115,75 @@ cyberskills-lab/
     └── pentest/
 ```
 
-## 🛠️ Useful Commands
+## Tech Stack
+
+- **Backend**: Flask (Python)
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Terminal**: xterm.js
+- **Containers**: Docker
+- **Database**: SQLite
+- **WebSocket**: flask-sock
+
+## Troubleshooting
+
+### Port 5000 in use
 
 ```bash
-bash start.sh       # Start platform
-bash stop.sh        # Stop platform
-bash install.sh     # Reinstall dependencies
-bash build-all.sh   # Rebuild Docker images
-```
-
-## 🔧 Troubleshooting
-
-### Error: Port 5000 in use
-
-```bash
-# Find the process
-lsof -ti:5000
-
-# Kill the process
 lsof -ti:5000 | xargs kill -9
-
-# Or use the script
-bash stop.sh
 ```
 
-### Container won't start
+### Containers not removed
 
 ```bash
-# Check if images exist
-docker images | grep ctf-senai
+docker ps -a | grep cyberskills | awk '{print $1}' | xargs docker rm -f
+```
 
-# Rebuild if necessary
+### Rebuild images
+
+```bash
 bash build-all.sh
 ```
 
-### Clean stopped containers
+## Contributing
 
-```bash
-# Remove all CTF containers
-docker ps -a | grep ctf- | awk '{print $1}' | xargs docker rm -f
-
-# Or use the script
-bash stop.sh
-```
-
-### Docker permission error
-
-```bash
-# Add your user to docker group
-sudo usermod -aG docker $USER
-
-# Logout and login again
-```
-
-### Corrupted database
-
-```bash
-# Backup database
-cp ctf_scores.db ctf_scores.db.backup
-
-# Remove and restart
-rm ctf_scores.db
-python3 ctf-simple.py
-```
-
-## 🛠️ Tech Stack
-
-- **Backend**: Python 3.8+ with Flask
-- **Containerization**: Docker
-- **Terminal**: xterm.js with WebSocket
-- **Database**: SQLite
-- **Frontend**: Vanilla JavaScript + CSS3
-
-## 🤝 Contributing
-
-> 💡 **Contributions and suggestions for improvements are super welcome!**
-> 
-> This is a constantly evolving project and your help is essential to make it even better.
-> Whether reporting bugs, suggesting new labs, improving documentation or contributing code.
-
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-### How to Contribute
+Contributions are welcome. Please:
 
 1. Fork the project
-2. Create a branch (`git checkout -b feature/NewLab`)
-3. Commit your changes (`git commit -m 'feat: add new lab'`)
-4. Push to the branch (`git push origin feature/NewLab`)
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
 5. Open a Pull Request
 
-### Contribution Ideas
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-- 🆕 New labs (forensics, malware, cloud security)
-- 🐛 Bug fixes
-- 📚 Documentation improvements
-- 🎨 Interface improvements
-- 🔧 New features
+## Roadmap
 
-## 🌟 Roadmap
+- Badge and achievement system
+- Real-time competition mode
+- Digital forensics labs
+- Malware analysis labs
+- Cloud security labs (AWS/Azure)
+- Public REST API
+- Analytics dashboard
+- Multi-language support
 
-- [ ] Badge and achievement system
-- [ ] Real-time competition mode
-- [ ] Digital forensics labs
-- [ ] Malware analysis labs
-- [ ] Cloud security labs (AWS/Azure)
-- [ ] CTFd integration
-- [ ] Public API
-- [ ] Analytics dashboard
-- [ ] Multi-language support
+## Author
 
-## 📊 Statistics
+**Jhow Magnum**
 
-- **6 Main Labs**
-- **40 Total Challenges**
-- **1190 Maximum Points**
-- **6 Security Categories**
-- **100% Open Source**
+- GitHub: [@Jhow-Magnum](https://github.com/Jhow-Magnum)
+- LinkedIn: [Jhow Magnum](https://www.linkedin.com/in/jhowmagnum/)
 
-## 📞 Support and Community
+## License
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/Jhow-Magnum/cyberskills-lab/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/Jhow-Magnum/cyberskills-lab/discussions)
-- 📧 **Email**: contact@example.com
-- 📖 **Wiki**: [GitHub Wiki](https://github.com/Jhow-Magnum/cyberskills-lab/wiki)
+This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
 
-## 👥 Creator & Community
+## Acknowledgments
 
-### 🚀 Founded by
-
-**Jhow Magnum** - *Creator and Lead Developer*
-
-- 🐙 GitHub: [@Jhow-Magnum](https://github.com/Jhow-Magnum)
-- 💼 LinkedIn: [Jhow Magnum](https://www.linkedin.com/in/jhowmagnum/)
+- Information security community
+- Project contributors
+- Open-source community
 
 ---
 
-### 🤝 Community-Driven Project
-
-This project is **open for contributions** from the cybersecurity community!
-
-**We welcome:**
-- 🆕 New labs and challenges
-- 🐛 Bug fixes and improvements
-- 📚 Documentation enhancements
-- 🌍 Translations
-- 💡 Feature suggestions
-
-**Want to contribute?** Check our [Contributing Guide](CONTRIBUTING.md)
-
----
-
-### 🌟 Contributors
-
-Thanks to all contributors who help make CYBERSKILLS LAB better!
-
-<!-- ALL-CONTRIBUTORS-LIST:START -->
-<!-- This section is automatically generated -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-## 🙏 Acknowledgments
-
-- Cybersecurity Community
-- Project Contributors
-- Linux and Open Source Community
-
-## ⭐ Star History
-
-If this project was useful to you, consider giving it a ⭐!
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-<p align="center">
-  Made with ❤️ for the Cybersecurity Community
-</p>
-
-<p align="center">
-  <strong>Version 1.0.0</strong> | 2025
-</p>
+**Version 1.0.0** | 2026
