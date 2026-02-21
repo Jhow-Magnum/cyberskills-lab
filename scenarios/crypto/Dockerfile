@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     python3 \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Configurar SSH

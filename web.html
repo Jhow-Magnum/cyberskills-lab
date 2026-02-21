@@ -25,28 +25,30 @@
         .username-display .name { color: #4ec9b0; font-weight: bold; font-size: 14px; }
         .scoreboard-btn { background: #ffd700; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 14px; }
         .scoreboard-btn:hover { background: #ffed4e; }
-        .main { flex: 1; display: flex; flex-direction: column; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); position: relative; }
+        .main { flex: 1; display: flex; flex-direction: row; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); position: relative; }
+        .resizer { width: 5px; background: #4ec9b0; cursor: col-resize; transition: background 0.2s; }
+        .resizer:hover { background: #00d9ff; }
         .main::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 0; pointer-events: none; }
         .main > * { position: relative; z-index: 1; }
-        .terminal { flex: 1; background: #000; padding: 10px; position: relative; z-index: 1; }
+        .terminal { flex: 1; min-width: 300px; background: #000; padding: 10px; position: relative; z-index: 1; }
         .logo-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         .logo-header img { width: 50px; height: 50px; object-fit: contain; }
         .logo-header h1 { margin: 0; color: #4ec9b0; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(78,201,176,0.5); font-weight: 700; }
-        .challenges { height: 50%; background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(26,26,26,0.95) 100%); padding: 25px; overflow-y: auto; border-top: 4px solid #4ec9b0; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+        .challenges { flex: 1; min-width: 300px; background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(26,26,26,0.95) 100%); padding: 25px; overflow-y: auto; border-left: 4px solid #4ec9b0; box-shadow: inset 4px 0 10px rgba(0,0,0,0.5); position: relative; z-index: 1; }
         .challenges-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
         .challenges-header img { width: 35px; height: 35px; object-fit: contain; }
         .challenges-header h1 { margin: 0; color: #4ec9b0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(78,201,176,0.5); font-weight: 700; }
-        .lab { background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; }
+        .lab { background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; border: 2px solid #2a2a2a; transition: all 0.3s; }
         .lab:hover { background: #333; }
         .lab-title { font-weight: bold; color: #4ec9b0; margin-bottom: 5px; font-size: 14px; }
         .lab-desc { font-size: 11px; color: #999; margin-bottom: 8px; }
         .btn { background: #4ec9b0; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; width: 100%; }
-        .challenge { background: linear-gradient(145deg, #1e1e1e 0%, #121212 100%); padding: 18px; margin-bottom: 18px; border-radius: 10px; border: 2px solid #2a2a2a; border-left: 5px solid #4ec9b0; box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-height: 2000px; }
+        .challenge { background: linear-gradient(145deg, #1e1e1e 0%, #121212 100%); padding: 18px; margin-bottom: 18px; border-radius: 10px; border: 2px solid #2a2a2a; border-left: 5px solid #4ec9b0; box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-height: 2000px; font-size: 16px; }
         .challenge.completed { border-color: #4ec9b0; box-shadow: 0 0 30px rgba(78,201,176,0.6), inset 0 0 20px rgba(78,201,176,0.2); max-height: 0; padding: 0; margin: 0; opacity: 0; }
         .challenge:hover { transform: translateY(-5px) translateX(5px); box-shadow: 0 15px 35px rgba(78,201,176,0.25), 0 0 20px rgba(78,201,176,0.15); border-left-width: 8px; border-color: #5fd9c0; }
-        .challenge h3 { color: #4ec9b0; margin-bottom: 10px; font-size: 17px; display: flex; align-items: center; gap: 10px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .challenge h3::before { content: '🎯'; font-size: 19px; filter: drop-shadow(0 2px 4px rgba(78,201,176,0.4)); }
-        .challenge p { color: #d4d4d4; margin-bottom: 15px; font-size: 14px; line-height: 1.7; padding-left: 29px; }
+        .challenge h3 { color: #4ec9b0; margin-bottom: 10px; font-size: 20px; display: flex; align-items: center; gap: 10px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .challenge h3::before { content: '🎯'; font-size: 22px; filter: drop-shadow(0 2px 4px rgba(78,201,176,0.4)); }
+        .challenge p { color: #e8e8e8; margin-bottom: 15px; font-size: 16px; line-height: 1.8; padding-left: 29px; }
         .challenge-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
         .difficulty-badge { padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .diff-easy { background: linear-gradient(135deg, #4ec9b0, #5fd9c0); color: #000; }
@@ -84,6 +86,32 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { color: #4ec9b0; font-size: 20px; margin-top: 30px; font-weight: bold; }
         .loading-steps { color: #999; font-size: 14px; margin-top: 15px; text-align: center; line-height: 1.8; }
+        .hint-btn {
+            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .hint-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,165,0,0.4);
+        }
+        .hint-warning {
+            background: rgba(255,165,0,0.1);
+            border-left: 3px solid #ffa500;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .hint-warning em {
+            color: #ffffff;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -117,13 +145,32 @@
             <div id="labs"></div>
         </div>
         <div class="main hide" id="main">
-            <div class="terminal"><div id="terminal"></div></div>
-            <div class="challenges"><div class="challenges-header"><img src="/assets/logo.png" alt="Logo"><h1>📝 Desafios</h1></div><div id="tasks"></div></div>
+            <div class="terminal" id="terminalPanel"><div id="terminal"></div></div>
+            <div class="resizer" id="resizer"></div>
+            <div class="challenges" id="challengesPanel"><div class="challenges-header"><img src="/assets/logo.png" alt="Logo"><h1>📝 Desafios</h1></div><div id="tasks"></div></div>
         </div>
     </div>
     <div id="timer" class="timer" style="display:none;">
         <span id="timerText">00:00</span>
         <button onclick="endSession()">Encerrar</button>
+        <button onclick="toggleLayout()" style="margin-left:10px;" title="Alternar layout">⇄</button>
+    </div>
+    
+    <div id="scoreboard" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;overflow-y:auto;padding:50px;">
+        <div style="max-width:800px;margin:0 auto;background:#1a1a2e;padding:30px;border-radius:10px;">
+            <h2 style="color:#00d9ff;text-align:center;margin-bottom:30px;">🏆 Scoreboard - Tempo Real</h2>
+            <table id="scoreboardTable" style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#0f0f1e;">
+                        <th style="padding:15px;text-align:left;color:#00d9ff;">#</th>
+                        <th style="padding:15px;text-align:left;color:#00d9ff;">Usuário</th>
+                        <th style="padding:15px;text-align:right;color:#00d9ff;">Pontos</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button onclick="document.getElementById('scoreboard').style.display='none';document.querySelector('.sidebar').style.display='block';if(scoreboardInterval)clearInterval(scoreboardInterval);scoreboardInterval=null;" style="margin-top:30px;padding:15px 30px;background:#00d9ff;border:none;border-radius:5px;cursor:pointer;font-weight:bold;width:100%;">Fechar</button>
+        </div>
     </div>
     
     <div id="loadingOverlay" class="loading-overlay">
@@ -135,7 +182,124 @@
     <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
     <script>
-        let term, fit, ws, session, timerInterval, completedCount = 0, totalChallenges = 0, totalPoints = 0, currentUser = '';
+        const motivationalQuotes = [
+            "Esforça-te, e sê corajoso. (Josué 1:9)",
+            "Sem esforço, não há colheita. (Princípio universal do trabalho)",
+            "A vontade é o martelo do destino. (Arthur Schopenhauer)",
+            "Age como se tua ação fosse lei universal. (Immanuel Kant)",
+            "Disciplina é liberdade. (Epicteto)",
+            "Conquista a ti mesmo, e conquistarás o mundo. (Eco estoico – Marco Aurélio)",
+            "Esforça-te: o Reino exige violência interior. (Jesus Cristo – Mateus 11:12)",
+            "A mente disciplinada é invencível. (Buda)",
+            "O que está em cima é como o que está embaixo. Age. (Hermes Trismegisto – O Caibalion)",
+            "Quem domina a si, domina o destino. (Princípio estoico)",
+            "Fortalece teu espírito, e o corpo seguirá. (Sabedoria estoica)",
+            "A dor é o preço do crescimento. (Princípio de superação)",
+            "O caráter se forja na resistência. (Princípio clássico de virtude)",
+            "Age hoje; o amanhã é ilusão. (Marco Aurélio)",
+            "A disciplina supera o talento. (Princípio de constância)",
+            "Virtude é prática, não intenção. (Aristóteles)",
+            "Esforça-te em silêncio; deixa o resultado falar. (Sabedoria estratégica)",
+            "O mundo pertence aos determinados. (Princípio de liderança)",
+            "A vontade reta cria poder. (Arthur Schopenhauer)",
+            "Suporta e persevera. (Marco Aurélio)",
+            "Não reclames; constrói. (Princípio de responsabilidade)",
+            "Grandes obras exigem grandes sacrifícios. (Princípio histórico universal)",
+            "Esforça-te além do medo. (Princípio de coragem)",
+            "O hábito molda o destino. (Aristóteles – ética da virtude)",
+            "Quem quer poder, suporta peso. (Nicolau Maquiavel)",
+            "A mente é teu campo de batalha. (Sabedoria estratégica clássica)",
+            "Sem constância, não há maestria. (Princípio de disciplina)",
+            "O espírito forte dobra a realidade. (Tradição filosófica clássica)",
+            "Vigia teus pensamentos; eles constroem teu futuro. (Sabedoria atribuída a Buda)",
+            "Firmeza hoje, vitória amanhã. (Princípio estratégico)",
+            "Transforma fraqueza em força. (Friedrich Nietzsche)",
+            "O esforço revela o eleito. (Princípio meritocrático clássico)",
+            "Quem se domina, não é dominado. (Epicteto)",
+            "Levanta-te cada vez que cair. (Princípio de perseverança)",
+            "A ação supera a intenção. (Princípio prático clássico)",
+            "Esforça-te até que o impossível ceda. (Princípio de persistência)",
+            "A coragem nasce na decisão. (Aristóteles – ética da virtude)",
+            "Persistência vence resistência. (Princípio universal de superação)",
+            "Nada resiste à vontade disciplinada. (Espírito estoico)",
+            "Esforça-te — e torna-te aquilo que deves ser. (Friedrich Nietzsche)"
+        ];
+        
+        let term, fit, ws, session, sessionId, timerInterval, completedCount = 0, totalChallenges = 0, totalPoints = 0, currentUser = '';
+        
+        // Resizer arrastável
+        const resizer = document.getElementById('resizer');
+        const terminalPanel = document.getElementById('terminalPanel');
+        const challengesPanel = document.getElementById('challengesPanel');
+        let isResizing = false;
+        
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const main = document.querySelector('.main');
+            
+            if (isHorizontal) {
+                const containerWidth = main.offsetWidth;
+                const newTerminalWidth = e.clientX - terminalPanel.offsetLeft;
+                const terminalPercent = (newTerminalWidth / containerWidth) * 100;
+                
+                if (terminalPercent > 20 && terminalPercent < 80) {
+                    terminalPanel.style.flex = `0 0 ${terminalPercent}%`;
+                    challengesPanel.style.flex = `0 0 ${100 - terminalPercent}%`;
+                }
+            } else {
+                const containerHeight = main.offsetHeight;
+                const newTerminalHeight = e.clientY - terminalPanel.offsetTop;
+                const terminalPercent = (newTerminalHeight / containerHeight) * 100;
+                
+                if (terminalPercent > 20 && terminalPercent < 80) {
+                    terminalPanel.style.flex = `0 0 ${terminalPercent}%`;
+                    challengesPanel.style.flex = `0 0 ${100 - terminalPercent}%`;
+                }
+            }
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
+        
+        // Alternar layout
+        let isHorizontal = true;
+        window.toggleLayout = function() {
+            const main = document.querySelector('.main');
+            isHorizontal = !isHorizontal;
+            
+            if (isHorizontal) {
+                // Horizontal (lado a lado)
+                main.style.flexDirection = 'row';
+                resizer.style.width = '5px';
+                resizer.style.height = 'auto';
+                resizer.style.cursor = 'col-resize';
+                challengesPanel.style.borderLeft = '4px solid #4ec9b0';
+                challengesPanel.style.borderTop = 'none';
+                terminalPanel.style.flex = '1';
+                terminalPanel.style.minHeight = 'auto';
+                challengesPanel.style.flex = '1';
+                challengesPanel.style.minHeight = 'auto';
+            } else {
+                // Vertical (em cima/embaixo)
+                main.style.flexDirection = 'column';
+                resizer.style.width = 'auto';
+                resizer.style.height = '5px';
+                resizer.style.cursor = 'row-resize';
+                challengesPanel.style.borderTop = '4px solid #4ec9b0';
+                challengesPanel.style.borderLeft = 'none';
+                terminalPanel.style.flex = '0 0 50%';
+                terminalPanel.style.minHeight = '300px';
+                challengesPanel.style.flex = '0 0 50%';
+                challengesPanel.style.minHeight = '300px';
+            }
+        };
         
         window.addEventListener('load', async () => {
             // NÃO carrega nome salvo - sempre mostra o campo
@@ -178,16 +342,16 @@
         
         fetch('/api/labs').then(r => r.json()).then(labs => {
             document.getElementById('labs').innerHTML = labs.map((l, idx) => `
-                <div class="lab">
+                <div class="lab" id="lab-${idx}">
                     <div class="lab-title">${l.name}</div>
                     <div class="lab-desc">${l.description}</div>
                     <div class="lab-desc">⏱️ ${l.duration} | 🎯 ${l.challenges} desafios</div>
-                    <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx})">Iniciar</button>
+                    <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">Iniciar</button>
                 </div>
             `).join('');
         });
 
-        async function start(id, btnIndex) {
+        async function start(id, btnIndex, labName) {
             if (!currentUser) {
                 currentUser = 'Player_' + Date.now().toString().slice(-6);
                 localStorage.setItem('ctf_username', currentUser);
@@ -196,9 +360,14 @@
             const loadingText = document.getElementById('loadingText');
             const loadingSteps = document.getElementById('loadingSteps');
             const btn = document.getElementById(`btn-${btnIndex}`);
+            const labCard = document.getElementById(`lab-${btnIndex}`);
+            
+            // Destaca lab selecionado
+            document.querySelectorAll('.lab').forEach(l => l.style.border = '2px solid #2a2a2a');
+            if (labCard) labCard.style.border = '2px solid #00d9ff';
             
             loadingOverlay.classList.add('show');
-            loadingText.textContent = '🚀 Iniciando desafio...';
+            loadingText.textContent = `🚀 Iniciando ${labName}...`;
             loadingSteps.textContent = 'Aguarde enquanto preparamos o ambiente...';
             
             if (btn) {
@@ -208,12 +377,13 @@
             
             try {
                 if (session) {
-                    loadingText.textContent = '🧹 Encerrando sessão anterior...';
+                    const oldLabName = session.lab_name || 'sessão anterior';
+                    loadingText.textContent = `🧹 Encerrando ${oldLabName}...`;
                     await endSession(true);
                     await new Promise(resolve => setTimeout(resolve, 1000));
                 }
                 
-                loadingText.textContent = '🐳 Criando container Docker...';
+                loadingText.textContent = `🐳 Criando container para ${labName}...`;
                 loadingSteps.textContent = 'Isso pode levar alguns segundos...';
                 
                 const r = await fetch('/api/start-lab', {
@@ -237,6 +407,8 @@
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 session = d.session;
+                session.lab_name = labName;
+                sessionId = d.session.session_id;
                 completedCount = 0;
                 totalChallenges = d.lab.challenges.length;
                 totalPoints = d.lab.challenges.reduce((sum, c) => sum + c.points, 0);
@@ -271,10 +443,11 @@
                 
                 loadingText.textContent = '💻 Carregando terminal...';
                 
+                // Esconde sidebar quando inicia lab
                 document.querySelector('.sidebar').classList.add('hide');
                 document.getElementById('main').classList.remove('hide');
                 
-                term = new Terminal({cursorBlink: true, fontSize: 14, theme: {background: '#000', foreground: '#fff'}});
+                term = new Terminal({cursorBlink: true, fontSize: 18, theme: {background: '#000', foreground: '#fff'}});
                 fit = new FitAddon.FitAddon();
                 term.loadAddon(fit);
                 term.open(document.getElementById('terminal'));
@@ -285,7 +458,7 @@
                 ws.onmessage = e => term.write(e.data);
                 
                 document.getElementById('tasks').innerHTML = d.lab.challenges.map(c => `
-                    <div class="challenge">
+                    <div class="challenge" id="challenge-${c.id}">
                         <div class="challenge-header">
                             <h3>${c.id}. ${c.name} <span id="s${c.id}" class="status" style="display:none"></span></h3>
                             <div style="display:flex;gap:8px;align-items:center">
@@ -297,17 +470,20 @@
                         ${c.hints && c.hints.length > 0 ? `
                             <div class="hint-section">
                                 <div class="hint-warning">
-                                    Esforce-se em procurar a flag antes de usar a dica!
+                                    Dicas custam pontos. Tente resolver sozinho primeiro.<br>
+                                    <em>"${motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)]}"</em>
                                 </div>
-                                <button class="hint-btn" onclick="toggleHint(${c.id}, ${c.hints.length})" id="hint-btn-${c.id}">Ver Dica 1</button>
-                                <div class="hint-box" id="hint-${c.id}">
-                                    ${c.hints.map((h, i) => `<div class="hint-item" id="hint-${c.id}-${i}"><strong>💡 Dica ${i+1}:</strong> ${h.text}</div>`).join('')}
-                                </div>
+                                ${c.hints.map((h, i) => `
+                                    <button class="hint-btn" onclick="getHint(${c.id}, ${i})" style="margin:5px;">
+                                        Dica ${i+1} (-${h.cost || 5} pts)
+                                    </button>
+                                `).join('')}
                             </div>
                         ` : ''}
                         <div class="flag-input">
                             <input id="f${c.id}" placeholder="Digite a flag aqui..." onkeypress="if(event.key=='Enter')submit(${c.id})">
                             <button class="btn" onclick="submit(${c.id})">ENVIAR</button>
+                            <button class="btn" onclick="showWriteup(${c.id})" id="writeup-${c.id}" style="display:none;background:#6c757d;">📖 Writeup</button>
                         </div>
                     </div>
                 `).join('');
@@ -359,6 +535,17 @@
             if (!session) return;
             
             const sessionId = session.session_id;
+            const labName = session.lab_name || 'sessão';
+            
+            // Mostra loading ao encerrar
+            if (!silent) {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const loadingText = document.getElementById('loadingText');
+                const loadingSteps = document.getElementById('loadingSteps');
+                loadingOverlay.classList.add('show');
+                loadingText.textContent = `🛡️ Encerrando ${labName}...`;
+                loadingSteps.textContent = 'Removendo container e limpando recursos...';
+            }
             
             if (ws) ws.close();
             if (timerInterval) clearInterval(timerInterval);
@@ -379,6 +566,9 @@
             document.querySelector('.sidebar').classList.remove('hide');
             document.getElementById('terminal').innerHTML = '';
             
+            // Remove destaque do lab
+            document.querySelectorAll('.lab').forEach(l => l.style.border = '2px solid #2a2a2a');
+            
             session = null;
             completedCount = 0;
             totalChallenges = 0;
@@ -387,6 +577,13 @@
                 btn.disabled = false;
                 btn.style.opacity = '1';
             });
+            
+            // Esconde loading
+            if (!silent) {
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').classList.remove('show');
+                }, 1000);
+            }
         }
 
         async function submit(id) {
@@ -418,6 +615,10 @@
                 s.style.display = 'inline';
                 input.disabled = true;
                 completedCount++;
+                
+                // Mostra botão de writeup
+                const writeupBtn = document.getElementById('writeup-'+id);
+                if (writeupBtn) writeupBtn.style.display = 'inline-block';
                 
                 // Atualiza stats via API
                 fetch(`/api/user/${currentUser}/stats`).then(r => r.json()).then(stats => {
@@ -513,28 +714,108 @@
         }
         
         async function showScoreboard() {
+            document.querySelector('.sidebar').style.display = 'none';
+            document.getElementById('scoreboard').style.display = 'block';
+            
+            // Conecta WebSocket para atualizações em tempo real
+            connectScoreboardWs();
+            
             const r = await fetch('/api/scoreboard');
             const d = await r.json();
-            let html = '<div style="padding:20px">';
-            html += '<h2 style="color:#ffd700;margin-bottom:30px;text-align:center">🏆 Top 20 Jogadores</h2>';
-            html += '<table style="width:100%;color:#fff;border-collapse:collapse;margin-bottom:30px">';
-            html += '<thead><tr style="background:#1a1a1a;border-bottom:2px solid #4ec9b0"><th style="padding:15px;text-align:center;width:60px">#</th><th style="padding:15px;text-align:left">Usuário</th><th style="padding:15px;text-align:center;width:120px">Pontos</th><th style="padding:15px;text-align:center;width:100px">Sessões</th></tr></thead>';
-            html += '<tbody>';
-            d.scoreboard.forEach((u, i) => {
-                const bgColor = i === 0 ? '#2a4a2a' : (i % 2 ? '#2d2d30' : '#1a1a1a');
-                const trophy = i === 0 ? '🏆 ' : '';
-                html += `<tr style="background:${bgColor};border-bottom:1px solid #333">`;
-                html += `<td style="padding:15px;text-align:center;font-weight:bold;color:#4ec9b0">${i+1}</td>`;
-                html += `<td style="padding:15px;font-weight:${i<3?'bold':'normal'}">${trophy}${u.username}</td>`;
-                html += `<td style="padding:15px;text-align:center;color:#4ec9b0;font-weight:bold;font-size:16px">${u.score}</td>`;
-                html += `<td style="padding:15px;text-align:center;color:#999">${u.sessions}</td>`;
-                html += '</tr>';
-            });
-            html += '</tbody></table>';
-            html += '<button class="btn" style="width:200px;margin:0 auto;display:block;padding:12px" onclick="location.reload()">Voltar</button>';
-            html += '</div>';
-            document.querySelector('.sidebar').innerHTML = html;
+            updateScoreboardUI(d.scoreboard);
         }
+
+// ========== HINTS PROGRESSIVOS ==========
+async function getHint(challengeId, hintIndex) {
+    const res = await fetch('/api/get-hint', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            session_id: sessionId,
+            challenge_id: challengeId,
+            hint_index: hintIndex
+        })
+    });
+    
+    const data = await res.json();
+    
+    if (data.hint) {
+        // Verifica se já foi mostrada
+        const hintId = `hint-display-${challengeId}-${hintIndex}`;
+        if (document.getElementById(hintId)) return;
+        
+        // Mostra dica abaixo do botão
+        const hintDiv = document.createElement('div');
+        hintDiv.id = hintId;
+        hintDiv.style.cssText = 'background:#2a2a2a;padding:15px;margin:10px 0;border-left:3px solid #ffa500;border-radius:5px;';
+        hintDiv.innerHTML = `<strong>💡 Dica (-${data.cost} pts):</strong><br>${data.hint}<br><small style="color:#999">Pontuação atual: ${data.new_score}</small>`;
+        
+        const challenge = document.getElementById('challenge-'+challengeId);
+        const hintSection = challenge.querySelector('.hint-section');
+        hintSection.appendChild(hintDiv);
+        
+        currentScore = data.new_score;
+        updateStats();
+    } else {
+        alert('❌ ' + (data.error || 'Erro ao obter dica'));
+    }
+}
+
+// ========== WRITEUPS AUTOMÁTICOS ==========
+async function showWriteup(challengeId) {
+    const res = await fetch('/api/get-writeup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            session_id: sessionId,
+            challenge_id: challengeId
+        })
+    });
+    
+    const data = await res.json();
+    
+    if (data.writeup) {
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;display:flex;align-items:center;justify-content:center;';
+        modal.innerHTML = `
+            <div style="background:#1a1a2e;padding:30px;border-radius:10px;max-width:800px;max-height:80vh;overflow-y:auto;color:#fff;">
+                <h2>📖 Writeup: ${data.challenge_name}</h2>
+                <pre style="background:#0f0f1e;padding:20px;border-radius:5px;white-space:pre-wrap;">${data.writeup}</pre>
+                <button onclick="this.parentElement.parentElement.remove()" style="margin-top:20px;padding:10px 20px;background:#00d9ff;border:none;border-radius:5px;cursor:pointer;font-weight:bold;">Fechar</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    } else {
+        alert('❌ ' + (data.error || 'Writeup não disponível'));
+    }
+}
+
+// ========== SCOREBOARD TEMPO REAL ==========
+let scoreboardInterval = null;
+
+function connectScoreboardWs() {
+    if (scoreboardInterval) return;
+    
+    // Atualiza a cada 3 segundos via polling
+    scoreboardInterval = setInterval(async () => {
+        const r = await fetch('/api/scoreboard');
+        const d = await r.json();
+        updateScoreboardUI(d.scoreboard);
+    }, 3000);
+}
+
+function updateScoreboardUI(scoreboard) {
+    const tbody = document.querySelector('#scoreboardTable tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = scoreboard.map((user, i) => `
+        <tr style="${user.user_id === currentUser ? 'background:#00d9ff22;font-weight:bold;' : ''}">
+            <td>${i + 1}</td>
+            <td>${user.user_id === currentUser ? '👤 ' : ''}${user.username}</td>
+            <td>${user.score}</td>
+        </tr>
+    `).join('');
+}
     </script>
 </body>
 </html>

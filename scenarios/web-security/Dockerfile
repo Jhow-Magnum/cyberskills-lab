@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     openssh-server \
     curl \
     wget \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Configurar SSH

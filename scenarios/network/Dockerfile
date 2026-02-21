@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     netcat-traditional \
     tcpdump \
     nmap \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Configurar SSH
