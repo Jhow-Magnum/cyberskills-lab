@@ -46,6 +46,14 @@ def init_db():
         FOREIGN KEY (session_id) REFERENCES sessions(session_id)
     )''')
     conn.commit()
+    
+    # Cria usuário Tryg_Gelt com 1089 pontos (39 desafios)
+    c.execute('SELECT user_id FROM users WHERE user_id = ?', ('Tryg_Gelt',))
+    if not c.fetchone():
+        c.execute('INSERT INTO users (user_id, username, total_score) VALUES (?, ?, ?)',
+                  ('Tryg_Gelt', 'Tryg_Gelt', 1089))
+        conn.commit()
+    
     conn.close()
 
 init_db()
