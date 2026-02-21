@@ -9,7 +9,7 @@ metadata:
   duration: "90m"
 spec:
   environment:
-    image: ctf-senai/network:latest
+    image: cyberskills-lab/network:latest
     resources:
       cpu: "1"
       memory: "512Mi"

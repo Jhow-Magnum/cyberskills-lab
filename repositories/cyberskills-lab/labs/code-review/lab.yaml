@@ -9,7 +9,7 @@ metadata:
   duration: "75m"
 spec:
   environment:
-    image: ctf-senai/code-review:latest
+    image: cyberskills-lab/code-review:latest
     resources:
       cpu: "1"
       memory: "512Mi"
