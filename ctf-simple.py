@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sock import Sock
-import subprocess, yaml, uuid, time, threading, os, pty, select, struct, fcntl, termios, sqlite3
+import subprocess, yaml, uuid, time, threading, os, pty, select, struct, fcntl, termios, sqlite3, json
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -11,7 +11,7 @@ CORS(app)
 sock = Sock(app)
 
 sessions = {}
-LABS_DIR = Path("repositories/ctf-senai/labs")
+LABS_DIR = Path("repositories/cyberskills-lab/labs")
 DB_FILE = "ctf_scores.db"
 
 # Inicializa banco de dados
@@ -155,7 +155,7 @@ def start_lab():
     # Encerra TODAS as sessões anteriores do usuário e aguarda remoção
     for sid, sess in list(sessions.items()):
         if sess.get('user_id') == user_id:
-            container_name = f'ctf-{sid}'
+            container_name = f'cyberskills-{sid}'
             # Remove container de forma forçada e aguarda
             subprocess.run(['docker', 'rm', '-f', container_name], capture_output=True)
             del sessions[sid]
@@ -168,7 +168,7 @@ def start_lab():
         return jsonify({'error': 'Lab não encontrado'}), 404
     
     session_id = str(uuid.uuid4())[:8]
-    container_name = f'ctf-{session_id}'
+    container_name = f'cyberskills-{session_id}'
     
     # Verifica se container com mesmo nome já existe (segurança extra)
     check = subprocess.run(['docker', 'ps', '-a', '-q', '-f', f'name={container_name}'], 
@@ -194,7 +194,7 @@ def start_lab():
                   capture_output=True)
     
     # Pega porta SSH
-    port_result = subprocess.run(['docker', 'port', f'ctf-{session_id}', '22'], 
+    port_result = subprocess.run(['docker', 'port', f'cyberskills-{session_id}', '22'], 
                                 capture_output=True, text=True)
     ssh_port = port_result.stdout.strip().split(':')[-1] if port_result.returncode == 0 else '22'
     
@@ -265,7 +265,7 @@ def start_lab():
     
     def auto_destroy():
         time.sleep(duration_seconds)
-        subprocess.run(['docker', 'rm', '-f', f'ctf-{session_id}'], capture_output=True)
+        subprocess.run(['docker', 'rm', '-f', f'cyberskills-{session_id}'], capture_output=True)
         if session_id in sessions:
             del sessions[session_id]
     
@@ -282,6 +282,73 @@ def start_lab():
             'name': lab['metadata']['name'],
             'challenges': lab['spec']['challenges']
         }
+    })
+
+@app.route('/api/get-hint', methods=['POST'])
+def get_hint():
+    data = request.json
+    session_id = data.get('session_id')
+    challenge_id = data.get('challenge_id')
+    hint_index = data.get('hint_index', 0)
+    
+    if session_id not in sessions:
+        return jsonify({'error': 'Sessão não encontrada'}), 404
+    
+    session = sessions[session_id]
+    lab = load_lab(session['lab_id'])
+    
+    challenge = next((c for c in lab['spec']['challenges'] if c['id'] == challenge_id), None)
+    if not challenge or 'hints' not in challenge:
+        return jsonify({'error': 'Hint não disponível'}), 404
+    
+    hints = challenge['hints']
+    if hint_index >= len(hints):
+        return jsonify({'error': 'Hint não existe'}), 404
+    
+    hint = hints[hint_index]
+    cost = hint.get('cost', 5)
+    
+    # Deduz pontos
+    session['score'] = max(0, session['score'] - cost)
+    
+    # Atualiza banco
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute('UPDATE sessions SET score = score - ? WHERE session_id = ?', (cost, session_id))
+    c.execute('UPDATE users SET total_score = total_score - ? WHERE user_id = ?', (cost, session['user_id']))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({
+        'hint': hint['text'],
+        'cost': cost,
+        'new_score': session['score']
+    })
+
+@app.route('/api/get-writeup', methods=['POST'])
+def get_writeup():
+    data = request.json
+    session_id = data.get('session_id')
+    challenge_id = data.get('challenge_id')
+    
+    if session_id not in sessions:
+        return jsonify({'error': 'Sessão não encontrada'}), 404
+    
+    session = sessions[session_id]
+    
+    # Só mostra writeup se completou o desafio
+    if challenge_id not in session['completed']:
+        return jsonify({'error': 'Complete o desafio primeiro'}), 403
+    
+    lab = load_lab(session['lab_id'])
+    challenge = next((c for c in lab['spec']['challenges'] if c['id'] == challenge_id), None)
+    
+    if not challenge or 'solution' not in challenge:
+        return jsonify({'error': 'Writeup não disponível'}), 404
+    
+    return jsonify({
+        'writeup': challenge['solution'],
+        'challenge_name': challenge['name']
     })
 
 @app.route('/api/submit-flag', methods=['POST'])
@@ -342,7 +409,7 @@ def stop_lab(session_id):
         conn.commit()
         conn.close()
         
-        container_name = f'ctf-{session_id}'
+        container_name = f'cyberskills-{session_id}'
         result = subprocess.run(['docker', 'rm', '-f', container_name], 
                                capture_output=True, text=True)
         del sessions[session_id]
@@ -359,7 +426,7 @@ def cleanup_user():
     # Remove sessões do usuário no dicionário
     for sid, sess in list(sessions.items()):
         if sess.get('user_id') == user_id:
-            container_name = f'ctf-{sid}'
+            container_name = f'cyberskills-{sid}'
             result = subprocess.run(['docker', 'rm', '-f', container_name], 
                                    capture_output=True, text=True)
             if result.returncode == 0:
@@ -466,6 +533,22 @@ def user_stats(user_id):
         'sessions': sessions_data,
         'challenges_completed': challenges
     })
+
+@sock.route('/ws/scoreboard')
+def scoreboard_ws(ws):
+    """WebSocket para atualizações em tempo real do scoreboard"""
+    while True:
+        try:
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            c.execute('''SELECT user_id, username, total_score FROM users ORDER BY total_score DESC LIMIT 20''')
+            scoreboard = [{'user_id': row[0], 'username': row[1], 'score': row[2]} for row in c.fetchall()]
+            conn.close()
+            
+            ws.send(json.dumps({'scoreboard': scoreboard}))
+            time.sleep(2)  # Atualiza a cada 2 segundos
+        except:
+            break
 
 @sock.route('/ws/terminal/<session_id>')
 def terminal_ws(ws, session_id):
