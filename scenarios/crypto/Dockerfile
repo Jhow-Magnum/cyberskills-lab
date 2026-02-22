@@ -4,7 +4,7 @@ LABEL maintainer="CTF SENAI" description="Cenário Criptografia - 8 Desafios"
 
 # Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server python3 openssl bc xxd zip unzip file \
+    openssh-server python3 openssl bc xxd zip unzip file coreutils binutils \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # SSH config
