@@ -3,7 +3,7 @@ FROM debian:12-slim
 LABEL maintainer="CTF SENAI"
 LABEL description="Cenário Web Security - 3 Desafios"
 
-# Instalar Apache, PHP, MySQL
+# Instalar ferramentas de web security
 RUN apt-get update && apt-get install -y \
     apache2 \
     php \
@@ -12,8 +12,15 @@ RUN apt-get update && apt-get install -y \
     openssh-server \
     curl \
     wget \
+    netcat-openbsd \
+    python3 \
+    python3-pip \
+    sqlmap \
     file \
     && rm -rf /var/lib/apt/lists/*
+
+# Instalar bibliotecas Python para web
+RUN pip3 install --no-cache-dir requests beautifulsoup4 --break-system-packages
 
 # Configurar SSH
 RUN mkdir -p /var/run/sshd

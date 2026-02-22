@@ -3,15 +3,16 @@ FROM debian:12-slim
 LABEL maintainer="CTF SENAI"
 LABEL description="Cenário Network Security - 3 Desafios"
 
-# Instalar ferramentas de rede
+# Instalar ferramentas de análise de rede
 RUN apt-get update && apt-get install -y \
     openssh-server \
-    net-tools \
-    iproute2 \
-    iputils-ping \
-    netcat-traditional \
     tcpdump \
     nmap \
+    netcat-openbsd \
+    iproute2 \
+    dnsutils \
+    tshark \
+    iputils-ping \
     file \
     && rm -rf /var/lib/apt/lists/*
 

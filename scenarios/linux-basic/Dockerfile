@@ -4,18 +4,20 @@ FROM debian:12-slim
 LABEL maintainer="CTF SENAI"
 LABEL description="Cenário Linux Básico - 8 Desafios"
 
-# Instalar ferramentas essenciais
+# Instalar ferramentas Linux básicas (minimalista)
 RUN apt-get update && apt-get install -y \
     openssh-server \
+    bash \
+    coreutils \
+    grep \
+    sed \
+    gawk \
+    findutils \
+    less \
     vim \
-    nano \
-    curl \
-    wget \
-    net-tools \
     procps \
     sudo \
     cron \
-    findutils \
     file \
     && rm -rf /var/lib/apt/lists/*
 

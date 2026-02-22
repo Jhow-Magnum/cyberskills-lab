@@ -185,9 +185,17 @@ def start_lab():
         subprocess.run(['docker', 'rm', '-f', container_name], capture_output=True)
         time.sleep(0.5)
     
-    # Cria container
+    # Cria container com limites de recursos
     image = lab['spec']['environment']['image']
-    cmd = ['docker', 'run', '-d', '--name', container_name, '-p', '22', image]
+    cmd = [
+        'docker', 'run', '-d',
+        '--name', container_name,
+        '--memory', '512m',
+        '--cpus', '1.0',
+        '--rm',  # Remove automaticamente ao parar
+        '-p', '22',
+        image
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     
     if result.returncode != 0:

@@ -3,13 +3,23 @@ FROM debian:12-slim
 LABEL maintainer="CTF SENAI"
 LABEL description="Cenário Code Review - 6 Desafios"
 
+# Instalar ferramentas de code review
 RUN apt-get update && apt-get install -y \
     openssh-server \
     python3 \
-    php \
+    python3-pip \
     nodejs \
+    npm \
+    default-jdk \
+    gcc \
+    make \
+    git \
+    php \
     file \
     && rm -rf /var/lib/apt/lists/*
+
+# Instalar bandit para análise de código Python
+RUN pip3 install --no-cache-dir bandit --break-system-packages
 
 RUN mkdir -p /var/run/sshd
 RUN echo 'root:root' | chpasswd
