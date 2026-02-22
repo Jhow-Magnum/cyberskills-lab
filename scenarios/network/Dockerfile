@@ -2,9 +2,9 @@ FROM debian:12-slim
 
 LABEL maintainer="CTF SENAI" description="Cenário Network Security - 3 Desafios"
 
-# Instalar ferramentas de rede
+# Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server tcpdump nmap netcat-openbsd iproute2 dnsutils tshark iputils-ping file \
+    openssh-server nmap netcat-openbsd iproute2 iputils-ping file \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # SSH config

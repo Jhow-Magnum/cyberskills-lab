@@ -2,10 +2,9 @@ FROM debian:12-slim
 
 LABEL maintainer="CTF SENAI" description="Cenário Web Security - 3 Desafios"
 
-# Instalar tudo em uma camada
+# Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    apache2 php php-mysql mariadb-server openssh-server curl wget netcat-openbsd python3 python3-pip sqlmap file \
-    && pip3 install --no-cache-dir requests beautifulsoup4 --break-system-packages \
+    apache2 php openssh-server curl wget netcat-openbsd file \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # SSH config
@@ -19,7 +18,7 @@ RUN echo -e "User-agent: *\nDisallow: /admin/\nDisallow: /secret/\n\n# Flag: R0B
     && echo -e '<?php\nif(isset($_POST["username"]) && isset($_POST["password"])) {\n    echo "<h2>Flag: SQL_1NJ3CT10N</h2>";\n}\n?>\n<form method="POST">\n<input type="text" name="username" placeholder="Username">\n<input type="password" name="password" placeholder="Password">\n<button type="submit">Login</button>\n</form>' > /var/www/html/login/index.php
 
 # Script de inicialização
-RUN echo -e '#!/bin/bash\nservice mysql start\nmysql -e "CREATE DATABASE IF NOT EXISTS ctf;"\nservice apache2 start\n/usr/sbin/sshd -D' > /start.sh && chmod +x /start.sh
+RUN echo -e '#!/bin/bash\nservice apache2 start\n/usr/sbin/sshd -D' > /start.sh && chmod +x /start.sh
 
 EXPOSE 22 80
 CMD ["/start.sh"]

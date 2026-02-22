@@ -2,10 +2,9 @@ FROM debian:12-slim
 
 LABEL maintainer="CTF SENAI" description="Cenário Code Review - 6 Desafios"
 
-# Instalar ferramentas
+# Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server python3 python3-pip nodejs npm default-jdk gcc make git php file \
-    && pip3 install --no-cache-dir bandit --break-system-packages \
+    openssh-server python3 php file \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # SSH config

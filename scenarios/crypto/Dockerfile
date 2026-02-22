@@ -2,10 +2,9 @@ FROM debian:12-slim
 
 LABEL maintainer="CTF SENAI" description="Cenário Criptografia - 8 Desafios"
 
-# Instalar tudo em uma camada + limpar cache
+# Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server python3 python3-pip openssl bc xxd zip unzip file \
-    && pip3 install --no-cache-dir pycryptodome sympy pwntools --break-system-packages \
+    openssh-server python3 openssl bc xxd zip unzip file \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # SSH config
