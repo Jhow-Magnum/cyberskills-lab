@@ -597,15 +597,23 @@ def terminal_ws(ws, session_id):
     os.close(slave)
     
     def read_output():
+        buffer = b''
         while True:
             try:
-                r, _, _ = select.select([master], [], [], 0.01)  # Reduzido para 10ms para melhor responsividade
+                r, _, _ = select.select([master], [], [], 0.05)
                 if r:
-                    data = os.read(master, 8192)  # Aumentado buffer
+                    data = os.read(master, 16384)  # Buffer maior
                     if data:
-                        ws.send(data.decode('utf-8', errors='ignore'))
+                        buffer += data
+                        # Envia buffer acumulado para reduzir overhead
+                        if len(buffer) >= 1024 or b'\n' in buffer:
+                            ws.send(buffer.decode('utf-8', errors='ignore'))
+                            buffer = b''
                     else:
                         break
+                elif buffer:  # Envia buffer restante após timeout
+                    ws.send(buffer.decode('utf-8', errors='ignore'))
+                    buffer = b''
             except:
                 break
     
