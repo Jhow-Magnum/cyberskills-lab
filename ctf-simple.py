@@ -572,9 +572,16 @@ def terminal_ws(ws, session_id):
         return
     
     container_name = f'cyberskills-{session_id}'
+    lab_id = sessions[session_id].get('lab_id', '')
+    
+    # Labs que devem abrir como usuário comum (não-root)
+    non_root_labs = ['pentest', 'web-security', 'network']
     
     # Executa bash no container
-    cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
+    if lab_id in non_root_labs:
+        cmd = ['docker', 'exec', '-it', '-u', 'user', container_name, '/bin/bash']
+    else:
+        cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
     master, slave = pty.openpty()
     
     # Configura terminal em modo raw para suportar todos os códigos de controle
