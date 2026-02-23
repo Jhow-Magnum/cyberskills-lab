@@ -577,6 +577,11 @@ def terminal_ws(ws, session_id):
     cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
     master, slave = pty.openpty()
     
+    # Configura terminal em modo raw para suportar todos os códigos de controle
+    attrs = termios.tcgetattr(master)
+    attrs[3] = attrs[3] & ~termios.ECHO  # Desabilita echo local
+    termios.tcsetattr(master, termios.TCSANOW, attrs)
+    
     # Configura tamanho do terminal (80 colunas x 24 linhas)
     winsize = struct.pack('HHHH', 24, 80, 0, 0)
     fcntl.ioctl(master, termios.TIOCSWINSZ, winsize)
@@ -594,15 +599,11 @@ def terminal_ws(ws, session_id):
     def read_output():
         while True:
             try:
-                r, _, _ = select.select([master], [], [], 0.1)
+                r, _, _ = select.select([master], [], [], 0.01)  # Reduzido para 10ms para melhor responsividade
                 if r:
-                    data = os.read(master, 4096)  # Aumentado de 1024 para 4096
+                    data = os.read(master, 8192)  # Aumentado buffer
                     if data:
-                        # Envia em chunks menores para evitar overflow
-                        chunk_size = 1024
-                        for i in range(0, len(data), chunk_size):
-                            ws.send(data[i:i+chunk_size].decode('utf-8', errors='ignore'))
-                            time.sleep(0.01)  # Pequeno delay entre chunks
+                        ws.send(data.decode('utf-8', errors='ignore'))
                     else:
                         break
             except:
