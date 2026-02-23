@@ -577,6 +577,10 @@ def terminal_ws(ws, session_id):
     cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
     master, slave = pty.openpty()
     
+    # Configura tamanho do terminal (80 colunas x 24 linhas)
+    winsize = struct.pack('HHHH', 24, 80, 0, 0)
+    fcntl.ioctl(master, termios.TIOCSWINSZ, winsize)
+    
     proc = subprocess.Popen(
         cmd,
         stdin=slave,
@@ -610,7 +614,16 @@ def terminal_ws(ws, session_id):
         try:
             data = ws.receive()
             if data:
-                os.write(master, data.encode())
+                # Verifica se é comando de resize (formato: "RESIZE:cols:rows")
+                if isinstance(data, str) and data.startswith('RESIZE:'):
+                    try:
+                        _, cols, rows = data.split(':')
+                        winsize = struct.pack('HHHH', int(rows), int(cols), 0, 0)
+                        fcntl.ioctl(master, termios.TIOCSWINSZ, winsize)
+                    except:
+                        pass
+                else:
+                    os.write(master, data.encode())
         except:
             break
     
