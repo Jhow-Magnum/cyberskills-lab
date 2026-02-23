@@ -572,10 +572,10 @@ def terminal_ws(ws, session_id):
         ws.close()
         return
     
-    container_id = sessions[session_id]['container_id']
+    container_name = f'cyberskills-{session_id}'
     
     # Executa bash no container
-    cmd = ['docker', 'exec', '-it', container_id, '/bin/bash']
+    cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
     master, slave = pty.openpty()
     
     proc = subprocess.Popen(
