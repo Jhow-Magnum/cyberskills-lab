@@ -18,7 +18,7 @@ RUN echo -e "User-agent: *\nDisallow: /admin/\nDisallow: /secret/\n\n# Flag: R0B
     && echo -e '<?php\nif(isset($_POST["username"]) && isset($_POST["password"])) {\n    echo "<h2>Flag: SQL_1NJ3CT10N</h2>";\n}\n?>\n<form method="POST">\n<input type="text" name="username" placeholder="Username">\n<input type="password" name="password" placeholder="Password">\n<button type="submit">Login</button>\n</form>' > /var/www/html/login/index.php
 
 # Script de inicialização
-RUN echo -e '#!/bin/bash\nservice apache2 start\n/usr/sbin/sshd -D' > /start.sh && chmod +x /start.sh
+RUN printf '#!/bin/bash\nservice apache2 start\n/usr/sbin/sshd -D\n' > /start.sh && chmod +x /start.sh
 
 EXPOSE 22 80
 CMD ["/start.sh"]

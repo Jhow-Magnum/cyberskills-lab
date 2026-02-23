@@ -18,10 +18,10 @@ RUN mkdir -p /root/network \
     && echo "22" > /root/network/ssh_port_flag.txt
 
 # Serviços fake
-RUN echo -e '#!/bin/bash\nnc -l -p 8080 &\nnc -l -p 9000 &\nnc -l -p 9001 &' > /start-services.sh && chmod +x /start-services.sh
+RUN printf '#!/bin/bash\nnc -l -p 8080 &\nnc -l -p 9000 &\nnc -l -p 9001 &\n' > /start-services.sh && chmod +x /start-services.sh
 
 # Script de inicialização
-RUN echo -e '#!/bin/bash\n/start-services.sh\n/usr/sbin/sshd -D' > /start.sh && chmod +x /start.sh
+RUN printf '#!/bin/bash\n/start-services.sh\n/usr/sbin/sshd -D\n' > /start.sh && chmod +x /start.sh
 
 EXPOSE 22
 CMD ["/start.sh"]
