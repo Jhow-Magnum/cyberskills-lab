@@ -592,9 +592,13 @@ def terminal_ws(ws, session_id):
             try:
                 r, _, _ = select.select([master], [], [], 0.1)
                 if r:
-                    data = os.read(master, 1024)
+                    data = os.read(master, 4096)  # Aumentado de 1024 para 4096
                     if data:
-                        ws.send(data.decode('utf-8', errors='ignore'))
+                        # Envia em chunks menores para evitar overflow
+                        chunk_size = 1024
+                        for i in range(0, len(data), chunk_size):
+                            ws.send(data[i:i+chunk_size].decode('utf-8', errors='ignore'))
+                            time.sleep(0.01)  # Pequeno delay entre chunks
                     else:
                         break
             except:
