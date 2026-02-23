@@ -192,7 +192,6 @@ def start_lab():
         '--name', container_name,
         '--memory', '512m',
         '--cpus', '1.0',
-        '--rm',  # Remove automaticamente ao parar
         '-p', '22',
         image
     ]
