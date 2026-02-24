@@ -24,5 +24,8 @@ RUN mkdir -p /opt/challenges/crypto /var/log/ctf /tmp/backup /etc/ctf /home/ctfu
     && printf '\x00\x00' | dd of=/srv/archives/backup.zip bs=1 count=2 conv=notrunc 2>/dev/null \
     && rm -rf /tmp/ziptemp
 
+# Criar README educativo
+RUN printf '=== CYBERSKILLS LAB - CRIPTOGRAFIA ===\n\nBem-vindo aos desafios de Criptografia!\nVocê está logado como '\''root'\'' Explore e decifre.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n8 DESAFIOS DE CRIPTOGRAFIA\n\nObjetivo: Decodificar, decifrar e quebrar hashes.\n\nComandos essenciais:\n• base64 -d               - Decodifica Base64\n• md5sum, sha256sum       - Gera hashes\n• echo -n "texto" | md5sum - Hash de texto\n• tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\'' - ROT13\n• xxd                      - Hexdump\n• openssl                  - Criptografia avançada\n\nDicas gerais:\n1. Arquivos codificados estão espalhados pelo sistema\n2. Hashes podem ser quebrados com wordlists\n3. ROT13 é uma cifra de substituição simples\n4. XOR pode ser quebrado testando todas as chaves (0-255)\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n💡 Usando Google/IA:\n\n✅ Pergunte: "Como decodificar Base64 no Linux?"\n✅ Pergunte: "O que é ROT13 e como decifrar?"\n✅ Pergunte: "Como quebrar hash MD5 com wordlist?"\n\n❌ Não peça soluções prontas!\n\nAPRENDA criptografia, não apenas resolva!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nComece explorando! Digite: find / -name "*.txt" 2>/dev/null\n' > /root/README.txt
+
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
