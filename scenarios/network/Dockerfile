@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /var/run/sshd && echo 'root:root' | chpasswd \
     && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# Criar usuário padrão para terminal
+RUN useradd -m -s /bin/bash user && echo 'user:user' | chpasswd
+
 # Criar desafios
 RUN mkdir -p /root/network \
     && echo "172.18.0.2" > /root/network/ip_flag.txt \

@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /var/run/sshd && echo 'root:root' | chpasswd \
     && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# Criar usuário padrão para terminal
+RUN useradd -m -s /bin/bash user && echo 'user:user' | chpasswd
+
 # Criar desafios web
 RUN echo -e "User-agent: *\nDisallow: /admin/\nDisallow: /secret/\n\n# Flag: R0B0TS_TXT" > /var/www/html/robots.txt \
     && echo -e '<!DOCTYPE html>\n<html><head><meta charset="UTF-8"><title>CTF SENAI</title></head>\n<body><h1>🎯 CTF SENAI - Web Security</h1>\n<!-- Flag: HTML_C0MM3NT -->\n<p>Explore o site.</p></body></html>' > /var/www/html/index.html \
