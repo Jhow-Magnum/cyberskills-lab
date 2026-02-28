@@ -1,0 +1,34 @@
+apiVersion: ctf.senai.io/v1
+kind: Challenge
+metadata:
+  name: desafio-final
+  version: "1.0.0"
+  description: "Desafio Final"
+  author: "SENAI"
+  difficulty: "special"
+  duration: "30m"
+spec:
+  environment:
+    image: cyberskills-lab/desafio-final:latest
+    resources:
+      cpu: "1"
+      memory: "256Mi"
+    ports:
+      - container: 22
+    credentials:
+      user: root
+      password: root
+  challenges:
+    - id: 1
+      name: "Desafio Final"
+      description: "Descubra quem é o primeiro colocado Tryg_Gelt. Pense em cifras para revelar sua identidade."
+      points: 100
+      hints:
+        - text: "Pense em Cifras...."
+          cost: 0
+      validation:
+        type: "flag"
+        flag: "Jhow"
+        flag_format: "text"
+  scoring:
+    total_points: 100

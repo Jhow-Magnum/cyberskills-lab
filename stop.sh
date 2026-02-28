@@ -6,7 +6,7 @@ echo "🛑 Parando CYBERSKILLS LAB..."
 pkill -f ctf-simple.py
 
 # Parar todos os containers CTF
-docker ps -a | grep ctf- | awk '{print $1}' | xargs -r docker stop
-docker ps -a | grep ctf- | awk '{print $1}' | xargs -r docker rm
+docker ps -a | grep cyberskills | awk '{print $1}' | xargs -r docker stop
+docker ps -a | grep cyberskills | awk '{print $1}' | xargs -r docker rm
 
 echo "✅ Plataforma parada"

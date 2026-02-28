@@ -85,25 +85,29 @@ def list_labs():
                     'points': lab['spec']['scoring']['total_points']
                 })
     
-    # Verifica se usuário completou todos os labs
+    # Verifica se usuário completou todos os labs (exceto final-challenge)
     if user_id:
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        c.execute('SELECT COUNT(DISTINCT lab_id) FROM sessions WHERE user_id = ? AND completed_challenges = total_challenges', (user_id,))
+        c.execute('''SELECT COUNT(DISTINCT lab_id) FROM sessions 
+                     WHERE user_id = ? AND completed_challenges = total_challenges 
+                     AND lab_id != "final-challenge"''', (user_id,))
         completed_labs = c.fetchone()[0]
+        conn.close()
         
         # Se completou todos os 6 labs, mostra desafio final
         if completed_labs >= 6:
-            labs.append({
-                'id': 'final-challenge',
-                'name': '🏆 DESAFIO FINAL',
-                'description': 'Você completou todos os desafios. Decifre o enigma final.',
-                'difficulty': 'legendary',
-                'duration': '10m',
-                'challenges': 1,
-                'points': 100
-            })
-        conn.close()
+            final_lab = load_lab('final-challenge')
+            if final_lab:
+                labs.append({
+                    'id': 'final-challenge',
+                    'name': 'Desafio Final',
+                    'description': 'Você completou todos os desafios. Decifre o enigma final.',
+                    'difficulty': 'special',
+                    'duration': '30m',
+                    'challenges': 1,
+                    'points': 100
+                })
     
     return jsonify(labs)
 
@@ -113,8 +117,20 @@ def start_lab():
     lab_id = data.get('lab_id')
     user_id = data.get('user_id', 'anonymous')
     
-    # Desafio Final Especial
+    # Desafio Final Especial (sem container)
     if lab_id == 'final-challenge':
+        # Verifica se completou os 6 labs
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('''SELECT COUNT(DISTINCT lab_id) FROM sessions 
+                     WHERE user_id = ? AND completed_challenges = total_challenges 
+                     AND lab_id != "final-challenge"''', (user_id,))
+        completed_labs = c.fetchone()[0]
+        conn.close()
+        
+        if completed_labs < 6:
+            return jsonify({'error': 'Complete todos os 6 labs primeiro'}), 403
+        
         session_id = str(uuid.uuid4())[:8]
         
         # Salva sessão
@@ -142,18 +158,19 @@ def start_lab():
             'session': {
                 'session_id': session_id,
                 'ssh_port': None,
-                'remaining_seconds': 600
+                'remaining_seconds': 1800
             },
             'lab': {
-                'name': '🏆 DESAFIO FINAL',
+                'name': 'Desafio Final',
                 'challenges': [{
                     'id': 1,
                     'name': 'Conquiste o Primeiro Lugar',
-                    'description': 'Supere Tryg_Gelt no ranking.',
+                    'description': 'O primeiro colocado no ranking é: Tryg_Gelt. Para ultrapassá-lo, descubra quem ele realmente é.',
                     'points': 100,
+                    'hints': [{'text': 'Pense em Cifras....', 'cost': 0}],
                     'validation': {
                         'type': 'flag',
-                        'flag': 'Jhow_Jhow'
+                        'flag': 'Jhow'
                     }
                 }]
             }

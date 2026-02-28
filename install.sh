@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# CYBERSKILLS LAB - Instalação Automática
-
 set -e
 
 echo "╔══════════════════════════════════════════════════════════╗"
@@ -22,12 +20,50 @@ fi
 # Instalar Python e dependências
 echo "📦 Instalando dependências Python..."
 pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages --quiet 2>/dev/null || pip3 install Flask flask-cors flask-sock pyyaml docker --quiet
-
-# Construir todas as imagens Docker
-echo "🏭  Construindo imagens Docker (pode demorar alguns minutos)..."
-bash build-all.sh
-
+echo "✅ Dependências instaladas"
 echo ""
+
+# Spinner
+spin() {
+    local -a spinner=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+    local i=0
+    local pid=$1
+    while kill -0 $pid 2>/dev/null; do
+        printf "\r   ${spinner[$i]} Construindo..."
+        i=$(( (i+1) % 10 ))
+        sleep 0.1
+    done
+    printf "\r\033[K"
+}
+
+# Construir imagens
+echo "🏗️  Construindo imagens Docker..."
+echo ""
+
+LABS=(
+    "linux-basic"
+    "crypto"
+    "web-security"
+    "network"
+    "code-review"
+    "pentest"
+    "desafio-final"
+)
+
+for lab_id in "${LABS[@]}"; do
+    echo "📦 Construindo: $lab_id"
+    
+    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
+    BUILD_PID=$!
+    spin $BUILD_PID
+    wait $BUILD_PID
+    
+    echo "✅ $lab_id construído com sucesso!"
+    echo ""
+    
+    sleep 1
+done
+
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     ✅ INSTALAÇÃO COMPLETA!                              ║"
 echo "╚══════════════════════════════════════════════════════════╝"
