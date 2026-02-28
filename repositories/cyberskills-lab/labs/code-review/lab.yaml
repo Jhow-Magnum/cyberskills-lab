@@ -21,63 +21,63 @@ spec:
   challenges:
     - id: 1
       name: "Command Injection"
-      description: "Analise os scripts Python em /opt/vulnerable/. Encontre o código que executa comandos do sistema sem validação."
+      description: "Analise os scripts Python em /opt/vulnerable/. Encontre o código que executa comandos do sistema sem validação. A flag está no comentário."
       points: 25
       hints:
         - text: "Procure por os.system(), subprocess.call() ou exec() com input do usuário"
       validation:
         type: "flag"
         flag: "CMD_1NJ3CT10N"
-        location: "/root/code_review/flag1.txt"
+        location: "/opt/vulnerable/vuln1.py"
     - id: 2
       name: "SQL Injection"
-      description: "Revise o código JavaScript em /opt/vulnerable/. Identifique queries SQL vulneráveis."
+      description: "Revise o código JavaScript em /opt/vulnerable/. Identifique queries SQL vulneráveis. A flag está no comentário."
       points: 25
       hints:
         - text: "Procure por concatenação de strings em queries SQL sem prepared statements"
       validation:
         type: "flag"
         flag: "SQL_1NJ3CT10N"
-        location: "/root/code_review/flag2.txt"
+        location: "/opt/vulnerable/vuln2.js"
     - id: 3
       name: "Hardcoded Password"
-      description: "Procure por credenciais hardcoded nos arquivos de configuração em /opt/vulnerable/."
+      description: "Procure por credenciais hardcoded nos arquivos Python em /opt/vulnerable/. A flag é a própria flag no comentário."
       points: 25
       hints:
-        - text: "Use grep para procurar: password, passwd, secret, api_key"
+        - text: "Use grep para procurar: password, passwd, secret, api_key em arquivos .py"
       validation:
         type: "flag"
         flag: "H4RDC0D3D_P4SS"
-        location: "/root/code_review/flag3.txt"
+        location: "/opt/vulnerable/config.py"
     - id: 4
       name: "Code Execution"
-      description: "Encontre uso perigoso de eval() em arquivos PHP em /opt/vulnerable/."
+      description: "Encontre uso perigoso de eval() em arquivos PHP em /opt/vulnerable/. A flag está no comentário."
       points: 25
       hints:
-        - text: "Procure por eval(), exec(), system() com input não sanitizado"
+        - text: "Procure por eval(), exec(), system() com input não sanitizado em arquivos .php"
       validation:
         type: "flag"
         flag: "C0D3_3X3C"
-        location: "/root/code_review/flag4.txt"
+        location: "/opt/vulnerable/vuln4.php"
     - id: 5
       name: "API Key Leak"
-      description: "Procure por chaves de API expostas em arquivos de código ou .env em /opt/vulnerable/."
+      description: "Procure por chaves de API expostas em arquivos ocultos (.env) em /opt/vulnerable/. A flag está no comentário."
       points: 25
       hints:
-        - text: "Use grep -r 'API_KEY|SECRET_KEY|TOKEN' para encontrar"
+        - text: "Use grep -r 'API_KEY|SECRET_KEY|TOKEN' ou ls -la para encontrar arquivos ocultos"
       validation:
         type: "flag"
         flag: "L34K3D_K3Y"
-        location: "/root/code_review/flag5.txt"
+        location: "/opt/vulnerable/.env"
     - id: 6
       name: "XSS Vulnerability"
-      description: "Analise o código JavaScript em /opt/vulnerable/. Encontre innerHTML sem sanitização."
+      description: "Analise o código JavaScript em /opt/vulnerable/. Encontre innerHTML sem sanitização. A flag está no comentário."
       points: 25
       hints:
-        - text: "Procure por innerHTML, document.write() com dados do usuário"
+        - text: "Procure por innerHTML, document.write() com dados do usuário em arquivos .js"
       validation:
         type: "flag"
         flag: "XSS_VULN"
-        location: "/root/code_review/flag6.txt"
+        location: "/opt/vulnerable/vuln6.js"
   scoring:
     total_points: 150

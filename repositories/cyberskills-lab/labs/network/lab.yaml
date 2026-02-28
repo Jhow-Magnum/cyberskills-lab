@@ -21,33 +21,33 @@ spec:
   challenges:
     - id: 1
       name: "IP do Container"
-      description: "Descubra o endereço IP interno do container. Use comandos de rede."
+      description: "Execute /opt/network/challenge1.sh e descubra o IP do container. Use comandos de rede."
       points: 40
       hints:
         - text: "Use ip addr, ifconfig ou hostname -I para ver o IP"
       validation:
         type: "flag"
-        flag: "172.18.0.2"
-        location: "/root/network/ip_flag.txt"
+        flag: "N3TW0RK_1P"
+        location: "/opt/network/challenge1.sh"
     - id: 2
       name: "Portas Abertas"
-      description: "Conte quantas portas TCP estão em estado LISTEN. Use netstat ou ss."
+      description: "Execute /opt/network/challenge2.sh e conte quantas portas TCP estão em estado LISTEN."
       points: 40
       hints:
         - text: "Use: netstat -tuln | grep LISTEN | wc -l ou ss -tuln"
       validation:
         type: "flag"
-        flag: "5"
-        location: "/root/network/ports_flag.txt"
+        flag: "P0RT_C0UNT"
+        location: "/opt/network/challenge2.sh"
     - id: 3
       name: "Porta SSH"
-      description: "Identifique em qual porta o serviço SSH está escutando."
+      description: "Execute /opt/network/challenge3.sh e identifique em qual porta o SSH está escutando."
       points: 40
       hints:
         - text: "Use: netstat -tuln | grep ssh ou cat /etc/ssh/sshd_config"
       validation:
         type: "flag"
-        flag: "22"
-        location: "/root/network/ssh_port_flag.txt"
+        flag: "SSH_P0RT_22"
+        location: "/opt/network/challenge3.sh"
   scoring:
     total_points: 120
