@@ -85,12 +85,12 @@ echo ""
 echo "🚀 Iniciando plataforma..."
 echo ""
 
-bash start.sh &
-START_PID=$!
+nohup python3 ctf-simple.py > /tmp/cyberskills.log 2>&1 &
+echo $! > /tmp/cyberskills.pid
 
 sleep 3
 
-if kill -0 $START_PID 2>/dev/null; then
+if ps -p $(cat /tmp/cyberskills.pid 2>/dev/null) > /dev/null 2>&1; then
     echo "✅ Plataforma iniciada com sucesso!"
     echo ""
     echo "📡 Acesse: http://localhost:5000"
