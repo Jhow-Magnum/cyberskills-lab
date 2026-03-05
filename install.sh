@@ -82,8 +82,21 @@ echo "╔═══════════════════════�
 echo "║     ✅ INSTALAÇÃO COMPLETA!                              ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
-echo "🚀 Para iniciar:"
-echo "   bash start.sh"
+echo "🚀 Iniciando plataforma..."
 echo ""
-echo "📡 Acesse: http://localhost:5000"
-echo ""
+
+bash start.sh &
+START_PID=$!
+
+sleep 3
+
+if kill -0 $START_PID 2>/dev/null; then
+    echo "✅ Plataforma iniciada com sucesso!"
+    echo ""
+    echo "📡 Acesse: http://localhost:5000"
+    echo ""
+    echo "⚠️  Para parar: bash ~/cyberskills-lab/stop.sh"
+    echo ""
+else
+    echo "❌ Erro ao iniciar. Execute manualmente: bash start.sh"
+fi
