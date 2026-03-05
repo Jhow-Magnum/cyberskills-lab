@@ -17,6 +17,9 @@ else
     echo "✅ Docker já instalado"
 fi
 
+# Garantir diretório válido
+cd ~
+
 # Clonar repositório
 echo "📥 Clonando repositório..."
 if [ -d "cyberskills-lab" ]; then
