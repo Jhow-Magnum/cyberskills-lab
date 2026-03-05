@@ -51,6 +51,14 @@ CYBERSKILLS LAB é uma plataforma educacional para treinamento prático em segur
 
 ## Instalação
 
+### Instalação Rápida (Recomendado)
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/install.sh | bash
+```
+
+### Instalação Manual
+
 ### 1. Instalar Docker
 
 ```bash
