@@ -403,6 +403,7 @@ def submit_flag():
     session_id = data.get('session_id')
     task_id = data.get('task_id')
     flag = data.get('flag', '').strip()
+    user_id = data.get('user_id', 'anonymous')
     
     if session_id not in sessions:
         return jsonify({'error': 'Sessão não encontrada'}), 404
@@ -417,29 +418,80 @@ def submit_flag():
     expected = challenge.get('validation', {}).get('flag', '')
     
     if flag == expected:
+        # Verifica se já completou este desafio NESTA sessão
         if task_id not in session['completed']:
+            # Verifica se já completou em QUALQUER sessão anterior
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            c.execute('''SELECT COUNT(*) FROM challenge_completions cc
+                        JOIN sessions s ON cc.session_id = s.session_id
+                        WHERE s.user_id = ? AND s.lab_id = ? AND cc.challenge_id = ?''',
+                     (user_id, session['lab_id'], task_id))
+            already_completed = c.fetchone()[0] > 0
+            conn.close()
+            
+            # Marca como completado na sessão atual
             session['completed'].add(task_id)
             points = challenge.get('points', 10)
             session['score'] += points
             
-            # Salva no banco
-            conn = sqlite3.connect(DB_FILE)
-            c = conn.cursor()
-            c.execute('''INSERT INTO challenge_completions 
-                        (session_id, challenge_id, challenge_name, points)
-                        VALUES (?, ?, ?, ?)''',
-                     (session_id, task_id, challenge['name'], points))
-            c.execute('UPDATE sessions SET score = score + ?, completed_challenges = completed_challenges + 1 WHERE session_id = ?',
-                     (points, session_id))
-            c.execute('UPDATE users SET total_score = total_score + ? WHERE user_id = ?',
-                     (points, session['user_id']))
-            conn.commit()
-            conn.close()
+            # Só adiciona pontos se NUNCA completou antes
+            if not already_completed:
+                conn = sqlite3.connect(DB_FILE)
+                c = conn.cursor()
+                c.execute('''INSERT INTO challenge_completions 
+                            (session_id, challenge_id, challenge_name, points)
+                            VALUES (?, ?, ?, ?)''',
+                         (session_id, task_id, challenge['name'], points))
+                c.execute('UPDATE sessions SET score = score + ?, completed_challenges = completed_challenges + 1 WHERE session_id = ?',
+                         (points, session_id))
+                c.execute('UPDATE users SET total_score = total_score + ? WHERE user_id = ?',
+                         (points, user_id))
+                conn.commit()
+                conn.close()
+            else:
+                # Já completou antes - apenas atualiza contador da sessão
+                conn = sqlite3.connect(DB_FILE)
+                c = conn.cursor()
+                c.execute('UPDATE sessions SET completed_challenges = completed_challenges + 1 WHERE session_id = ?',
+                         (session_id,))
+                conn.commit()
+                conn.close()
             
-            return jsonify({'correct': True, 'points': points, 'total_score': session['score']})
+            return jsonify({'correct': True, 'points': points if not already_completed else 0, 'total_score': session['score']})
         return jsonify({'correct': True, 'points': 0, 'total_score': session['score']})
     
     return jsonify({'correct': False, 'points': 0})
+
+@app.route('/api/reset-user', methods=['POST'])
+def reset_user():
+    data = request.json
+    user_id = data.get('user_id', '')
+    
+    if not user_id or user_id == 'Tryg_Gelt':
+        return jsonify({'error': 'Usuário inválido'}), 400
+    
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    
+    # Remove todas as sessões do usuário
+    c.execute('SELECT session_id FROM sessions WHERE user_id = ?', (user_id,))
+    session_ids = [row[0] for row in c.fetchall()]
+    
+    # Remove completions
+    for sid in session_ids:
+        c.execute('DELETE FROM challenge_completions WHERE session_id = ?', (sid,))
+    
+    # Remove sessões
+    c.execute('DELETE FROM sessions WHERE user_id = ?', (user_id,))
+    
+    # Remove usuário
+    c.execute('DELETE FROM users WHERE user_id = ?', (user_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'message': 'Progresso resetado'})
 
 @app.route('/api/stop/<session_id>', methods=['DELETE'])
 def stop_lab(session_id):

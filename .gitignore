@@ -67,3 +67,6 @@ nohup.out
 
 # OS
 Thumbs.db
+GUIA_PRIVADO.md
+ctf_scores.db
+*.db
