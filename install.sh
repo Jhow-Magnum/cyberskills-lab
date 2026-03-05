@@ -18,16 +18,16 @@ else
 fi
 
 # Garantir diretório válido
-cd ~
+INSTALL_DIR="$HOME/cyberskills-lab"
 
 # Clonar repositório
 echo "📥 Clonando repositório..."
-if [ -d "cyberskills-lab" ]; then
+if [ -d "$INSTALL_DIR" ]; then
     echo "⚠️  Diretório já existe, removendo..."
-    rm -rf cyberskills-lab
+    rm -rf "$INSTALL_DIR"
 fi
-git clone https://github.com/Jhow-Magnum/cyberskills-lab.git --quiet
-cd cyberskills-lab
+git clone https://github.com/Jhow-Magnum/cyberskills-lab.git "$INSTALL_DIR" --quiet
+cd "$INSTALL_DIR"
 echo "✅ Repositório clonado"
 echo ""
 
