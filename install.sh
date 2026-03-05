@@ -97,6 +97,9 @@ if ps -p $(cat /tmp/cyberskills.pid 2>/dev/null) > /dev/null 2>&1; then
     echo ""
     echo "⚠️  Para parar: bash ~/cyberskills-lab/stop.sh"
     echo ""
+    
+    sleep 2
+    xdg-open http://localhost:5000 2>/dev/null || open http://localhost:5000 2>/dev/null || echo "🌐 Abra manualmente: http://localhost:5000"
 else
     echo "❌ Erro ao iniciar. Execute manualmente: bash start.sh"
 fi
