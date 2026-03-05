@@ -47,7 +47,11 @@ def init_db():
     )''')
     conn.commit()
     
-    # Cria usuário Tryg_Gelt com 1089 pontos (39 desafios)
+    # Cria usuário Tryg_Gelt com 1089 pontos (39 desafios - todos exceto o final)
+    # Total de pontos dos 6 labs: 1090 pontos
+    # Tryg_Gelt tem: 1089 pontos (falta 1 ponto)
+    # Desafio final: 100 pontos
+    # Usuário precisa completar TUDO + desafio final para ultrapassar
     c.execute('SELECT user_id FROM users WHERE user_id = ?', ('Tryg_Gelt',))
     if not c.fetchone():
         c.execute('INSERT INTO users (user_id, username, total_score) VALUES (?, ?, ?)',
@@ -70,8 +74,23 @@ def list_labs():
     # Pega user_id da query string
     user_id = request.args.get('user_id', '')
     
+    # Busca labs completados pelo usuário
+    completed_labs = set()
+    if user_id:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('''SELECT lab_id FROM sessions 
+                     WHERE user_id = ? AND completed_challenges = total_challenges''',
+                  (user_id,))
+        completed_labs = {row[0] for row in c.fetchall()}
+        conn.close()
+    
     labs = []
     for lab_dir in LABS_DIR.iterdir():
+        # Pula o desafio final - será adicionado depois se qualificado
+        if lab_dir.name == 'desafio-final':
+            continue
+            
         if lab_dir.is_dir() and (lab_dir / "lab.yaml").exists():
             lab = load_lab(lab_dir.name)
             if lab:
@@ -82,31 +101,28 @@ def list_labs():
                     'difficulty': lab['metadata'].get('difficulty', 'medium'),
                     'duration': lab['metadata'].get('duration', '30m'),
                     'challenges': len(lab['spec']['challenges']),
-                    'points': lab['spec']['scoring']['total_points']
+                    'points': lab['spec']['scoring']['total_points'],
+                    'completed': lab_dir.name in completed_labs
                 })
     
-    # Verifica se usuário completou todos os labs (exceto final-challenge)
+    # Verifica se usuário completou TODOS os 6 labs (exceto desafio-final)
     if user_id:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        c.execute('''SELECT COUNT(DISTINCT lab_id) FROM sessions 
-                     WHERE user_id = ? AND completed_challenges = total_challenges 
-                     AND lab_id != "final-challenge"''', (user_id,))
-        completed_labs = c.fetchone()[0]
-        conn.close()
+        # Conta quantos labs foram 100% completados (excluindo desafio-final)
+        non_final_completed = sum(1 for lab_id in completed_labs if lab_id != 'desafio-final')
         
-        # Se completou todos os 6 labs, mostra desafio final
-        if completed_labs >= 6:
-            final_lab = load_lab('final-challenge')
+        # Só mostra desafio final se completou TODOS os 6 labs
+        if non_final_completed >= 6:
+            final_lab = load_lab('desafio-final')
             if final_lab:
                 labs.append({
-                    'id': 'final-challenge',
-                    'name': 'Desafio Final',
-                    'description': 'Você completou todos os desafios. Decifre o enigma final.',
+                    'id': 'desafio-final',
+                    'name': '🏆 DESAFIO FINAL',
+                    'description': 'PARABÉNS! Você completou todos os labs. Agora enfrente o desafio final e conquiste o primeiro lugar!',
                     'difficulty': 'special',
                     'duration': '30m',
                     'challenges': 1,
-                    'points': 100
+                    'points': 100,
+                    'completed': 'desafio-final' in completed_labs
                 })
     
     return jsonify(labs)
@@ -118,13 +134,13 @@ def start_lab():
     user_id = data.get('user_id', 'anonymous')
     
     # Desafio Final Especial (sem container)
-    if lab_id == 'final-challenge':
+    if lab_id == 'desafio-final':
         # Verifica se completou os 6 labs
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         c.execute('''SELECT COUNT(DISTINCT lab_id) FROM sessions 
                      WHERE user_id = ? AND completed_challenges = total_challenges 
-                     AND lab_id != "final-challenge"''', (user_id,))
+                     AND lab_id != "desafio-final"''', (user_id,))
         completed_labs = c.fetchone()[0]
         conn.close()
         
@@ -267,9 +283,7 @@ def start_lab():
                        'mkdir -p /etc/cron.d && echo "# CTF Cron Job" > /etc/cron.d/ctf-cron && echo "# Flag: cr0n_m4st3r" >> /etc/cron.d/ctf-cron && chmod 644 /etc/cron.d/ctf-cron'],
                       capture_output=True)
         
-        # Remove README no final (usuário deve descobrir sozinho)
-        subprocess.run(['docker', 'exec', container_name, 'rm', '-f', '/root/README.txt'], capture_output=True)
-    
+
     # Salva sessão
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -635,25 +649,43 @@ def terminal_ws(ws, session_id):
     
     threading.Thread(target=read_output, daemon=True).start()
     
-    while True:
-        try:
-            data = ws.receive()
-            if data:
-                # Verifica se é comando de resize (formato: "RESIZE:cols:rows")
-                if isinstance(data, str) and data.startswith('RESIZE:'):
-                    try:
-                        _, cols, rows = data.split(':')
-                        winsize = struct.pack('HHHH', int(rows), int(cols), 0, 0)
-                        fcntl.ioctl(master, termios.TIOCSWINSZ, winsize)
-                    except:
-                        pass
-                else:
-                    os.write(master, data.encode())
-        except:
-            break
-    
-    proc.terminate()
-    os.close(master)
+    try:
+        while True:
+            try:
+                data = ws.receive()
+                if data:
+                    # Verifica se é comando de resize (formato: "RESIZE:cols:rows")
+                    if isinstance(data, str) and data.startswith('RESIZE:'):
+                        try:
+                            _, cols, rows = data.split(':')
+                            winsize = struct.pack('HHHH', int(rows), int(cols), 0, 0)
+                            fcntl.ioctl(master, termios.TIOCSWINSZ, winsize)
+                        except:
+                            pass
+                    else:
+                        os.write(master, data.encode())
+            except:
+                break
+    finally:
+        # Cleanup quando WebSocket desconectar
+        proc.terminate()
+        os.close(master)
+        
+        # Remove container quando usuário desconecta
+        if session_id in sessions:
+            subprocess.run(['docker', 'rm', '-f', container_name], capture_output=True)
+            
+            # Atualiza banco com fim da sessão
+            session = sessions[session_id]
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            duration = int((datetime.now() - session['start_time']).total_seconds())
+            c.execute('UPDATE sessions SET end_time = ?, duration_seconds = ? WHERE session_id = ?',
+                     (datetime.now(), duration, session_id))
+            conn.commit()
+            conn.close()
+            
+            del sessions[session_id]
 
 @app.route('/manifest.json')
 def manifest():

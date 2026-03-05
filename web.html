@@ -38,10 +38,23 @@
         .challenges-header { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
         .challenges-header img { width: 45px; height: 45px; object-fit: contain; }
         .challenges-header h1 { margin: 0; color: #4ec9b0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(78,201,176,0.5); font-weight: 700; }
-        .lab { background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; border: 2px solid #2a2a2a; transition: all 0.3s; }
+        .lab { background: #1a1a1a; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; border: 2px solid #2a2a2a; transition: all 0.3s; position: relative; }
         .lab:hover { background: #333; }
+        .lab.completed { border-color: #4ec9b0; background: linear-gradient(145deg, #1a2e26 0%, #0d1f15 100%); }
+        .lab.completed::after { content: '✅'; position: absolute; top: 10px; right: 10px; font-size: 20px; }
+        .lab.final-challenge { border: 3px solid #ffd700; background: linear-gradient(145deg, #2a2a1a 0%, #1a1a0a 100%); box-shadow: 0 0 20px rgba(255,215,0,0.3); animation: pulse-gold 2s infinite; }
+        .lab.final-challenge .lab-title { color: #ffd700; font-size: 16px; font-weight: bold; }
+        @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,215,0,0.6); } }
         .lab-title { font-weight: bold; color: #4ec9b0; margin-bottom: 5px; font-size: 14px; }
         .lab-desc { font-size: 11px; color: #999; margin-bottom: 8px; }
+        .progress-notification { position: fixed; top: 80px; right: 20px; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%); padding: 20px 30px; border-radius: 10px; border: 2px solid #4ec9b0; box-shadow: 0 10px 40px rgba(78,201,176,0.4); z-index: 9998; opacity: 0; transform: translateX(400px); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .progress-notification.show { opacity: 1; transform: translateX(0); }
+        .progress-notification .title { color: #4ec9b0; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
+        .progress-bar-container { background: #0a0a0a; height: 8px; border-radius: 4px; overflow: hidden; border: 1px solid #2a2a2a; margin: 8px 0; }
+        .progress-bar { background: linear-gradient(90deg, #4ec9b0 0%, #5fd9c0 100%); height: 100%; transition: width 0.5s ease; box-shadow: 0 0 10px rgba(78,201,176,0.6); }
+        .progress-text { font-size: 12px; color: #4ec9b0; text-align: center; font-weight: bold; }
+        .lab-progress { background: #0a0a0a; height: 4px; border-radius: 2px; margin: 8px 0; overflow: hidden; border: 1px solid #2a2a2a; }
+        .lab-progress-bar { background: linear-gradient(90deg, #4ec9b0 0%, #5fd9c0 100%); height: 100%; transition: width 0.3s ease; }
         .btn { background: #4ec9b0; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; width: 100%; }
         .challenge { background: linear-gradient(145deg, #1e1e1e 0%, #121212 100%); padding: 18px; margin-bottom: 18px; border-radius: 10px; border: 2px solid #2a2a2a; border-left: 5px solid #4ec9b0; box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-height: 2000px; font-size: 16px; }
         .challenge.completed { border-color: #4ec9b0; box-shadow: 0 0 30px rgba(78,201,176,0.6), inset 0 0 20px rgba(78,201,176,0.2); max-height: 0; padding: 0; margin: 0; opacity: 0; }
@@ -338,18 +351,68 @@
             document.getElementById('displayName').textContent = '👤 ' + currentUser;
             document.getElementById('usernameInput').classList.add('hidden');
             document.getElementById('usernameDisplay').style.display = 'block';
+            loadLabs(); // Recarrega labs com status de completado
         }
         
-        fetch('/api/labs').then(r => r.json()).then(labs => {
-            document.getElementById('labs').innerHTML = labs.map((l, idx) => `
-                <div class="lab" id="lab-${idx}">
-                    <div class="lab-title">${l.name}</div>
-                    <div class="lab-desc">${l.description}</div>
-                    <div class="lab-desc">⏱️ ${l.duration} | 🎯 ${l.challenges} desafios</div>
-                    <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">Iniciar</button>
-                </div>
-            `).join('');
-        });
+        function loadLabs() {
+            const url = currentUser ? `/api/labs?user_id=${encodeURIComponent(currentUser)}` : '/api/labs';
+            fetch(url).then(r => r.json()).then(async labs => {
+                // Busca progresso de cada lab
+                let labProgress = {};
+                let hasUnlockedFinal = false;
+                
+                if (currentUser) {
+                    const statsRes = await fetch(`/api/user/${encodeURIComponent(currentUser)}/stats`);
+                    if (statsRes.ok) {
+                        const stats = await statsRes.json();
+                        stats.sessions.forEach(s => {
+                            if (!labProgress[s.lab_id] || s.completed > (labProgress[s.lab_id].completed || 0)) {
+                                labProgress[s.lab_id] = { completed: s.completed, total: s.total };
+                            }
+                        });
+                    }
+                    
+                    // Verifica se desbloqueou o desafio final
+                    hasUnlockedFinal = labs.some(l => l.id === 'desafio-final');
+                }
+                
+                // Filtra labs - remove desafio-final se não tiver user_id
+                const filteredLabs = currentUser ? labs : labs.filter(l => l.id !== 'desafio-final');
+                
+                document.getElementById('labs').innerHTML = filteredLabs.map((l, idx) => {
+                    const progress = labProgress[l.id] || { completed: 0, total: l.challenges };
+                    const percentage = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
+                    const isFinal = l.id === 'desafio-final';
+                    
+                    return `
+                        <div class="lab ${l.completed ? 'completed' : ''} ${isFinal ? 'final-challenge' : ''}" id="lab-${idx}">
+                            <div class="lab-title">${l.name}</div>
+                            <div class="lab-desc">${l.description}</div>
+                            <div class="lab-desc">⏱️ ${l.duration} | 🎯 ${l.challenges} desafio${l.challenges > 1 ? 's' : ''}</div>
+                            ${percentage > 0 && !isFinal ? `
+                                <div class="lab-progress">
+                                    <div class="lab-progress-bar" style="width:${percentage}%"></div>
+                                </div>
+                                <div style="font-size:10px;color:#4ec9b0;text-align:center;margin-top:4px;">
+                                    ${progress.completed}/${progress.total} completados
+                                </div>
+                            ` : ''}
+                            <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">${l.completed ? 'Refazer' : 'Iniciar'}</button>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Mostra alerta quando desbloquear o desafio final
+                if (hasUnlockedFinal && !sessionStorage.getItem('final_unlocked_shown')) {
+                    sessionStorage.setItem('final_unlocked_shown', 'true');
+                    setTimeout(() => {
+                        alert('🏆 PARABÉNS!\n\nVocê completou todos os 6 laboratórios!\n\nO DESAFIO FINAL foi desbloqueado!\n\nComplete-o para conquistar o primeiro lugar no ranking!');
+                    }, 500);
+                }
+            });
+        }
+        
+        loadLabs();
 
         async function start(id, btnIndex, labName) {
             if (!currentUser) {
@@ -615,6 +678,7 @@
                 s.style.display = 'inline';
                 input.disabled = true;
                 completedCount++;
+                showProgressNotification(); // Mostra notificação temporária
                 
                 // Mostra botão de writeup
                 const writeupBtn = document.getElementById('writeup-'+id);
@@ -630,6 +694,9 @@
                     });
                     document.getElementById('statCompleted').textContent = completedLabs.size;
                     document.getElementById('statPoints').textContent = stats.total_score;
+                    
+                    // Recarrega labs para atualizar status de completado
+                    loadLabs();
                 });
                 
                 // Borda verde NEON no card
@@ -711,6 +778,37 @@
         
         function updateStats() {
             // Stats são atualizados via API, não localmente
+        }
+        
+        function showProgressNotification() {
+            // Remove notificação anterior se existir
+            const existing = document.getElementById('progress-notification');
+            if (existing) existing.remove();
+            
+            const percentage = totalChallenges > 0 ? (completedCount / totalChallenges) * 100 : 0;
+            const isComplete = completedCount === totalChallenges;
+            
+            const notification = document.createElement('div');
+            notification.id = 'progress-notification';
+            notification.className = 'progress-notification';
+            notification.innerHTML = `
+                <div class="title">🎯 ${isComplete ? 'LAB COMPLETO!' : 'Progresso Atualizado'}</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width:${percentage}%;${isComplete ? 'background:linear-gradient(90deg, #00ff88 0%, #00cc66 100%);' : ''}"></div>
+                </div>
+                <div class="progress-text">${completedCount}/${totalChallenges} desafios completados</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Anima entrada
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Remove após 3 segundos
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
         }
         
         async function showScoreboard() {
