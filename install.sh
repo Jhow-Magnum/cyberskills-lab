@@ -17,6 +17,17 @@ else
     echo "✅ Docker já instalado"
 fi
 
+# Clonar repositório
+echo "📥 Clonando repositório..."
+if [ -d "cyberskills-lab" ]; then
+    echo "⚠️  Diretório já existe, removendo..."
+    rm -rf cyberskills-lab
+fi
+git clone https://github.com/Jhow-Magnum/cyberskills-lab.git --quiet
+cd cyberskills-lab
+echo "✅ Repositório clonado"
+echo ""
+
 # Instalar Python e dependências
 echo "📦 Instalando dependências Python..."
 pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages --quiet 2>/dev/null || pip3 install Flask flask-cors flask-sock pyyaml docker --quiet
