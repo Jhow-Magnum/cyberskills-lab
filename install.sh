@@ -85,6 +85,15 @@ echo ""
 echo "🚀 Iniciando plataforma..."
 echo ""
 
+# Parar instância anterior se existir
+if [ -f /tmp/cyberskills.pid ]; then
+    OLD_PID=$(cat /tmp/cyberskills.pid)
+    if ps -p $OLD_PID > /dev/null 2>&1; then
+        kill $OLD_PID 2>/dev/null
+        sleep 1
+    fi
+fi
+
 nohup python3 ctf-simple.py > /tmp/cyberskills.log 2>&1 &
 echo $! > /tmp/cyberskills.pid
 
