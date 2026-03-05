@@ -11,7 +11,35 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial; background: #1a1a1a; color: #fff; height: 100vh; overflow: hidden; }
         .container { display: flex; height: 100vh; }
-        .sidebar { width: 320px; background: #2d2d30; padding: 15px; overflow-y: auto; }
+        .sidebar { width: 380px; background: #2d2d30; padding: 15px; overflow-y: auto; flex-shrink: 0; }
+        .hero-section { flex: 1; background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; position: relative; overflow-y: auto; overflow-x: hidden; }
+        .hero-section::-webkit-scrollbar { width: 10px; }
+        .hero-section::-webkit-scrollbar-track { background: #1a1a1a; }
+        .hero-section::-webkit-scrollbar-thumb { background: #4ec9b0; border-radius: 5px; }
+        .hero-section::-webkit-scrollbar-thumb:hover { background: #5fd9c0; }
+        .hero-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(78,201,176,0.1) 0%, rgba(0,217,255,0.1) 100%); z-index: 1; pointer-events: none; }
+        .hero-image-container { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .hero-image-container img { width: 100%; height: auto; min-height: 100vh; object-fit: cover; position: relative; z-index: 2; filter: drop-shadow(0 0 40px rgba(78,201,176,0.3)); }
+        .hero-title { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 3; text-align: center; pointer-events: none; }
+        .hero-title h1 { font-size: 56px; font-weight: 900; color: #4ec9b0; text-shadow: 0 0 30px rgba(78,201,176,0.8), 0 0 60px rgba(78,201,176,0.5), 0 4px 20px rgba(0,0,0,0.8); letter-spacing: 4px; margin: 0; text-transform: uppercase; }
+        .hero-title p { font-size: 18px; color: #5fd9c0; text-shadow: 0 0 20px rgba(78,201,176,0.6), 0 2px 10px rgba(0,0,0,0.8); margin-top: 10px; font-weight: 600; letter-spacing: 2px; }
+        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 4; opacity: 0; transition: opacity 0.3s ease; cursor: pointer; }
+        .hero-image-container:hover .scroll-indicator { opacity: 1; animation: bounce 2s infinite; }
+        .scroll-indicator svg { width: 40px; height: 40px; filter: drop-shadow(0 0 10px rgba(78,201,176,0.8)); }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
+        .hero-content { position: relative; z-index: 3; max-width: 900px; padding: 60px 40px; color: #e8e8e8; line-height: 1.8; }
+        .hero-content h2 { color: #4ec9b0; font-size: 32px; margin-bottom: 20px; text-align: center; font-weight: 700; text-shadow: 0 0 20px rgba(78,201,176,0.5); }
+        .hero-content p { font-size: 16px; margin-bottom: 20px; text-align: justify; }
+        .hero-content .highlight { color: #4ec9b0; font-weight: 600; }
+        .hero-content .section { margin-bottom: 30px; padding: 25px; background: rgba(26,26,26,0.8); border-left: 4px solid #4ec9b0; border-radius: 8px; }
+        .hero-content .section h3 { color: #5fd9c0; font-size: 20px; margin-bottom: 15px; }
+        .hero-content ul { list-style: none; padding-left: 0; }
+        .hero-content ul li { padding: 8px 0; padding-left: 25px; position: relative; }
+        .hero-content ul li::before { content: '▸'; position: absolute; left: 0; color: #4ec9b0; font-weight: bold; }
+        .hero-content .cta { text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, rgba(78,201,176,0.15) 0%, rgba(0,217,255,0.15) 100%); border-radius: 10px; border: 2px solid #4ec9b0; }
+        .hero-content .section p strong { color: #4ec9b0; }
+        .hero-section.hide { display: none; }
+        .sidebar { width: 380px; background: #2d2d30; padding: 15px; overflow-y: auto; flex-shrink: 0; }
         .stats-box { background: #1a1a1a; padding: 12px; border-radius: 5px; margin-bottom: 15px; border: 2px solid #4ec9b0; }
         .stats-box .stat-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .stats-box .stat-item:last-child { margin-bottom: 0; }
@@ -23,8 +51,10 @@
         .username-input.hidden { display: none; }
         .username-display { background: #1a1a1a; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; text-align: center; border: 2px solid #4ec9b0; }
         .username-display .name { color: #4ec9b0; font-weight: bold; font-size: 14px; }
-        .scoreboard-btn { background: #ffd700; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 14px; }
-        .scoreboard-btn:hover { background: #ffed4e; }
+        .scoreboard-btn { background: #2d2d30; color: #4ec9b0; border: 2px solid #4ec9b0; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 8px; font-size: 14px; transition: all 0.3s; }
+        .scoreboard-btn:hover { background: #3a3a3a; box-shadow: 0 0 10px rgba(78,201,176,0.3); }
+        .reset-btn { background: #1a1a1a; color: #ff6b6b; border: 2px solid #ff6b6b; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; font-size: 14px; transition: all 0.3s; }
+        .reset-btn:hover { background: #2a2a2a; box-shadow: 0 0 10px rgba(255,107,107,0.3); }
         .main { flex: 1; display: flex; flex-direction: row; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); position: relative; }
         .resizer { width: 5px; background: #4ec9b0; cursor: col-resize; transition: background 0.2s; }
         .resizer:hover { background: #00d9ff; }
@@ -47,15 +77,17 @@
         @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 30px rgba(255,215,0,0.6); } }
         .lab-title { font-weight: bold; color: #4ec9b0; margin-bottom: 5px; font-size: 14px; }
         .lab-desc { font-size: 11px; color: #999; margin-bottom: 8px; }
+        .lab-progress { background: #0a0a0a; height: 8px; border-radius: 10px; margin: 10px 0 5px 0; overflow: hidden; border: 1px solid #2a2a2a; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); position: relative; }
+        .lab-progress-bar { background: linear-gradient(90deg, #4ec9b0 0%, #5fd9c0 50%, #4ec9b0 100%); height: 100%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px rgba(78,201,176,0.6), inset 0 1px 0 rgba(255,255,255,0.2); border-radius: 10px; position: relative; }
+        .lab-progress-bar::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         .progress-notification { position: fixed; top: 80px; right: 20px; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%); padding: 20px 30px; border-radius: 10px; border: 2px solid #4ec9b0; box-shadow: 0 10px 40px rgba(78,201,176,0.4); z-index: 9998; opacity: 0; transform: translateX(400px); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .progress-notification.show { opacity: 1; transform: translateX(0); }
         .progress-notification .title { color: #4ec9b0; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
         .progress-bar-container { background: #0a0a0a; height: 8px; border-radius: 4px; overflow: hidden; border: 1px solid #2a2a2a; margin: 8px 0; }
         .progress-bar { background: linear-gradient(90deg, #4ec9b0 0%, #5fd9c0 100%); height: 100%; transition: width 0.5s ease; box-shadow: 0 0 10px rgba(78,201,176,0.6); }
         .progress-text { font-size: 12px; color: #4ec9b0; text-align: center; font-weight: bold; }
-        .lab-progress { background: #0a0a0a; height: 4px; border-radius: 2px; margin: 8px 0; overflow: hidden; border: 1px solid #2a2a2a; }
-        .lab-progress-bar { background: linear-gradient(90deg, #4ec9b0 0%, #5fd9c0 100%); height: 100%; transition: width 0.3s ease; }
-        .btn { background: #4ec9b0; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; width: 100%; }
+        .btn { background: #4ec9b0; color: #000; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 12px; width: 100%; }
         .challenge { background: linear-gradient(145deg, #1e1e1e 0%, #121212 100%); padding: 18px; margin-bottom: 18px; border-radius: 10px; border: 2px solid #2a2a2a; border-left: 5px solid #4ec9b0; box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(78,201,176,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-height: 2000px; font-size: 16px; }
         .challenge.completed { border-color: #4ec9b0; box-shadow: 0 0 30px rgba(78,201,176,0.6), inset 0 0 20px rgba(78,201,176,0.2); max-height: 0; padding: 0; margin: 0; opacity: 0; }
         .challenge:hover { transform: translateY(-5px) translateX(5px); box-shadow: 0 15px 35px rgba(78,201,176,0.25), 0 0 20px rgba(78,201,176,0.15); border-left-width: 8px; border-color: #5fd9c0; }
@@ -68,14 +100,13 @@
         .diff-medium { background: linear-gradient(135deg, #ffa500, #ffb733); color: #000; }
         .diff-hard { background: linear-gradient(135deg, #f48771, #ff6b6b); color: #000; }
         .points-badge { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000; padding: 6px 14px; border-radius: 25px; font-size: 13px; font-weight: 800; box-shadow: 0 3px 12px rgba(255,215,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3); letter-spacing: 0.5px; }
-        .hint-section { margin: 15px 0; padding: 14px; background: rgba(255,215,0,0.03); border-radius: 8px; border: 1px solid rgba(255,215,0,0.15); }
-        .hint-warning { background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,215,0,0.05) 100%); border: 2px dashed rgba(255,215,0,0.4); padding: 10px 14px; border-radius: 6px; margin-bottom: 10px; color: #ffd700; font-size: 12px; text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .hint-warning::before { content: '⚠️'; font-size: 14px; }
-        .hint-btn { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #000; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 3px 10px rgba(255,215,0,0.4); display: flex; align-items: center; gap: 6px; width: fit-content; letter-spacing: 0.5px; }
-        .hint-btn::before { content: '💡'; font-size: 14px; }
-        .hint-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 20px rgba(255,215,0,0.6); }
-        .hint-btn:active { transform: translateY(-1px); }
-        .hint-box { background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,215,0,0.03) 100%); border-left: 4px solid #ffd700; padding: 14px 16px; margin-top: 10px; border-radius: 6px; color: #ffd700; font-size: 13px; line-height: 1.6; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+        .hint-section { margin: 15px 0; padding: 0; background: transparent; border: none; }
+        .hint-warning { display: none; }
+        .hint-btn { background: transparent; color: #999; border: 1px solid #3a3a3a; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: normal; font-size: 12px; transition: all 0.3s; margin: 0 5px 5px 0; display: inline-block; }
+        .hint-btn::before { content: '💡'; font-size: 12px; margin-right: 5px; }
+        .hint-btn:hover { background: #2a2a2a; border-color: #4ec9b0; color: #4ec9b0; transform: none; box-shadow: none; }
+        .hint-btn:active { transform: none; }
+        .hint-box { background: rgba(78,201,176,0.05); border-left: 3px solid #4ec9b0; padding: 12px; margin-top: 8px; border-radius: 4px; color: #ccc; font-size: 13px; line-height: 1.6; box-shadow: none; }
         .hint-item { display: none; margin-bottom: 10px; animation: slideIn 0.4s ease-out; }
         .hint-item.show { display: block; }
         .hint-item:last-child { margin-bottom: 0; }
@@ -84,7 +115,7 @@
         .flag-input input { flex: 3; padding: 12px 16px; background: #0a0a0a; border: 2px solid #2a2a2a; color: #4ec9b0; border-radius: 6px; font-size: 14px; font-family: 'Courier New', monospace; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 600; letter-spacing: 0.5px; }
         .flag-input input:focus { outline: none; border-color: #4ec9b0; background: #0d0d0d; box-shadow: 0 0 15px rgba(78,201,176,0.3), inset 0 2px 8px rgba(0,0,0,0.4); transform: translateY(-2px); }
         .flag-input input::placeholder { color: #555; font-weight: 400; }
-        .flag-input button { flex: 1; min-width: 110px; padding: 12px; font-size: 14px; font-weight: 800; letter-spacing: 1px; transition: all 0.3s ease; }
+        .flag-input button { flex: 1; min-width: 110px; padding: 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s ease; }
         .status { padding: 10px 24px; border-radius: 25px; font-size: 16px; margin-left: 15px; font-weight: 800; letter-spacing: 1px; animation: statusPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-transform: uppercase; }
         @keyframes statusPop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
         .correct { background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%); color: #000; box-shadow: 0 0 40px rgba(0,255,136,0.8), 0 6px 20px rgba(0,255,136,0.6), inset 0 2px 0 rgba(255,255,255,0.4); }
@@ -100,26 +131,22 @@
         .loading-text { color: #4ec9b0; font-size: 20px; margin-top: 30px; font-weight: bold; }
         .loading-steps { color: #999; font-size: 14px; margin-top: 15px; text-align: center; line-height: 1.8; }
         .hint-btn {
-            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background: transparent;
+            color: #999;
+            border: 1px solid #3a3a3a;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: normal;
             transition: all 0.3s;
         }
         .hint-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,165,0,0.4);
+            background: #2a2a2a;
+            border-color: #4ec9b0;
+            color: #4ec9b0;
         }
         .hint-warning {
-            background: rgba(255,165,0,0.1);
-            border-left: 3px solid #ffa500;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
+            display: none;
         }
         .hint-warning em {
             color: #ffffff;
@@ -136,6 +163,7 @@
             </div>
             <div class="username-input" id="usernameInput">
                 <input type="text" id="nameField" placeholder="Digite seu nome..." onkeypress="if(event.key=='Enter')setUsername()">
+                <button class="btn" onclick="setUsername()" style="width:auto;padding:8px 15px;">OK</button>
             </div>
             <div class="username-display" id="usernameDisplay" style="display:none;">
                 <div class="name" id="displayName"></div>
@@ -155,7 +183,94 @@
                 </div>
             </div>
             <button class="scoreboard-btn" onclick="showScoreboard()">🏆 Scoreboard</button>
+            <button class="reset-btn" onclick="resetProgress()">🔄 Reset Progresso</button>
             <div id="labs"></div>
+        </div>
+        <div class="hero-section" id="heroSection">
+            <div class="hero-image-container">
+                <img src="/assets/hero-image.png" alt="CyberSkills Lab">
+                <div class="hero-title">
+                    <h1>CYBERSKILLS LAB</h1>
+                    <p>Treinamento Prático em Cibersegurança</p>
+                </div>
+                <div class="scroll-indicator" onclick="document.getElementById('heroSection').scrollTo({top: window.innerHeight, behavior: 'smooth'})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#4ec9b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="hero-content">
+                <h2>Bem-vindo ao CYBERSKILLS LAB</h2>
+                
+                <div class="section">
+                    <p>Esta plataforma nasceu da comunidade, para a comunidade. Criada para quem quer <span class="highlight">aprender cibersegurança na prática</span>, sem barreiras, sem custos, sem complicações.</p>
+                    
+                    <p>Sabemos que nem todos têm acesso a máquinas com dual boot, ambientes Linux configurados ou recursos para plataformas pagas. Por isso, o CYBERSKILLS LAB roda <span class="highlight">100% local</span>, no seu computador, usando Docker para isolar cada desafio de forma segura.</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Para quem é este projeto?</h3>
+                    <ul>
+                        <li>Estudantes de segurança da informação que querem praticar</li>
+                        <li>Entusiastas de Linux e sistemas operacionais</li>
+                        <li>Profissionais que se preparam para certificações (OSCP, CEH, etc)</li>
+                        <li>Professores que buscam material prático para suas aulas</li>
+                        <li>Qualquer pessoa curiosa sobre como a segurança funciona na prática</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Por que Open Source?</h3>
+                    <p>Porque <span class="highlight">conhecimento deve ser livre</span>. O código está aberto no GitHub para que você possa:</p>
+                    <ul>
+                        <li>Estudar como a plataforma foi construída</li>
+                        <li>Adicionar seus próprios desafios e categorias</li>
+                        <li>Corrigir bugs e melhorar funcionalidades</li>
+                        <li>Adaptar para suas necessidades específicas</li>
+                        <li>Aprender com o código de outros desenvolvedores</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Esta é a primeira versão</h3>
+                    <p>Sim, ainda há muito a melhorar. Mas é assim que projetos open-source crescem: <span class="highlight">com a colaboração da comunidade</span>.</p>
+                    
+                    <p>Se você tem ideias, encontrou bugs, ou quer adicionar novos desafios, sua contribuição é bem-vinda. Não precisa ser um expert, todos começamos de algum lugar.</p>
+                </div>
+                
+                <div class="section">
+                    <h3>O que você vai encontrar aqui</h3>
+                    <ul>
+                        <li><span class="highlight">40 desafios práticos</span> em 6 categorias diferentes</li>
+                        <li>Ambientes Docker isolados para cada lab</li>
+                        <li>Terminal web integrado (sem precisar SSH externo)</li>
+                        <li>Sistema de pontuação e ranking</li>
+                        <li>Hints progressivos para quando você travar</li>
+                        <li>Writeups automáticos após completar os desafios</li>
+                    </ul>
+                </div>
+                
+                <div class="cta">
+                    <p>Escolha um laboratório no menu ao lado e comece sua jornada.</p>
+                    <p>Lembre-se: a melhor forma de aprender é fazendo. Boa sorte, hacker!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>💡 Dica: Instale como Aplicativo</h3>
+                    <p>Você pode instalar o CYBERSKILLS LAB como um <span class="highlight">aplicativo nativo</span> no seu computador. Ele abrirá em janela própria, sem a barra do navegador, proporcionando uma experiência mais imersiva.</p>
+                    
+                    <p style="margin-top:15px;"><strong>Como instalar:</strong></p>
+                    <ul>
+                        <li><strong>Chrome/Edge/Brave:</strong> Acesse a plataforma, procure o ícone de computador com seta (⊕) no canto direito da barra de endereço (ao lado da estrela de favoritos) e clique em "Instalar"</li>
+                        <li><strong>Firefox:</strong> Clique nos três traços (☰) no canto superior direito, depois em "Instalar este site como aplicativo"</li>
+                        <li><strong>Safari (macOS):</strong> Clique no botão de compartilhar (quadrado com seta para cima) e selecione "Adicionar à Dock"</li>
+                    </ul>
+                    
+                    <p style="margin-top:15px;padding:12px;background:rgba(255,107,107,0.1);border-left:3px solid #ff6b6b;border-radius:4px;font-size:14px;">
+                        <strong>⚠️ Importante:</strong> O aplicativo só funcionará se a plataforma estiver rodando no terminal (bash start.sh). Sem o servidor ativo, o app não abrirá.
+                    </p>
+                </div>
+            </div>
         </div>
         <div class="main hide" id="main">
             <div class="terminal" id="terminalPanel"><div id="terminal"></div></div>
@@ -235,7 +350,7 @@
             "A coragem nasce na decisão. (Aristóteles – ética da virtude)",
             "Persistência vence resistência. (Princípio universal de superação)",
             "Nada resiste à vontade disciplinada. (Espírito estoico)",
-            "Esforça-te — e torna-te aquilo que deves ser. (Friedrich Nietzsche)"
+            "Esforça-te e torna-te aquilo que deves ser. (Friedrich Nietzsche)"
         ];
         
         let term, fit, ws, session, sessionId, timerInterval, completedCount = 0, totalChallenges = 0, totalPoints = 0, currentUser = '';
@@ -315,9 +430,15 @@
         };
         
         window.addEventListener('load', async () => {
-            // NÃO carrega nome salvo - sempre mostra o campo
-            currentUser = '';
-            localStorage.removeItem('ctf_username');
+            // Carrega nome salvo
+            const savedName = localStorage.getItem('ctf_username');
+            if (savedName) {
+                currentUser = savedName;
+                document.getElementById('displayName').textContent = '👤 ' + currentUser;
+                document.getElementById('usernameInput').classList.add('hidden');
+                document.getElementById('usernameDisplay').style.display = 'block';
+                loadLabs();
+            }
             
             const savedSessionId = localStorage.getItem('ctf_session_id');
             if (savedSessionId) {
@@ -393,8 +514,8 @@
                                 <div class="lab-progress">
                                     <div class="lab-progress-bar" style="width:${percentage}%"></div>
                                 </div>
-                                <div style="font-size:10px;color:#4ec9b0;text-align:center;margin-top:4px;">
-                                    ${progress.completed}/${progress.total} completados
+                                <div style="font-size:11px;color:#4ec9b0;text-align:center;margin-top:5px;font-weight:600;">
+                                    ${progress.completed}/${progress.total} completados (${Math.round(percentage)}%)
                                 </div>
                             ` : ''}
                             <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">${l.completed ? 'Refazer' : 'Iniciar'}</button>
@@ -416,8 +537,9 @@
 
         async function start(id, btnIndex, labName) {
             if (!currentUser) {
-                currentUser = 'Player_' + Date.now().toString().slice(-6);
-                localStorage.setItem('ctf_username', currentUser);
+                alert('Digite seu nome primeiro!');
+                document.getElementById('nameField').focus();
+                return;
             }
             const loadingOverlay = document.getElementById('loadingOverlay');
             const loadingText = document.getElementById('loadingText');
@@ -508,6 +630,7 @@
                 
                 // Esconde sidebar quando inicia lab
                 document.querySelector('.sidebar').classList.add('hide');
+                document.getElementById('heroSection').classList.add('hide');
                 document.getElementById('main').classList.remove('hide');
                 
                 term = new Terminal({cursorBlink: true, fontSize: 18, theme: {background: '#000', foreground: '#fff'}});
@@ -532,12 +655,11 @@
                         <p>${c.description}</p>
                         ${c.hints && c.hints.length > 0 ? `
                             <div class="hint-section">
-                                <div class="hint-warning">
-                                    Dicas custam pontos. Tente resolver sozinho primeiro.<br>
-                                    <em>"${motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)]}"</em>
+                                <div style="font-size:11px;color:#666;font-style:italic;margin-bottom:8px;">
+                                    "${motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)]}"
                                 </div>
                                 ${c.hints.map((h, i) => `
-                                    <button class="hint-btn" onclick="getHint(${c.id}, ${i})" style="margin:5px;">
+                                    <button class="hint-btn" onclick="getHint(${c.id}, ${i})">
                                         Dica ${i+1} (-${h.cost || 5} pts)
                                     </button>
                                 `).join('')}
@@ -627,6 +749,7 @@
             document.getElementById('timer').style.display = 'none';
             document.getElementById('main').classList.add('hide');
             document.querySelector('.sidebar').classList.remove('hide');
+            document.getElementById('heroSection').classList.remove('hide');
             document.getElementById('terminal').innerHTML = '';
             
             // Remove destaque do lab
@@ -913,6 +1036,44 @@ function updateScoreboardUI(scoreboard) {
             <td>${user.score}</td>
         </tr>
     `).join('');
+}
+
+function resetProgress() {
+    if (!currentUser) return;
+    
+    if (!confirm('⚠️ ATENÇÃO!\n\nVocê tem certeza que deseja RESETAR TODO o seu progresso?\n\nIsso irá:\n- Apagar todos os desafios completados\n- Zerar sua pontuação\n- Remover seu usuário do ranking\n\nEsta ação NÃO PODE SER DESFEITA!')) return;
+    
+    if (!confirm('🚨 Última confirmação!\n\nTem ABSOLUTA CERTEZA que deseja apagar tudo e começar do zero?')) return;
+    
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingText = document.getElementById('loadingText');
+    const loadingSteps = document.getElementById('loadingSteps');
+    
+    loadingOverlay.classList.add('show');
+    loadingText.textContent = '🗑️ Resetando progresso...';
+    loadingSteps.textContent = 'Apagando todos os dados do usuário...';
+    
+    fetch('/api/reset-user', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({user_id: currentUser})
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            loadingText.textContent = '✅ Progresso resetado!';
+            loadingSteps.textContent = 'Recarregando plataforma...';
+            setTimeout(() => {
+                localStorage.removeItem('ctf_username');
+                localStorage.removeItem('ctf_session_id');
+                location.reload();
+            }, 2000);
+        } else {
+            loadingOverlay.classList.remove('show');
+            alert('❌ Erro ao resetar progresso: ' + (data.error || 'Erro desconhecido'));
+        }
+    }).catch(err => {
+        loadingOverlay.classList.remove('show');
+        alert('❌ Erro ao resetar progresso.');
+    });
 }
     </script>
 </body>
