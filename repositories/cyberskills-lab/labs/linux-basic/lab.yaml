@@ -65,37 +65,36 @@ spec:
         Esta é a flag do desafio 1.
     
     - id: 2
-      name: "Pasta SENAI"
-      description: "Navegue até /root/SENAI e leia o conteúdo do arquivo 'flag'."
+      name: "Pasta Oculta"
+      description: "Navegue até /root/CyberSkills Lab e leia o conteúdo do arquivo 'flag'. O conteúdo está invertido!"
       category: "file-system"
       points: 15
       order: 2
       instructions: |
-        Existe uma pasta chamada SENAI no diretório /root.
+        Existe uma pasta chamada CyberSkills Lab no diretório /root.
         Dentro dela há um arquivo chamado 'flag' com a resposta.
+        Atenção: O conteúdo está invertido!
         
         💡 Dica: Use comandos de navegação e listagem de arquivos.
       
       hints:
-        - text: "Use 'ls' para listar arquivos"
+        - text: "Use 'ls' para listar arquivos e 'cd' para navegar"
           cost: 3
-        - text: "Use 'cd /root/SENAI' para entrar na pasta"
+        - text: "Use 'cat flag | rev' para ler e desinverter o arquivo"
           cost: 5
-        - text: "Use 'cat flag' para ler o arquivo"
-          cost: 8
       
       validation:
         type: "flag"
-        flag: "pa$t4"
+        flag: "paSt4"
         flag_format: "text"
-        location: "/root/SENAI/flag"
+        location: "/root/CyberSkills Lab/flag"
       
       solution: |
-        $ cd /root/SENAI
+        $ cd "CyberSkills Lab"
         $ ls
-        $ cat flag
+        $ cat flag | rev
         
-        A flag é: pa$t4
+        A flag é: paSt4
     
     - id: 3
       name: "Script Oculto"

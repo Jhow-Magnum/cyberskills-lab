@@ -24,11 +24,18 @@ RUN mkdir -p /opt/network \
 RUN printf '#!/bin/bash\nnc -l -p 8080 &\nnc -l -p 9000 &\nnc -l -p 9001 &\n' > /start-services.sh && chmod +x /start-services.sh
 
 # Criar README educativo estilo Bandit
-RUN printf '=== CYBERSKILLS LAB - NETWORK ANALYSIS ===\n\nBem-vindo aos desafios de Análise de Rede!\nVocê está logado como '\''user'\''. Explore a rede.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n3 DESAFIOS DE ANÁLISE DE REDE\n\nComandos úteis:\n• /opt/network/challenge1.sh\n• /opt/network/challenge2.sh\n• /opt/network/challenge3.sh\n• ip addr\n• ip a\n• hostname -I\n• ifconfig\n• netstat -tuln\n• netstat -tuln | grep LISTEN\n• ss -tuln\n• ss -tuln | wc -l\n• nmap localhost\n• nmap -p- localhost\n• ps aux\n• ps aux | grep ssh\n\nDicas gerais:\n1. Serviços de rede escutam em portas específicas\n2. SSH geralmente usa porta 22\n3. HTTP usa porta 80, HTTPS usa 443\n4. Portas LISTEN indicam serviços ativos\n5. Containers têm IPs internos\n6. Contar linhas ajuda a quantificar resultados\n\nRecursos:\n• Comandos de rede: ip, netstat, ss, nmap\n• Processos: ps, grep\n• Arquivos: /root/network\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n💡 Usando Google/IA:\n\n✅ Pergunte: "Como ver portas abertas no Linux?"\n✅ Pergunte: "Diferença entre netstat e ss?"\n✅ Pergunte: "Como descobrir IP do container?"\n\n❌ Não peça soluções diretas!\n\nAPRENDA networking, não apenas resolva!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nLembre-se: A melhor forma de aprender é tentando sozinho primeiro!\nUse as dicas apenas se estiver realmente travado.\n\nBoa sorte, hacker!\n' > /home/user/README.txt \
-    && chown user:user /home/user/README.txt
+RUN printf '=== CYBERSKILLS LAB - NETWORK ANALYSIS ===\n\nBem-vindo aos desafios de Análise de Rede!\nVocê está logado como '\''user'\''. Explore a rede.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n3 DESAFIOS DE ANÁLISE DE REDE\n\nComandos úteis:\n• /opt/network/challenge1.sh\n• /opt/network/challenge2.sh\n• /opt/network/challenge3.sh\n• ip addr\n• ip a\n• hostname -I\n• ifconfig\n• netstat -tuln\n• netstat -tuln | grep LISTEN\n• ss -tuln\n• ss -tuln | wc -l\n• nmap localhost\n• nmap -p- localhost\n• ps aux\n• ps aux | grep ssh\n\nDicas gerais:\n1. Serviços de rede escutam em portas específicas\n2. SSH geralmente usa porta 22\n3. HTTP usa porta 80, HTTPS usa 443\n4. Portas LISTEN indicam serviços ativos\n5. Containers têm IPs internos\n6. Contar linhas ajuda a quantificar resultados\n\nRecursos:\n• Comandos de rede: ip, netstat, ss, nmap\n• Processos: ps, grep\n• Arquivos: /root/network\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n💡 Usando Google/IA:\n\n✅ Pergunte: "Como ver portas abertas no Linux?"\n✅ Pergunte: "Diferença entre netstat e ss?"\n✅ Pergunte: "Como descobrir IP do container?"\n\n❌ Não peça soluções diretas!\n\nAPRENDA networking, não apenas resolva!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nLembre-se: A melhor forma de aprender é tentando sozinho primeiro!\nUse as dicas apenas se estiver realmente travado.\n\nBoa sorte, hacker!\n' > /home/user/README \
+    && chown user:user /home/user/README \
+    && echo '' >> /home/user/.bashrc \
+    && echo '[ -f ~/README ] && cat ~/README' >> /home/user/.bashrc \
+    && echo '' >> /home/user/.bashrc
 
 # Script de inicialização
-RUN printf '#!/bin/bash\n/start-services.sh\n/usr/sbin/sshd -D\n' > /start.sh && chmod +x /start.sh
+RUN printf '#!/bin/bash\n/start-services.sh\n/usr/sbin/sshd -D\n' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
+# Limpar historico de comandos
+RUN rm -f /root/.bash_history /home/user/.bash_history 2>/dev/null || true
+
+WORKDIR /home/user
 EXPOSE 22
-CMD ["/start.sh"]
+CMD ["/usr/local/bin/start.sh"]
