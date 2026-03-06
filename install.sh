@@ -44,22 +44,25 @@ pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages -
 echo "✅ Dependências instaladas"
 echo ""
 
-# Spinner
+# Spinner com tempo
 spin() {
     local -a spinner=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
     local i=0
     local pid=$1
     local msg=$2
+    local start=$(date +%s)
     while kill -0 $pid 2>/dev/null; do
-        printf "\r   ${spinner[$i]} $msg"
+        local elapsed=$(($(date +%s) - start))
+        printf "\r   ${spinner[$i]} $msg (${elapsed}s)"
         i=$(( (i+1) % 10 ))
         sleep 0.1
     done
-    printf "\r\033[K"
+    local total=$(($(date +%s) - start))
+    printf "\r✅ $msg - ${total}s\n"
 }
 
-# Construir imagens em paralelo
-echo "🏗️  Construindo imagens Docker..."
+# Construir imagens sequencialmente
+echo "🏗️  Construindo imagens Docker..." 
 echo ""
 
 LABS=(
@@ -72,19 +75,9 @@ LABS=(
     "desafio-final"
 )
 
-PIDS=()
 for lab_id in "${LABS[@]}"; do
     docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
-    PIDS+=($!)
-done
-
-# Aguardar conclusão com spinner
-for i in "${!LABS[@]}"; do
-    lab_id="${LABS[$i]}"
-    pid="${PIDS[$i]}"
-    spin $pid "Construindo: $lab_id"
-    wait $pid
-    echo "✅ $lab_id construído!"
+    spin $! "Construindo: $lab_id"
 done
 
 echo ""
