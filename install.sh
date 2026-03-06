@@ -37,19 +37,6 @@ pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages -
 echo "✅ Dependências instaladas"
 echo ""
 
-# Spinner
-spin() {
-    local -a spinner=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
-    local i=0
-    local pid=$1
-    while kill -0 $pid 2>/dev/null; do
-        printf "\r   ${spinner[$i]} Construindo..."
-        i=$(( (i+1) % 10 ))
-        sleep 0.1
-    done
-    printf "\r\033[K"
-}
-
 # Construir imagens
 echo "🏗️  Construindo imagens Docker..."
 echo ""
@@ -65,17 +52,15 @@ LABS=(
 )
 
 for lab_id in "${LABS[@]}"; do
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "📦 Construindo: $lab_id"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     
-    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
-    BUILD_PID=$!
-    spin $BUILD_PID
-    wait $BUILD_PID
+    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/
     
+    echo ""
     echo "✅ $lab_id construído com sucesso!"
     echo ""
-    
-    sleep 1
 done
 
 echo "╔══════════════════════════════════════════════════════════╗"
