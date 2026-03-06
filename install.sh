@@ -76,7 +76,6 @@ LABS=(
 )
 
 for lab_id in "${LABS[@]}"; do
-    echo "📦 Construindo: $lab_id"
     docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
     spin $! "Construindo: $lab_id"
     echo ""
