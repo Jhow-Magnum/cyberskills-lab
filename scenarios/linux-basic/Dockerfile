@@ -37,7 +37,7 @@ top
 uname -a
 EOF
 
-# Desafio 6: Criar EXATAMENTE 5 arquivos ocultos
+# Desafio 6: Criar EXATAMENTE 5 arquivos ocultos (sem contar README)
 # .bash_history + .flag_script.sh + .bashrc + .profile + .flag_hidden = 5
 RUN touch /root/.flag_hidden
 
@@ -63,7 +63,7 @@ RUN mkdir -p /opt/secure \
 # Desafio 10: PATH hijacking
 RUN printf '#!/bin/bash\nls\n' > /usr/local/bin/check && chmod +x /usr/local/bin/check
 
-# Desafio 11: Variável de ambiente
+# Desafio 11: Variável de ambiente (sem exibir README)
 RUN echo 'export FLAG_ENV="flag{3nv_s3cr3t}"' >> /root/.bashrc
 
 # Desafio 12: Processo temporário
@@ -153,11 +153,14 @@ EOF
 
 # Exibir README ao logar
 RUN echo '' >> /root/.bashrc && \
-    echo '[ -f ~/README ] && cat ~/README' >> /root/.bashrc && \
+    echo '# Exibir README apenas no login interativo' >> /root/.bashrc && \
+    echo 'if [ -n "$PS1" ] && [ -f ~/README ]; then' >> /root/.bashrc && \
+    echo '    cat ~/README' >> /root/.bashrc && \
+    echo 'fi' >> /root/.bashrc && \
     echo '' >> /root/.bashrc
 
 # Script de inicialização
-RUN printf '#!/bin/bash\n/usr/local/bin/temp_generator.sh &\n/usr/local/bin/socket_server.sh &\n/usr/sbin/sshd -D\n' > /usr/local/bin/start.sh \
+RUN printf '#!/bin/bash\n/usr/local/bin/temp_generator.sh &\n/usr/local/bin/socket_server.sh &\nsleep 2\n/usr/sbin/sshd -D\n' > /usr/local/bin/start.sh \
     && chmod +x /usr/local/bin/start.sh
 
 WORKDIR /root

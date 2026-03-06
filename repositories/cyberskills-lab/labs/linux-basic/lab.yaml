@@ -81,7 +81,7 @@ spec:
         - text: "Use ls -la /root | grep ^- | grep ' \\.' | wc -l"
       validation:
         type: "flag"
-        flag: "flag{5}"
+        flag: "flag{6}"
     
     - id: 7
       name: "SUID Binaries"
