@@ -59,6 +59,7 @@ Antes de instalar, certifique-se de ter:
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
 sudo usermod -aG docker $USER
+newgrp docker
 ```
 
 **2. Python 3 e pip:**
@@ -67,7 +68,13 @@ sudo apt update
 sudo apt install python3 python3-pip -y
 ```
 
-**3. Faça logout e login novamente** para aplicar as permissões do grupo docker.
+**3. Adicionar usuário ao grupo sudo (opcional):**
+```bash
+sudo usermod -aG sudo $USER
+newgrp sudo
+```
+
+**4. Faça logout e login novamente** para aplicar as permissões do grupo docker.
 
 ### Instalação Rápida (Recomendado)
 
@@ -82,6 +89,7 @@ curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/ins
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
 sudo usermod -aG docker $USER
+newgrp docker
 ```
 
 **2. Instalar Python e pip:**
@@ -91,22 +99,29 @@ sudo apt update
 sudo apt install python3 python3-pip -y
 ```
 
-**3. Faça logout e login novamente.**
+**3. Adicionar ao grupo sudo (opcional):**
 
-**4. Clonar Repositório:**
+```bash
+sudo usermod -aG sudo $USER
+newgrp sudo
+```
+
+**4. Faça logout e login novamente.**
+
+**5. Clonar Repositório:**
 
 ```bash
 git clone https://github.com/Jhow-Magnum/cyberskills-lab.git
 cd cyberskills-lab
 ```
 
-**5. Instalar Dependências:**
+**6. Instalar Dependências:**
 
 ```bash
 bash install.sh
 ```
 
-**6. Iniciar Plataforma:**
+**7. Iniciar Plataforma:**
 
 ```bash
 bash start.sh
