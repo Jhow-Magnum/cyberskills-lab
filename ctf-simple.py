@@ -264,24 +264,9 @@ def start_lab():
     
     # Configurações especiais do Linux Basic
     if lab_id == 'linux-basic':
-        # Script oculto (.secret.sh)
-        subprocess.run(['docker', 'exec', container_name, 'sh', '-c',
-                       'echo "#!/bin/bash" > /root/.secret.sh && echo "echo h1dd3n_scr1pt" >> /root/.secret.sh && chmod +x /root/.secret.sh'],
-                      capture_output=True)
-        
-        # Histórico bash com flag
-        subprocess.run(['docker', 'exec', container_name, 'sh', '-c',
-                       'echo "cd /tmp" > /root/.bash_history && echo "ls -la" >> /root/.bash_history && echo "echo h1st0ry_m4tt3rs" >> /root/.bash_history'],
-                      capture_output=True)
-        
         # SUID já está configurado no Dockerfile (/usr/bin/find)
         # Apenas garantir que está ativo
         subprocess.run(['docker', 'exec', container_name, 'chmod', 'u+s', '/usr/bin/find'], capture_output=True)
-        
-        # Crontab em /etc/cron.d/ (como no Dockerfile original)
-        subprocess.run(['docker', 'exec', container_name, 'sh', '-c',
-                       'mkdir -p /etc/cron.d && echo "# CTF Cron Job" > /etc/cron.d/ctf-cron && echo "# Flag: cr0n_m4st3r" >> /etc/cron.d/ctf-cron && chmod 644 /etc/cron.d/ctf-cron'],
-                      capture_output=True)
         
 
     # Salva sessão
