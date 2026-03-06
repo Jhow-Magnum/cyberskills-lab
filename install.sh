@@ -2,28 +2,28 @@
 
 set -e
 
-echo "╔══════════════════════════════════════════════════════════╗"
-echo "║     🎯 CYBERSKILLS LAB - Instalação Automática          ║"
-echo "╚══════════════════════════════════════════════════════════╝"
+echo "═══════════════════════════════════════════════════════════"
+echo "  CYBERSKILLS LAB - Instalação Automática"
+echo "═══════════════════════════════════════════════════════════"
 echo ""
 
 # Verificar Docker
-echo "🔍 Verificando Docker..."
+echo "[1/4] Verificando Docker..."
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker não encontrado!"
-    echo "📦 Instale com: curl -fsSL https://get.docker.com | sudo bash"
+    echo "ERRO: Docker não encontrado"
+    echo "Instale com: curl -fsSL https://get.docker.com | sudo bash"
     exit 1
-else
-    echo "✅ Docker já instalado"
 fi
+echo "OK: Docker instalado"
+echo ""
 
 # Garantir diretório válido
 INSTALL_DIR="$HOME/cyberskills-lab"
 
 # Clonar repositório
-echo "📥 Clonando repositório..."
+echo "[2/4] Clonando repositório..."
 if [ -d "$INSTALL_DIR" ]; then
-    echo "⚠️  Diretório já existe, atualizando..."
+    echo "Diretório existente, atualizando..."
     cd "$INSTALL_DIR"
     git pull --quiet 2>/dev/null || {
         cd "$HOME"
@@ -35,13 +35,13 @@ else
     git clone https://github.com/Jhow-Magnum/cyberskills-lab.git "$INSTALL_DIR" --quiet
     cd "$INSTALL_DIR"
 fi
-echo "✅ Repositório pronto"
+echo "OK: Repositório pronto"
 echo ""
 
 # Instalar Python e dependências
-echo "📦 Instalando dependências Python..."
+echo "[3/4] Instalando dependências Python..."
 pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages --quiet 2>/dev/null || pip3 install Flask flask-cors flask-sock pyyaml docker --quiet
-echo "✅ Dependências instaladas"
+echo "OK: Dependências instaladas"
 echo ""
 
 # Spinner com tempo
@@ -58,11 +58,11 @@ spin() {
         sleep 0.1
     done
     local total=$(($(date +%s) - start))
-    printf "\r✅ $msg - ${total}s\n"
+    printf "\rOK: $msg - ${total}s\n"
 }
 
 # Construir imagens sequencialmente
-echo "🏗️  Construindo imagens Docker..." 
+echo "[4/4] Construindo imagens Docker..." 
 echo ""
 
 LABS=(
@@ -82,11 +82,11 @@ done
 
 echo ""
 
-echo "╔══════════════════════════════════════════════════════════╗"
-echo "║     ✅ INSTALAÇÃO COMPLETA!                              ║"
-echo "╚══════════════════════════════════════════════════════════╝"
+echo "═══════════════════════════════════════════════════════════"
+echo "  INSTALAÇÃO COMPLETA"
+echo "═══════════════════════════════════════════════════════════"
 echo ""
-echo "🚀 Iniciando plataforma..."
+echo "Iniciando plataforma..."
 echo ""
 
 # Parar instância anterior se existir
@@ -104,15 +104,15 @@ echo $! > /tmp/cyberskills.pid
 sleep 3
 
 if ps -p $(cat /tmp/cyberskills.pid 2>/dev/null) > /dev/null 2>&1; then
-    echo "✅ Plataforma iniciada com sucesso!"
+    echo "OK: Plataforma iniciada com sucesso"
     echo ""
-    echo "📡 Acesse: http://localhost:5000"
+    echo "Acesse: http://localhost:5000"
     echo ""
-    echo "⚠️  Para parar: bash ~/cyberskills-lab/stop.sh"
+    echo "Para parar: bash ~/cyberskills-lab/stop.sh"
     echo ""
     
     sleep 2
-    xdg-open http://localhost:5000 2>/dev/null || open http://localhost:5000 2>/dev/null || echo "🌐 Abra manualmente: http://localhost:5000"
+    xdg-open http://localhost:5000 2>/dev/null || open http://localhost:5000 2>/dev/null || echo "Abra manualmente: http://localhost:5000"
 else
-    echo "❌ Erro ao iniciar. Execute manualmente: bash start.sh"
+    echo "ERRO: Falha ao iniciar. Execute manualmente: bash start.sh"
 fi
