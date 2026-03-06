@@ -83,21 +83,78 @@ RUN mkdir -p /opt/mystery \
 RUN cat > /root/README << 'EOF'
 === CYBERSKILLS LAB - LINUX BASICO ===
 
-14 desafios de comandos Linux
+Bem-vindo aos desafios de Linux!
+Voce esta logado como root. Explore o sistema de arquivos.
+
+================================================================
+
+14 DESAFIOS DE COMANDOS LINUX
 
 Comandos uteis:
-- whoami, pwd, ls, ls -la
-- cd, cat, rev
-- find, grep
-- ps, env, history
-- chmod, bash
-- netstat, nc
-- strings
+- whoami
+- ls, ls -la, ls -R
+- cd <diretorio>
+- cat <arquivo>
+- rev <arquivo>
+- find / -name <arquivo>
+- find / -type f -perm -4000
+- grep <texto> <arquivo>
+- grep -r "texto" /root
+- history
+- cat ~/.bash_history
+- ps aux
+- env
+- cat /etc/cron.d/*
+- nc -U /var/run/ctf.sock
+- strings <binario>
 
-Explore: /root, /etc, /tmp, /opt, /var
+Dicas gerais:
+1. Arquivos ocultos comecam com ponto (.)
+2. Use TAB para autocompletar comandos
+3. Explore diretorios: /root, /etc, /tmp, /opt, /var
+4. Scripts executaveis tem permissao +x
+5. Historico de comandos guarda acoes anteriores
+6. Processos tem PIDs unicos
+7. SUID permite executar como outro usuario
+8. Cron jobs sao tarefas agendadas
 
-Boa sorte!
+Recursos:
+- Diretorios: /root, /etc, /tmp, /opt, /var
+- Arquivos ocultos: comecam com .
+- Binarios SUID: find / -type f -perm -4000
+
+================================================================
+
+Usando Google/IA como aliado:
+
+Esta travado? Tudo bem usar Google ou IA (ChatGPT, Claude, etc), MAS:
+
+FACA:
+  - Pergunte "Como listar arquivos ocultos no Linux?"
+  - Pergunte "O que faz o comando find?"
+  - Pergunte "Como inverter texto no Linux?"
+  - Use para APRENDER os conceitos e comandos
+
+NAO FACA:
+  - Copiar e colar comandos prontos sem entender
+  - Pedir "resolva o desafio X para mim"
+  - Pular o aprendizado so para pegar a flag
+
+O objetivo e APRENDER, nao apenas completar!
+Entenda cada comando que voce executa.
+
+================================================================
+
+Lembre-se: A melhor forma de aprender e tentando sozinho primeiro!
+Use as dicas apenas se estiver realmente travado.
+
+Boa sorte, hacker!
 EOF
+
+# Exibir README ao logar
+RUN echo '' >> /root/.bashrc && \
+    echo '[ -f ~/README ] && cat ~/README' >> /root/.bashrc && \
+    echo '' >> /root/.bashrc
 
 # Script de inicialização
 RUN printf '#!/bin/bash\n/usr/local/bin/temp_generator.sh &\n/usr/local/bin/socket_server.sh &\n/usr/sbin/sshd -D\n' > /usr/local/bin/start.sh \
