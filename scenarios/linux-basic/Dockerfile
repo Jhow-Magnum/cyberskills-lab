@@ -19,22 +19,43 @@ RUN mkdir -p '/root/data' \
 RUN printf '#!/bin/bash\necho "flag{h1dd3n_scr1pt}"\n' > /root/.flag_script.sh \
     && chmod 644 /root/.flag_script.sh
 
-# Desafio 4: Histórico com comandos misturados
-RUN mkdir -p /root && cat > /root/.bash_history << 'EOF'
+# Desafio 4: Histórico com comandos misturados e flag
+RUN cat > /root/.bash_history << 'EOF'
 ls -la
 cd /tmp
 whoami
 cat /etc/passwd
-find / -name "*.conf"
-grep -r "password" /etc
+find / -name "*.conf" 2>/dev/null
+grep -r "password" /etc 2>/dev/null
 ps aux
 netstat -tuln
-flag{h1st0ry_m4tt3rs}
 cat /var/log/syslog
 df -h
 free -m
 top
 uname -a
+cat /root/secret.txt
+flag{h1st0ry_m4tt3rs}
+ls /home
+cd /var/log
+cat auth.log
+grep "error" /var/log/syslog
+find /usr -type f -name "*.sh"
+chmod +x script.sh
+./script.sh
+cat /etc/hosts
+ping google.com
+curl http://example.com
+wget http://test.com/file.zip
+tar -xzf archive.tar.gz
+zip -r backup.zip /home
+unzip file.zip
+cat /proc/cpuinfo
+cat /proc/meminfo
+lsblk
+fdisk -l
+mount /dev/sda1 /mnt
+umount /mnt
 EOF
 
 # Desafio 6: Criar EXATAMENTE 5 arquivos ocultos (sem contar README)
