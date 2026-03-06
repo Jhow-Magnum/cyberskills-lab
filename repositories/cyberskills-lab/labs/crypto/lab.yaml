@@ -28,7 +28,7 @@ spec:
         - text: "Use ls -R em /opt ou find para localizar arquivos. Decodifique com base64 -d"
       validation:
         type: "flag"
-        flag: "GORD_Master_2025"
+        flag: "flag{GORD_Master_2025}"
         location: "/opt/challenges/crypto/message.txt"
     - id: 2
       name: "Assinatura Digital"
@@ -39,7 +39,7 @@ spec:
         - text: "Use: echo -n 'Gelt_Cyber' | md5sum. O -n evita quebra de linha"
       validation:
         type: "flag"
-        flag: "fd6aa30e90a21237fabaf9fb110d8773"
+        flag: "flag{fd6aa30e90a21237fabaf9fb110d8773}"
     - id: 3
       name: "Cifra Rotacional"
       description: "Procure nos logs do sistema em /var/log. Há uma mensagem cifrada em ROT13."
@@ -49,7 +49,7 @@ spec:
         - text: "Logs do CTF estão em /var/log/ctf/. Use tr para decodificar ROT13"
       validation:
         type: "flag"
-        flag: "CIPHER_SIMPLE"
+        flag: "flag{CIPHER_SIMPLE}"
         location: "/var/log/ctf/encrypted.log"
     - id: 4
       name: "Hash Moderno"
@@ -60,7 +60,7 @@ spec:
         - text: "Use: echo -n 'Gelt_Cyber' | sha256sum | cut -c1-8"
       validation:
         type: "flag"
-        flag: "50e29cfb"
+        flag: "flag{50e29cfb}"
     - id: 5
       name: "Cifra de Byte"
       description: "Encontre o arquivo criptografado em /tmp/backup/. Quebre a cifra XOR testando valores."
@@ -71,7 +71,7 @@ spec:
         - text: "Use python ou bash loop: for i in {0..255}; do ... done"
       validation:
         type: "flag"
-        flag: "x0r_s1mpl3"
+        flag: "flag{x0r_s1mpl3}"
         location: "/tmp/backup/data.enc"
     - id: 6
       name: "Senha Fraca"
@@ -83,7 +83,7 @@ spec:
         - text: "Loop: while read word; do echo -n $word | md5sum; done"
       validation:
         type: "flag"
-        flag: "password123"
+        flag: "flag{password123}"
     - id: 7
       name: "Cifra Clássica"
       description: "Procure arquivos ocultos no home do usuário. A mensagem usa cifra de César (ROT)."
@@ -95,7 +95,7 @@ spec:
         - text: "A rotação correta é ROT7: tr 'A-Za-z' 'H-ZA-Gh-za-g'"
       validation:
         type: "flag"
-        flag: "c43s4r_cr4ck3d"
+        flag: "flag{c43s4r_cr4ck3d}"
         location: "/home/ctfuser/.secrets/note.txt"
     - id: 8
       name: "Arquivo Danificado"
@@ -108,6 +108,6 @@ spec:
         - text: "Corrija com: printf '\x50\x4B' | dd of=/srv/archives/backup.zip bs=1 count=2 conv=notrunc"
       validation:
         type: "flag"
-        flag: "z1p_r3p41r3d"
+        flag: "flag{z1p_r3p41r3d}"
   scoring:
     total_points: 190

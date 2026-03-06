@@ -27,7 +27,7 @@ spec:
         - text: "Use ip addr, ifconfig ou hostname -I para ver o IP"
       validation:
         type: "flag"
-        flag: "N3TW0RK_1P"
+        flag: "flag{N3TW0RK_1P}"
         location: "/opt/network/challenge1.sh"
     - id: 2
       name: "Portas Abertas"
@@ -37,7 +37,7 @@ spec:
         - text: "Use: netstat -tuln | grep LISTEN | wc -l ou ss -tuln"
       validation:
         type: "flag"
-        flag: "P0RT_C0UNT"
+        flag: "flag{P0RT_C0UNT}"
         location: "/opt/network/challenge2.sh"
     - id: 3
       name: "Porta SSH"
@@ -47,7 +47,7 @@ spec:
         - text: "Use: netstat -tuln | grep ssh ou cat /etc/ssh/sshd_config"
       validation:
         type: "flag"
-        flag: "SSH_P0RT_22"
+        flag: "flag{SSH_P0RT_22}"
         location: "/opt/network/challenge3.sh"
   scoring:
     total_points: 120

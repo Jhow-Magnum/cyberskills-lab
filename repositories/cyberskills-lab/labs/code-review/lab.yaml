@@ -27,7 +27,7 @@ spec:
         - text: "Procure por os.system(), subprocess.call() ou exec() com input do usuário"
       validation:
         type: "flag"
-        flag: "CMD_1NJ3CT10N"
+        flag: "flag{CMD_1NJ3CT10N}"
         location: "/opt/vulnerable/vuln1.py"
     - id: 2
       name: "SQL Injection"
@@ -37,7 +37,7 @@ spec:
         - text: "Procure por concatenação de strings em queries SQL sem prepared statements"
       validation:
         type: "flag"
-        flag: "SQL_1NJ3CT10N"
+        flag: "flag{SQL_1NJ3CT10N}"
         location: "/opt/vulnerable/vuln2.js"
     - id: 3
       name: "Hardcoded Password"
@@ -47,7 +47,7 @@ spec:
         - text: "Use grep para procurar: password, passwd, secret, api_key em arquivos .py"
       validation:
         type: "flag"
-        flag: "H4RDC0D3D_P4SS"
+        flag: "flag{H4RDC0D3D_P4SS}"
         location: "/opt/vulnerable/config.py"
     - id: 4
       name: "Code Execution"
@@ -57,7 +57,7 @@ spec:
         - text: "Procure por eval(), exec(), system() com input não sanitizado em arquivos .php"
       validation:
         type: "flag"
-        flag: "C0D3_3X3C"
+        flag: "flag{C0D3_3X3C}"
         location: "/opt/vulnerable/vuln4.php"
     - id: 5
       name: "API Key Leak"
@@ -67,7 +67,7 @@ spec:
         - text: "Use grep -r 'API_KEY|SECRET_KEY|TOKEN' ou ls -la para encontrar arquivos ocultos"
       validation:
         type: "flag"
-        flag: "L34K3D_K3Y"
+        flag: "flag{L34K3D_K3Y}"
         location: "/opt/vulnerable/.env"
     - id: 6
       name: "XSS Vulnerability"
@@ -77,7 +77,7 @@ spec:
         - text: "Procure por innerHTML, document.write() com dados do usuário em arquivos .js"
       validation:
         type: "flag"
-        flag: "XSS_VULN"
+        flag: "flag{XSS_VULN}"
         location: "/opt/vulnerable/vuln6.js"
   scoring:
     total_points: 150

@@ -28,7 +28,7 @@ spec:
           cost: 0
       validation:
         type: "flag"
-        flag: "Jhow_Jhow"
+        flag: "flag{Jhow_Jhow}"
         flag_format: "text"
   scoring:
     total_points: 100
