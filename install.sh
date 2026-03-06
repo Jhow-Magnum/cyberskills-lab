@@ -23,12 +23,19 @@ INSTALL_DIR="$HOME/cyberskills-lab"
 # Clonar repositório
 echo "📥 Clonando repositório..."
 if [ -d "$INSTALL_DIR" ]; then
-    echo "⚠️  Diretório já existe, removendo..."
-    rm -rf "$INSTALL_DIR"
+    echo "⚠️  Diretório já existe, atualizando..."
+    cd "$INSTALL_DIR"
+    git pull --quiet 2>/dev/null || {
+        cd "$HOME"
+        rm -rf "$INSTALL_DIR"
+        git clone https://github.com/Jhow-Magnum/cyberskills-lab.git "$INSTALL_DIR" --quiet
+        cd "$INSTALL_DIR"
+    }
+else
+    git clone https://github.com/Jhow-Magnum/cyberskills-lab.git "$INSTALL_DIR" --quiet
+    cd "$INSTALL_DIR"
 fi
-git clone https://github.com/Jhow-Magnum/cyberskills-lab.git "$INSTALL_DIR" --quiet
-cd "$INSTALL_DIR"
-echo "✅ Repositório clonado"
+echo "✅ Repositório pronto"
 echo ""
 
 # Instalar Python e dependências
