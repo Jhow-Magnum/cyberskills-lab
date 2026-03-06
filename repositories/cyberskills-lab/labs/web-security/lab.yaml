@@ -28,7 +28,7 @@ spec:
         - text: "Use curl http://localhost/robots.txt ou navegue em /var/www/html/"
       validation:
         type: "flag"
-        flag: "R0B0TS_TXT"
+        flag: "flag{R0B0TS_TXT}"
         location: "/var/www/html/robots.txt"
     - id: 2
       name: "Comentário HTML"
@@ -38,7 +38,7 @@ spec:
         - text: "Use cat /var/www/html/index.html ou curl http://localhost/"
       validation:
         type: "flag"
-        flag: "HTML_C0MM3NT"
+        flag: "flag{HTML_C0MM3NT}"
         location: "/var/www/html/index.html"
     - id: 3
       name: "SQL Injection"
@@ -48,6 +48,6 @@ spec:
         - text: "Procure por arquivos .php ou .sql. Teste payloads como ' OR '1'='1"
       validation:
         type: "flag"
-        flag: "SQL_1NJ3CT10N"
+        flag: "flag{SQL_1NJ3CT10N}"
   scoring:
     total_points: 150
