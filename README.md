@@ -153,6 +153,19 @@ Para encerrar:
 bash stop.sh
 ```
 
+### Desinstalar Completamente
+
+Para remover tudo (plataforma, containers, imagens e diretório):
+
+```bash
+bash ~/cyberskills-lab/uninstall.sh
+```
+
+Ou via curl:
+```bash
+curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/uninstall.sh | bash
+```
+
 ## Estrutura do Projeto
 
 ```
