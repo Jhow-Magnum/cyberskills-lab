@@ -25,26 +25,26 @@ ls -la
 cd /tmp
 whoami
 cat /etc/passwd
+grep root /etc/shadow
 find / -name "*.conf" 2>/dev/null
 grep -r "password" /etc 2>/dev/null
-ps aux
+ps aux | grep ssh
 netstat -tuln
 cat /var/log/syslog
 df -h
 free -m
-top
+top -n 1
 uname -a
 cat /root/secret.txt
-flag{h1st0ry_m4tt3rs}
 ls /home
 cd /var/log
-cat auth.log
+tail -f auth.log
 grep "error" /var/log/syslog
 find /usr -type f -name "*.sh"
 chmod +x script.sh
 ./script.sh
 cat /etc/hosts
-ping google.com
+ping -c 4 google.com
 curl http://example.com
 wget http://test.com/file.zip
 tar -xzf archive.tar.gz
@@ -56,6 +56,183 @@ lsblk
 fdisk -l
 mount /dev/sda1 /mnt
 umount /mnt
+cd /etc
+ls -lah
+cat /etc/issue
+cat /etc/os-release
+hostname
+ifconfig
+ip addr show
+route -n
+arp -a
+ss -tuln
+lsof -i
+id
+groups
+sudo -l
+cat /etc/sudoers
+find / -perm -4000 2>/dev/null
+find / -writable -type f 2>/dev/null
+locate password
+updatedb
+which python
+which gcc
+apt list --installed
+dpkg -l
+systemctl status
+service --status-all
+journalctl -xe
+dmesg | tail
+last
+lastlog
+w
+who
+uptime
+date
+cal
+timedatectl
+cat /etc/timezone
+env
+export PATH=/tmp:$PATH
+echo $PATH
+echo $HOME
+echo $USER
+alias ll='ls -la'
+alias
+history | grep flag
+history | grep password
+cat ~/.bashrc
+cat ~/.profile
+cat ~/.bash_logout
+source ~/.bashrc
+cd ~
+pwd
+mkdir test
+rmdir test
+touch file.txt
+rm file.txt
+cp /etc/passwd /tmp/
+mv /tmp/passwd /tmp/backup_passwd
+cat /tmp/backup_passwd
+head -n 10 /etc/passwd
+tail -n 5 /etc/passwd
+wc -l /etc/passwd
+grep bash /etc/passwd
+cut -d: -f1 /etc/passwd
+awk -F: '{print $1}' /etc/passwd
+sed 's/root/admin/g' /etc/passwd
+flag{h1st0ry_m4tt3rs}
+sort /etc/passwd
+uniq /etc/passwd
+tr 'a-z' 'A-Z' < /etc/hostname
+rev /etc/hostname
+base64 /etc/hostname
+base64 -d <<< "dGVzdA=="
+md5sum /etc/passwd
+sha256sum /etc/passwd
+file /bin/bash
+strings /bin/bash | grep version
+ldd /bin/bash
+objdump -d /bin/ls
+strace ls
+ltrace ls
+nm /bin/ls
+readelf -h /bin/bash
+hexdump -C /etc/hostname
+xxd /etc/hostname
+od -c /etc/hostname
+find / -name "flag*" 2>/dev/null
+find / -type f -name "*.txt" 2>/dev/null
+find /root -type f
+find /etc -name "*.conf"
+grep -r "flag" /root 2>/dev/null
+grep -ri "password" /var/log 2>/dev/null
+grep -E "[0-9]{1,3}\.[0-9]{1,3}" /etc/hosts
+egrep "root|admin" /etc/passwd
+fgrep "root" /etc/passwd
+cat /proc/version
+cat /proc/cmdline
+cat /proc/mounts
+cat /sys/class/net/eth0/address
+ls /dev
+ls /sys
+ls /proc
+cat /etc/crontab
+crontab -l
+cat /etc/cron.d/*
+ls /etc/cron.daily
+ls /var/spool/cron
+at now + 1 minute
+batch
+watch -n 1 date
+sleep 5
+timeout 10 ping google.com
+nohup sleep 100 &
+jobs
+bg
+fg
+kill -9 1234
+killall sleep
+pkill sleep
+nice -n 10 sleep 100 &
+renice 5 -p 1234
+ps -ef
+ps aux --sort=-%mem
+top -b -n 1
+htop
+iostat
+vmstat
+mpstat
+sar
+netcat -l 4444
+nc -lvnp 4444
+socat TCP-LISTEN:4444 STDOUT
+python -m SimpleHTTPServer 8000
+python3 -m http.server 8000
+php -S 0.0.0.0:8000
+ruby -run -e httpd . -p 8000
+busybox httpd -f -p 8000
+curl -X POST http://example.com
+wget -O- http://example.com
+lynx http://example.com
+w3m http://example.com
+ssh user@192.168.1.1
+scp file.txt user@host:/tmp/
+rsync -avz /data/ user@host:/backup/
+sftp user@host
+ftp ftp.example.com
+telnet 192.168.1.1 23
+nmap -sV 192.168.1.0/24
+ping -c 10 8.8.8.8
+traceroute google.com
+tracepath google.com
+mtr google.com
+dig google.com
+nslookup google.com
+host google.com
+whois google.com
+tcpdump -i eth0
+tshark -i eth0
+wireshark
+iptables -L
+ip6tables -L
+ufw status
+firewall-cmd --list-all
+setenforce 0
+getenforce
+cat /etc/selinux/config
+apparmor_status
+aa-status
+chmod 777 /tmp/test
+chmod u+x script.sh
+chown root:root file.txt
+chgrp users file.txt
+umask
+umask 022
+getfacl /tmp
+setfacl -m u:user:rwx /tmp
+chattr +i file.txt
+lsattr file.txt
 EOF
 
 # Desafio 6: Criar EXATAMENTE 5 arquivos ocultos (sem contar README)
