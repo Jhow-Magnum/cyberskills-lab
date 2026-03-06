@@ -44,12 +44,30 @@ CYBERSKILLS LAB é uma plataforma educacional para treinamento prático em segur
 ## Requisitos do Sistema
 
 - Docker 20.10+
-- Python 3.8+
+- Python 3.8+ com pip
 - Linux (Debian/Ubuntu recomendado)
 - 4GB RAM mínimo
 - 10GB espaço em disco
 
 ## Instalação
+
+### Pré-requisitos
+
+Antes de instalar, certifique-se de ter:
+
+**1. Docker instalado e configurado:**
+```bash
+curl -fsSL https://get.docker.com | sudo bash
+sudo usermod -aG docker $USER
+```
+
+**2. Python 3 e pip:**
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+```
+
+**3. Faça logout e login novamente** para aplicar as permissões do grupo docker.
 
 ### Instalação Rápida (Recomendado)
 
@@ -59,29 +77,36 @@ curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/ins
 
 ### Instalação Manual
 
-### 1. Instalar Docker
+**1. Instalar Docker:**
 
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
 sudo usermod -aG docker $USER
 ```
 
-Faça logout e login novamente para aplicar as permissões.
+**2. Instalar Python e pip:**
 
-### 2. Clonar Repositório
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+```
+
+**3. Faça logout e login novamente.**
+
+**4. Clonar Repositório:**
 
 ```bash
 git clone https://github.com/Jhow-Magnum/cyberskills-lab.git
 cd cyberskills-lab
 ```
 
-### 3. Instalar Dependências
+**5. Instalar Dependências:**
 
 ```bash
 bash install.sh
 ```
 
-### 4. Iniciar Plataforma
+**6. Iniciar Plataforma:**
 
 ```bash
 bash start.sh
