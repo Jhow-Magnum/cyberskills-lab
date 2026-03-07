@@ -44,36 +44,84 @@ CYBERSKILLS LAB is an educational platform for hands-on information security tra
 ## System Requirements
 
 - Docker 20.10+
-- Python 3.8+
+- Python 3.8+ with pip
 - Linux (Debian/Ubuntu recommended)
 - 4GB RAM minimum
 - 10GB disk space
 
 ## Installation
 
-### 1. Install Docker
+### Prerequisites
+
+Before installing, make sure you have:
+
+**1. Docker installed and configured:**
+```bash
+curl -fsSL https://get.docker.com | sudo bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+**2. Python 3 and pip:**
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+```
+
+**3. Add user to sudo group (optional):**
+```bash
+sudo usermod -aG sudo $USER
+newgrp sudo
+```
+
+**4. Log out and log back in** to apply docker group permissions.
+
+### Quick Install (Recommended)
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/install.sh | bash
+```
+
+### Manual Installation
+
+**1. Install Docker:**
 
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
 sudo usermod -aG docker $USER
+newgrp docker
 ```
 
-Log out and log back in to apply permissions.
+**2. Install Python and pip:**
 
-### 2. Clone Repository
+```bash
+sudo apt update
+sudo apt install python3 python3-pip -y
+```
+
+**3. Add to sudo group (optional):**
+
+```bash
+sudo usermod -aG sudo $USER
+newgrp sudo
+```
+
+**4. Log out and log back in.**
+
+**5. Clone Repository:**
 
 ```bash
 git clone https://github.com/Jhow-Magnum/cyberskills-lab.git
 cd cyberskills-lab
 ```
 
-### 3. Install Dependencies
+**6. Install Dependencies:**
 
 ```bash
 bash install.sh
 ```
 
-### 4. Start Platform
+**7. Start Platform:**
 
 ```bash
 bash start.sh
@@ -103,6 +151,19 @@ The app will open in its own window without the browser bar.
 To stop:
 ```bash
 bash stop.sh
+```
+
+### Complete Uninstall
+
+To remove everything (platform, containers, images and directory):
+
+```bash
+bash ~/cyberskills-lab/uninstall.sh
+```
+
+Or via curl:
+```bash
+curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/uninstall.sh | bash
 ```
 
 ## Project Structure
