@@ -230,17 +230,6 @@ Contributions are welcome. Please:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## Roadmap
-
-- Badge and achievement system
-- Real-time competition mode
-- Digital forensics labs
-- Malware analysis labs
-- Cloud security labs (AWS/Azure)
-- Public REST API
-- Analytics dashboard
-- Multi-language support
-
 ## Author
 
 **Jhow Magnum**
