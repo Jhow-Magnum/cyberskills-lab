@@ -15,6 +15,13 @@ if [ -f /tmp/cyberskills.pid ]; then
     fi
     rm -f /tmp/cyberskills.pid
 fi
+
+# Matar processo na porta 5000
+PORT_PID=$(lsof -ti:5000 2>/dev/null)
+if [ -n "$PORT_PID" ]; then
+    kill -9 $PORT_PID 2>/dev/null
+    echo "OK: Porta 5000 liberada"
+fi
 echo ""
 
 # Remover containers
