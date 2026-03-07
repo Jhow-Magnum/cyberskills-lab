@@ -65,10 +65,10 @@ for lab_id in "${LABS[@]}"; do
     echo "📦 Construindo: $lab_id..."
     if docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1; then
         echo "✅ $lab_id construído com sucesso"
-        ((BUILD_SUCCESS++))
+        BUILD_SUCCESS=$((BUILD_SUCCESS + 1))
     else
         echo "❌ $lab_id falhou (veja /tmp/build-$lab_id.log)"
-        ((BUILD_FAILED++))
+        BUILD_FAILED=$((BUILD_FAILED + 1))
     fi
     echo ""
 done
