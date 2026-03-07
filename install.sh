@@ -53,12 +53,12 @@ spin() {
     local start=$(date +%s)
     while kill -0 $pid 2>/dev/null; do
         local elapsed=$(($(date +%s) - start))
-        printf "\r   ${spinner[$i]} $msg (${elapsed}s)"
+        printf "\r   ${spinner[$i]} $msg (${elapsed}s)    "
         i=$(( (i+1) % 10 ))
         sleep 0.1
     done
     local total=$(($(date +%s) - start))
-    printf "\r✅ $msg - ${total}s\n"
+    printf "\r✅ $msg - ${total}s          \n"
 }
 
 # Construir imagens sequencialmente
