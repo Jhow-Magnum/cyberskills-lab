@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     🎯 CYBERSKILLS LAB - Instalação Automática          ║"
 echo "╚══════════════════════════════════════════════════════════╝"
@@ -42,6 +44,23 @@ pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages -
 echo "✅ Dependências instaladas"
 echo ""
 
+# Spinner com tempo
+spin() {
+    local -a spinner=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+    local i=0
+    local pid=$1
+    local msg=$2
+    local start=$(date +%s)
+    while kill -0 $pid 2>/dev/null; do
+        local elapsed=$(($(date +%s) - start))
+        printf "\r   ${spinner[$i]} $msg (${elapsed}s)"
+        i=$(( (i+1) % 10 ))
+        sleep 0.1
+    done
+    local total=$(($(date +%s) - start))
+    printf "\r✅ $msg - ${total}s\n"
+}
+
 # Construir imagens sequencialmente
 echo "🏗️  Construindo imagens Docker..."
 echo ""
@@ -56,23 +75,12 @@ LABS=(
     "desafio-final"
 )
 
-BUILD_SUCCESS=0
-BUILD_FAILED=0
-
 for lab_id in "${LABS[@]}"; do
-    echo "📦 Construindo: $lab_id..."
-    if docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1; then
-        echo "✅ $lab_id construído com sucesso"
-        BUILD_SUCCESS=$((BUILD_SUCCESS + 1))
-    else
-        echo "❌ $lab_id falhou (veja /tmp/build-$lab_id.log)"
-        BUILD_FAILED=$((BUILD_FAILED + 1))
-    fi
+    echo "📦 Construindo: $lab_id"
+    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
+    spin $! "Construindo: $lab_id"
     echo ""
 done
-
-echo "📊 Resultado: $BUILD_SUCCESS sucesso, $BUILD_FAILED falhas"
-echo ""
 
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     ✅ INSTALAÇÃO COMPLETA!                              ║"
