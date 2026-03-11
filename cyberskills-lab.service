@@ -1,0 +1,17 @@
+[Unit]
+Description=CyberSkills Lab - Cybersecurity Training Platform
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=%u
+WorkingDirectory=%h/cyberskills-lab
+ExecStart=/usr/bin/python3 %h/cyberskills-lab/ctf-simple.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/tmp/cyberskills.log
+StandardError=append:/tmp/cyberskills.log
+
+[Install]
+WantedBy=default.target

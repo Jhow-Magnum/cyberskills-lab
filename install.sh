@@ -111,6 +111,16 @@ if ps -p $(cat /tmp/cyberskills.pid 2>/dev/null) > /dev/null 2>&1; then
     echo "⚠️  Para parar: bash ~/cyberskills-lab/stop.sh"
     echo ""
     
+    # Instalar serviço systemd para auto-start
+    echo "🔧 Configurando auto-start..."
+    mkdir -p ~/.config/systemd/user/
+    cp cyberskills-lab.service ~/.config/systemd/user/
+    systemctl --user daemon-reload
+    systemctl --user enable cyberskills-lab.service 2>/dev/null
+    systemctl --user start cyberskills-lab.service 2>/dev/null
+    echo "✅ Auto-start configurado (iniciará automaticamente no boot)"
+    echo ""
+    
     sleep 2
     xdg-open http://localhost:5000 2>/dev/null || open http://localhost:5000 2>/dev/null || echo "🌐 Abra manualmente: http://localhost:5000"
 else
