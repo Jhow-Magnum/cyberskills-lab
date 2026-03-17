@@ -158,8 +158,11 @@
     <div class="container">
         <div class="sidebar">
             <div class="logo-header">
-                <img src="/assets/pingulinux-oficial.png" alt="PinguLinux" style="width:54px;height:54px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(78,201,176,0.6));">
-                <h1>🔒 CYBERSKILLS LAB</h1>
+                <img src="/assets/pingulinux-oficial.png" alt="PinguLinux" style="width:60px;height:60px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(78,201,176,0.6));">
+                <div>
+                    <div style="font-size:10px;color:#4ec9b0;letter-spacing:2px;font-weight:600;opacity:0.8;">PINGULINUX</div>
+                    <h1 style="margin:0;">🔒 CYBERSKILLS LAB</h1>
+                </div>
             </div>
             <div class="username-input" id="usernameInput">
                 <input type="text" id="nameField" placeholder="Digite seu nome..." onkeypress="if(event.key=='Enter')setUsername()">
@@ -190,14 +193,9 @@
             <div class="hero-image-container">
                 <img src="/assets/hero-image.png" alt="CyberSkills Lab">
                 <div class="hero-title">
-                    <div style="display:flex;align-items:center;justify-content:center;gap:18px;">
-                        <img src="/assets/pingulinux-oficial.png" alt="PinguLinux" style="width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(78,201,176,0.7));pointer-events:none;">
-                        <div style="text-align:left;">
-                            <h1 style="margin:0;">CYBERSKILLS LAB</h1>
-                            <p style="margin:6px 0 0 0;">Treinamento Prático em Cibersegurança</p>
-                        </div>
-                    </div>
-                </div>
+                    <h1>CYBERSKILLS LAB</h1>
+                    <p>Treinamento Prático em Cibersegurança</p>
+                    <img src="/assets/pingulinux-oficial.png" alt="PinguLinux" style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(78,201,176,0.7));pointer-events:none;margin-top:18px;">
                 <div class="scroll-indicator" onclick="document.getElementById('heroSection').scrollTo({top: window.innerHeight, behavior: 'smooth'})">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#4ec9b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"></polyline>
@@ -1081,9 +1079,6 @@ function resetProgress() {
     });
 }
     </script>
-    <footer style="position:fixed;bottom:10px;right:20px;color:#555;font-size:11px;z-index:1000;display:flex;align-items:center;gap:7px;">
-        <img src="/assets/pingulinux-oficial.png" alt="PinguLinux" style="width:24px;height:24px;object-fit:contain;opacity:0.9;">
-        <span>by <a href="https://github.com/Jhow-Magnum" target="_blank" style="color:#4ec9b0;text-decoration:none;">@Jhow-Magnum</a> &middot; open source for the InfoSec community</span>
-    </footer>
+    <footer style="position:fixed;bottom:10px;right:20px;color:#555;font-size:11px;z-index:1000;">by <a href="https://github.com/Jhow-Magnum" target="_blank" style="color:#4ec9b0;text-decoration:none;">@Jhow-Magnum</a> &middot; open source for the InfoSec community</footer>
 </body>
 </html>
