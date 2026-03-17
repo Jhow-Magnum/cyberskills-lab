@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     🎯 CYBERSKILLS LAB - Instalação Automática          ║"
 echo "╚══════════════════════════════════════════════════════════╝"
@@ -44,27 +42,6 @@ pip3 install Flask flask-cors flask-sock pyyaml docker --break-system-packages -
 echo "✅ Dependências instaladas"
 echo ""
 
-# Spinner com tempo
-spin() {
-    local -a spinner=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
-    local i=0
-    local pid=$1
-    local msg=$2
-    local start=$(date +%s)
-    while kill -0 $pid 2>/dev/null; do
-        local elapsed=$(($(date +%s) - start))
-        printf "\r   ${spinner[$i]} $msg (${elapsed}s)"
-        i=$(( (i+1) % 10 ))
-        sleep 0.1
-    done
-    local total=$(($(date +%s) - start))
-    printf "\r✅ $msg - ${total}s\n"
-}
-
-# Construir imagens sequencialmente
-echo "🏗️  Construindo imagens Docker..."
-echo ""
-
 LABS=(
     "linux-basic"
     "crypto"
@@ -75,12 +52,54 @@ LABS=(
     "desafio-final"
 )
 
+# Construir todas as imagens em paralelo
+echo "🏗️  Construindo imagens Docker em paralelo..."
+echo "   (isso pode levar alguns minutos na primeira vez)"
+echo ""
+
+BUILD_START=$(date +%s)
+declare -A PIDS
+
 for lab_id in "${LABS[@]}"; do
-    echo "📦 Construindo: $lab_id"
-    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ > /tmp/build-$lab_id.log 2>&1 &
-    spin $! "Construindo: $lab_id"
-    echo ""
+    docker build -t pingulinux/$lab_id scenarios/$lab_id/ \
+        > /tmp/build-$lab_id.log 2>&1 &
+    PIDS[$lab_id]=$!
+    echo "   🔄 $lab_id — iniciado (PID ${PIDS[$lab_id]})"
 done
+
+echo ""
+echo "   Aguardando conclusão..."
+echo ""
+
+SUCCESS=0
+FAILED=0
+FAILED_LABS=()
+
+for lab_id in "${LABS[@]}"; do
+    if wait ${PIDS[$lab_id]}; then
+        echo "   ✅ $lab_id"
+        SUCCESS=$((SUCCESS + 1))
+    else
+        echo "   ❌ $lab_id (ver /tmp/build-$lab_id.log)"
+        FAILED=$((FAILED + 1))
+        FAILED_LABS+=("$lab_id")
+    fi
+done
+
+BUILD_END=$(date +%s)
+BUILD_TIME=$((BUILD_END - BUILD_START))
+BUILD_MIN=$((BUILD_TIME / 60))
+BUILD_SEC=$((BUILD_TIME % 60))
+
+echo ""
+echo "   📊 $SUCCESS construídos com sucesso, $FAILED falhas — tempo: ${BUILD_MIN}m${BUILD_SEC}s"
+
+if [ ${#FAILED_LABS[@]} -gt 0 ]; then
+    echo ""
+    echo "   ⚠️  Labs com falha: ${FAILED_LABS[*]}"
+    echo "   Execute para ver o erro: cat /tmp/build-<lab>.log"
+fi
+echo ""
 
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║     ✅ INSTALAÇÃO COMPLETA!                              ║"
