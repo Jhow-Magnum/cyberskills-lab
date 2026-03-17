@@ -7,27 +7,26 @@ Open-source cybersecurity training platform with isolated practical environments
 [![Python](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/docker-required-blue)](https://www.docker.com/)
 
-[![English](https://img.shields.io/badge/lang-English-red)](README-EN.md)
-[![Português](https://img.shields.io/badge/lang-Português-green)](README.md)
-
-**English | [Português](README.md)**
+**English** | [Português](README.md)
 
 ---
 
 ## About
 
-CYBERSKILLS LAB is an educational platform for hands-on information security training. It offers 40 challenges across 6 categories, running in isolated Docker containers with integrated web terminal.
+CYBERSKILLS LAB is an educational platform for hands-on information security training. It offers 40 challenges across 6 categories, running in isolated Docker containers with an integrated web terminal.
 
-### Key Features
+The official platform mascot is **PinguLinux** 🐧 — a penguin representing the project's essence: Linux, community and hands-on learning.
 
-- Local execution via Docker
-- Integrated web terminal (xterm.js)
+### Features
+
+- 100% local execution via Docker
+- Integrated web terminal (xterm.js) — no external SSH needed
 - Scoring and ranking system
 - Auto-destruction of containers after use
-- Responsive interface
 - Support for multiple simultaneous users
+- Installable as an app (PWA)
 
-## Available Labs
+## Labs
 
 | Category | Challenges | Points | Duration | Level |
 |----------|-----------|--------|----------|-------|
@@ -37,11 +36,11 @@ CYBERSKILLS LAB is an educational platform for hands-on information security tra
 | Network Analysis | 3 | 120 | 90 min | Intermediate |
 | Code Review | 6 | 150 | 75 min | Intermediate |
 | Penetration Testing | 5 | 200 | 120 min | Advanced |
-| **Final Challenge** | 1 | 100 | 10 min | Special |
+| **Final Challenge** | 1 | 100 | 30 min | Special |
 
 **Total: 40 challenges | 1,190 points**
 
-## System Requirements
+## Requirements
 
 - Docker 20.10+
 - Python 3.8+ with pip
@@ -53,9 +52,7 @@ CYBERSKILLS LAB is an educational platform for hands-on information security tra
 
 ### Prerequisites
 
-Before installing, make sure you have:
-
-**1. Docker installed and configured:**
+**1. Docker:**
 ```bash
 curl -fsSL https://get.docker.com | sudo bash
 sudo usermod -aG docker $USER
@@ -64,19 +61,12 @@ newgrp docker
 
 **2. Python 3 and pip:**
 ```bash
-sudo apt update
-sudo apt install python3 python3-pip -y
+sudo apt update && sudo apt install python3 python3-pip -y
 ```
 
-**3. Add user to sudo group (optional):**
-```bash
-sudo usermod -aG sudo $USER
-newgrp sudo
-```
+**3. Log out and log back in** to apply docker group permissions.
 
-**4. Log out and log back in** to apply docker group permissions.
-
-### Quick Install (Recommended)
+### Quick Install
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/install.sh | bash
@@ -84,54 +74,17 @@ curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/ins
 
 ### Manual Installation
 
-**1. Install Docker:**
-
-```bash
-curl -fsSL https://get.docker.com | sudo bash
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-**2. Install Python and pip:**
-
-```bash
-sudo apt update
-sudo apt install python3 python3-pip -y
-```
-
-**3. Add to sudo group (optional):**
-
-```bash
-sudo usermod -aG sudo $USER
-newgrp sudo
-```
-
-**4. Log out and log back in.**
-
-**5. Clone Repository:**
-
 ```bash
 git clone https://github.com/Jhow-Magnum/cyberskills-lab.git
 cd cyberskills-lab
-```
-
-**6. Install Dependencies:**
-
-```bash
 bash install.sh
-```
-
-**7. Start Platform:**
-
-```bash
-bash start.sh
 ```
 
 Access: http://localhost:5000
 
 ## Usage
 
-1. Open browser at `http://localhost:5000`
+1. Open `http://localhost:5000` in your browser
 2. Enter your username
 3. Select a lab
 4. Solve challenges in the integrated terminal
@@ -140,53 +93,35 @@ Access: http://localhost:5000
 
 ### Install as App (PWA)
 
-You can install the platform as an application:
-
 - **Chrome/Edge/Brave**: Click the install icon (⊕) in the address bar
 - **Firefox**: Menu → Install this site as an app
 - **Safari**: Share → Add to Home Screen
 
-The app will open in its own window without the browser bar.
+### Stop the Platform
 
-To stop:
 ```bash
-bash stop.sh
+bash ~/cyberskills-lab/stop.sh
 ```
 
-### Complete Uninstall
-
-To remove everything (platform, containers, images and directory):
+### Uninstall
 
 ```bash
 bash ~/cyberskills-lab/uninstall.sh
-```
-
-Or via curl:
-```bash
-curl -sSL https://raw.githubusercontent.com/Jhow-Magnum/cyberskills-lab/main/uninstall.sh | bash
 ```
 
 ## Project Structure
 
 ```
 cyberskills-lab/
-├── ctf-simple.py           # Flask backend
-├── web.html                # Web interface
-├── requirements.txt        # Python dependencies
-├── install.sh              # Installation script
-├── start.sh                # Start platform
-├── stop.sh                 # Stop platform
-├── build-all.sh            # Build Docker images
-├── repositories/           # YAML lab definitions
-│   └── cyberskills-lab/
-│       └── labs/
-└── scenarios/              # Environment Dockerfiles
-    ├── linux-basic/
-    ├── crypto/
-    ├── web-security/
-    ├── network/
-    ├── code-review/
-    └── pentest/
+├── ctf-simple.py        # Flask backend
+├── web.html             # Web interface
+├── requirements.txt     # Python dependencies
+├── install.sh           # Installation script
+├── start.sh             # Start platform
+├── stop.sh              # Stop platform
+├── build-all.sh         # Build Docker images
+├── repositories/        # YAML lab definitions
+└── scenarios/           # Environment Dockerfiles
 ```
 
 ## Tech Stack
@@ -200,35 +135,28 @@ cyberskills-lab/
 
 ## Troubleshooting
 
-### Port 5000 in use
-
+**Port 5000 in use:**
 ```bash
 lsof -ti:5000 | xargs kill -9
 ```
 
-### Containers not removed
-
+**Containers not removed:**
 ```bash
 docker ps -a | grep cyberskills | awk '{print $1}' | xargs docker rm -f
 ```
 
-### Rebuild images
-
+**Rebuild images:**
 ```bash
 bash build-all.sh
 ```
 
 ## Contributing
 
-Contributions are welcome. Please:
-
 1. Fork the project
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
+2. Create a branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Description of change'`)
 4. Push to the branch (`git push origin feature/new-feature`)
 5. Open a Pull Request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## Author
 
@@ -239,14 +167,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Information security community
-- Project contributors
-- Open-source community
-
----
-
-**Version 1.0.0** | 2026
+MIT License — see [LICENSE](LICENSE) for details.
