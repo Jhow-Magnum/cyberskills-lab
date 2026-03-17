@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-LABEL maintainer="CyberSkills Lab" description="Cenário Linux Básico - 14 Desafios"
+LABEL maintainer="Jhow-Magnum" description="Cenário Linux Básico - 14 Desafios"
 
 # Instalar ferramentas
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -12,8 +12,8 @@ RUN mkdir -p /var/run/sshd && echo 'root:root' | chpasswd \
     && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Desafio 2: Pasta com flag invertida
-RUN mkdir -p '/root/data' \
-    && echo '4tSap' > '/root/data/secret.txt'
+RUN mkdir -p '/root/CyberSkills Lab' \
+    && echo '4tSap' > '/root/CyberSkills Lab/secret.txt'
 
 # Desafio 3: Script oculto SEM permissão de execução
 RUN printf '#!/bin/bash\necho "flag{h1dd3n_scr1pt}"\n' > /root/.flag_script.sh \
@@ -351,11 +351,13 @@ EOF
 
 # Exibir README ao logar
 RUN echo '' >> /root/.bashrc && \
-    echo '# Exibir README apenas no login interativo' >> /root/.bashrc && \
-    echo 'if [ -n "$PS1" ] && [ -f ~/README ]; then' >> /root/.bashrc && \
+    echo 'if [ -n "$PS1" ] && [ -f ~/README ] && [ -z "$README_SHOWN" ]; then' >> /root/.bashrc && \
+    echo '    export README_SHOWN=1' >> /root/.bashrc && \
     echo '    cat ~/README' >> /root/.bashrc && \
     echo 'fi' >> /root/.bashrc && \
-    echo '' >> /root/.bashrc
+    echo '' >> /root/.bashrc && \
+    echo '' >> /root/.profile && \
+    echo 'if [ -f ~/.bashrc ]; then . ~/.bashrc; fi' >> /root/.profile
 
 # Script de inicialização
 RUN printf '#!/bin/bash\n/usr/local/bin/temp_generator.sh &\n/usr/local/bin/socket_server.sh &\nsleep 2\n/usr/sbin/sshd -D\n' > /usr/local/bin/start.sh \

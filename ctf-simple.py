@@ -647,9 +647,9 @@ def terminal_ws(ws, session_id):
     
     # Executa bash no container
     if lab_id in non_root_labs:
-        cmd = ['docker', 'exec', '-it', '-u', 'user', container_name, '/bin/bash']
+        cmd = ['docker', 'exec', '-it', '-u', 'user', container_name, '/bin/bash', '--login']
     else:
-        cmd = ['docker', 'exec', '-it', container_name, '/bin/bash']
+        cmd = ['docker', 'exec', '-it', container_name, '/bin/bash', '--login']
     master, slave = pty.openpty()
     
     # Configura terminal em modo raw para suportar todos os códigos de controle

@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-LABEL maintainer="CyberSkills Lab" description="Desafio Final - 1 Desafio Especial"
+LABEL maintainer="Jhow-Magnum" description="Desafio Final - 1 Desafio Especial"
 
 # Instalar apenas o essencial
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-LABEL maintainer="CyberSkills Lab" description="Cenário Network Security - 3 Desafios"
+LABEL maintainer="Jhow-Magnum" description="Cenário Network Security - 3 Desafios"
 
 # Instalar ferramentas de análise de rede
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-LABEL maintainer="CyberSkills Lab" description="Cenário Code Review - 6 Desafios"
+LABEL maintainer="Jhow-Magnum" description="Cenário Code Review - 6 Desafios"
 
 # Instalar apenas ferramentas essenciais
 RUN apt-get update && apt-get install -y --no-install-recommends \

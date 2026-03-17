@@ -8,8 +8,8 @@ entries:
       difficulty: "easy"
       duration: "45m"
       keywords: [linux, bash, comandos, permissões]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/linux-basic/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 14
@@ -22,8 +22,8 @@ entries:
       difficulty: "easy"
       duration: "45m"
       keywords: [criptografia, hash, encoding, cifras]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/crypto/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 8
@@ -36,8 +36,8 @@ entries:
       difficulty: "medium"
       duration: "60m"
       keywords: [web, sql-injection, xss, owasp]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/web-security/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 3
@@ -50,8 +50,8 @@ entries:
       difficulty: "hard"
       duration: "90m"
       keywords: [pentest, exploitation, privilege-escalation, reverse-shell]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/pentest/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 5
@@ -64,8 +64,8 @@ entries:
       difficulty: "medium"
       duration: "60m"
       keywords: [network, nmap, wireshark, scanning]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/network/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 3
@@ -78,8 +78,8 @@ entries:
       difficulty: "medium"
       duration: "45m"
       keywords: [code-review, vulnerabilities, secure-coding, sast]
-      maintainers: ["Tryg_Gelt"]
-      author: "Tryg_Gelt"
+      maintainers: ["Jhow-Magnum"]
+      author: "Jhow-Magnum"
       url: "file://labs/code-review/lab.yaml"
       created: "2024-01-15T10:00:00Z"
       challenges: 6
