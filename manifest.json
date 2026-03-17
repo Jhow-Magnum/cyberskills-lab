@@ -1,7 +1,7 @@
 {
   "name": "CYBERSKILLS LAB",
   "short_name": "CyberSkills",
-  "description": "Cybersecurity Training Platform",
+  "description": "Treinamento Prático em Cibersegurança",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1a1a",
