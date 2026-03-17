@@ -12,8 +12,8 @@ RUN mkdir -p /var/run/sshd && echo 'root:root' | chpasswd \
     && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Desafio 2: Pasta com flag invertida
-RUN mkdir -p '/root/CyberSkills Lab' \
-    && echo '4tSap' > '/root/CyberSkills Lab/secret.txt'
+RUN mkdir -p '/root/data' \
+    && echo '4tSap' > '/root/data/secret.txt'
 
 # Desafio 3: Script oculto SEM permissão de execução
 RUN printf '#!/bin/bash\necho "flag{h1dd3n_scr1pt}"\n' > /root/.flag_script.sh \
