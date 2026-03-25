@@ -47,15 +47,15 @@ def init_db():
     )''')
     conn.commit()
     
-    # Cria usuário Tryg_Gelt com 1089 pontos (39 desafios - todos exceto o final)
-    # Total de pontos dos 6 labs: 1090 pontos
-    # Tryg_Gelt tem: 1089 pontos (falta 1 ponto)
+    # Cria usuário Tryg_Gelt com 969 pontos (37 desafios - todos exceto o final)
+    # Total de pontos dos 5 labs ativos: 970 pontos
+    # Tryg_Gelt tem: 969 pontos (falta 1 ponto)
     # Desafio final: 100 pontos
     # Usuário precisa completar TUDO + desafio final para ultrapassar
     c.execute('SELECT user_id FROM users WHERE user_id = ?', ('Tryg_Gelt',))
     if not c.fetchone():
         c.execute('INSERT INTO users (user_id, username, total_score) VALUES (?, ?, ?)',
-                  ('Tryg_Gelt', 'Tryg_Gelt', 1089))
+                  ('Tryg_Gelt', 'Tryg_Gelt', 969))
         conn.commit()
     
     conn.close()
@@ -90,6 +90,20 @@ def list_labs():
         # Pula o desafio final - será adicionado depois se qualificado
         if lab_dir.name == 'desafio-final':
             continue
+        # Bloqueia network - em desenvolvimento
+        if lab_dir.name == 'network':
+            labs.append({
+                'id': 'network',
+                'name': 'Network Analysis',
+                'description': '🚧 Em desenvolvimento. Em breve!',
+                'difficulty': 'medium',
+                'duration': '90m',
+                'challenges': 3,
+                'points': 0,
+                'completed': False,
+                'locked': True
+            })
+            continue
             
         if lab_dir.is_dir() and (lab_dir / "lab.yaml").exists():
             lab = load_lab(lab_dir.name)
@@ -105,13 +119,13 @@ def list_labs():
                     'completed': lab_dir.name in completed_labs
                 })
     
-    # Verifica se usuário completou TODOS os 6 labs (exceto desafio-final)
+    # Verifica se usuário completou TODOS os 5 labs ativos (exceto desafio-final e network)
     if user_id:
-        # Conta quantos labs foram 100% completados (excluindo desafio-final)
-        non_final_completed = sum(1 for lab_id in completed_labs if lab_id != 'desafio-final')
+        # Conta quantos labs foram 100% completados (excluindo desafio-final e network)
+        non_final_completed = sum(1 for lab_id in completed_labs if lab_id not in ('desafio-final', 'network'))
         
-        # Só mostra desafio final se completou TODOS os 6 labs
-        if non_final_completed >= 6:
+        # Só mostra desafio final se completou TODOS os 5 labs ativos
+        if non_final_completed >= 5:
             final_lab = load_lab('desafio-final')
             if final_lab:
                 labs.append({
@@ -132,20 +146,24 @@ def start_lab():
     data = request.json
     lab_id = data.get('lab_id')
     user_id = data.get('user_id', 'anonymous')
-    
+
+    # Bloquear network
+    if lab_id == 'network':
+        return jsonify({'error': 'Este lab está em desenvolvimento e será liberado em breve.'}), 403
+
     # Desafio Final Especial (sem container)
     if lab_id == 'desafio-final':
-        # Verifica se completou os 6 labs
+        # Verifica se completou os 5 labs ativos
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         c.execute('''SELECT COUNT(DISTINCT lab_id) FROM sessions 
                      WHERE user_id = ? AND completed_challenges = total_challenges 
-                     AND lab_id != "desafio-final"''', (user_id,))
+                     AND lab_id NOT IN ("desafio-final", "network")''', (user_id,))
         completed_labs = c.fetchone()[0]
         conn.close()
         
-        if completed_labs < 6:
-            return jsonify({'error': 'Complete todos os 6 labs primeiro'}), 403
+        if completed_labs < 5:
+            return jsonify({'error': 'Complete todos os 5 labs primeiro'}), 403
         
         session_id = str(uuid.uuid4())[:8]
         

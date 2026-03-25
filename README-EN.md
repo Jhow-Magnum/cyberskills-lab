@@ -13,7 +13,7 @@ Open-source cybersecurity training platform with isolated practical environments
 
 ## About
 
-CYBERSKILLS LAB is an educational platform for hands-on information security training. It offers 40 challenges across 6 categories, running in isolated Docker containers with an integrated web terminal.
+CYBERSKILLS LAB is an educational platform for hands-on information security training. It offers 37 challenges across 5 active categories, running in isolated Docker containers with an integrated web terminal.
 
 The official platform mascot is **PinguLinux** 🐧 — a penguin representing the project's essence: Linux, community and hands-on learning.
 
@@ -33,12 +33,12 @@ The official platform mascot is **PinguLinux** 🐧 — a penguin representing t
 | Linux Basics | 14 | 280 | 60 min | Beginner |
 | Cryptography | 8 | 190 | 60 min | Beginner |
 | Web Security | 3 | 150 | 90 min | Intermediate |
-| Network Analysis | 3 | 120 | 90 min | Intermediate |
+| Network Analysis | 3 | - | 90 min | 🚧 In Development |
 | Code Review | 6 | 150 | 75 min | Intermediate |
 | Penetration Testing | 5 | 200 | 120 min | Advanced |
 | **Final Challenge** | 1 | 100 | 30 min | Special |
 
-**Total: 40 challenges | 1,190 points**
+**Total: 37 active challenges | 1,070 points**
 
 ## Requirements
 

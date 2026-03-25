@@ -247,7 +247,7 @@
                 <div class="section">
                     <h3>O que você vai encontrar aqui</h3>
                     <ul>
-                        <li><span class="highlight">40 desafios práticos</span> em 6 categorias diferentes</li>
+                        <li><span class="highlight">37 desafios práticos</span> em 5 categorias ativas</li>
                         <li>Ambientes Docker isolados para cada lab</li>
                         <li>Terminal web integrado (sem precisar SSH externo)</li>
                         <li>Sistema de pontuação e ranking</li>
@@ -510,9 +510,10 @@
                     const progress = labProgress[l.id] || { completed: 0, total: l.challenges };
                     const percentage = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
                     const isFinal = l.id === 'desafio-final';
+                    const isLocked = l.locked === true;
                     
                     return `
-                        <div class="lab ${l.completed ? 'completed' : ''} ${isFinal ? 'final-challenge' : ''}" id="lab-${idx}">
+                        <div class="lab ${l.completed ? 'completed' : ''} ${isFinal ? 'final-challenge' : ''} ${isLocked ? 'locked' : ''}" id="lab-${idx}" style="${isLocked ? 'opacity:0.5;cursor:not-allowed;' : ''}">
                             <div class="lab-title">${l.name}</div>
                             <div class="lab-desc">${l.description}</div>
                             <div class="lab-desc">⏱️ ${l.duration} | 🎯 ${l.challenges} desafio${l.challenges > 1 ? 's' : ''}</div>
@@ -524,7 +525,10 @@
                                     ${progress.completed}/${progress.total} completados (${Math.round(percentage)}%)
                                 </div>
                             ` : ''}
-                            <button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">${l.completed ? 'Refazer' : 'Iniciar'}</button>
+                            ${isLocked 
+                                ? `<button class="btn" disabled style="opacity:0.4;cursor:not-allowed;">🚧 Em Desenvolvimento</button>`
+                                : `<button class="btn" id="btn-${idx}" onclick="start('${l.id}', ${idx}, '${l.name}')">${l.completed ? 'Refazer' : 'Iniciar'}</button>`
+                            }
                         </div>
                     `;
                 }).join('');
@@ -533,7 +537,7 @@
                 if (hasUnlockedFinal && !sessionStorage.getItem('final_unlocked_shown')) {
                     sessionStorage.setItem('final_unlocked_shown', 'true');
                     setTimeout(() => {
-                        alert('🏆 PARABÉNS!\n\nVocê completou todos os 6 laboratórios!\n\nO DESAFIO FINAL foi desbloqueado!\n\nComplete-o para conquistar o primeiro lugar no ranking!');
+                        alert('🏆 PARABÉNS!\n\nVocê completou todos os 5 laboratórios!\n\nO DESAFIO FINAL foi desbloqueado!\n\nComplete-o para conquistar o primeiro lugar no ranking!');
                     }, 500);
                 }
             });
