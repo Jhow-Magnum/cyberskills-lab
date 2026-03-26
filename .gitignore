@@ -35,8 +35,8 @@ wheels/
 *.sqlite3
 ctf_scores.db
 
-# Wordlists
-wordlist.txt
+# Wordlists (apenas na raiz — scenarios/pentest/wordlist.txt é necessário para o build)
+/wordlist.txt
 
 # Logs
 *.log
