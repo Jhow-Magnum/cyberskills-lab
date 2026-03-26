@@ -61,7 +61,7 @@ BUILD_START=$(date +%s)
 declare -A PIDS
 
 for lab_id in "${LABS[@]}"; do
-    docker build -t pingulinux/$lab_id scenarios/$lab_id/ \
+    docker build -t cyberskills-lab/$lab_id scenarios/$lab_id/ \
         > /tmp/build-$lab_id.log 2>&1 &
     PIDS[$lab_id]=$!
     echo "   🔄 $lab_id — iniciado (PID ${PIDS[$lab_id]})"
