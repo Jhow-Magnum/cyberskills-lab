@@ -546,27 +546,6 @@ def get_status(session_id):
         return jsonify({'error': 'Sessão não encontrada'}), 404
     return jsonify({'success': True, 'session': sessions[session_id]})
 
-@app.route('/api/create-challenge-user', methods=['POST'])
-def create_challenge_user():
-    """Cria o usuário desafio final Tryg_Gelt"""
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    
-    # Verifica se já existe
-    c.execute('SELECT user_id FROM users WHERE user_id = ?', ('Tryg_Gelt',))
-    if c.fetchone():
-        conn.close()
-        return jsonify({'exists': True})
-    
-    # Cria com pontuação quase completa (falta 1 desafio)
-    # Total de pontos: ~840 (soma de todos os labs)
-    # Tryg_Gelt terá: 820 pontos (falta 20 pontos)
-    c.execute('INSERT INTO users (user_id, username, total_score) VALUES (?, ?, ?)',
-              ('Tryg_Gelt', 'Tryg_Gelt', 820))
-    conn.commit()
-    conn.close()
-    return jsonify({'created': True, 'score': 820})
-
 @app.route('/api/scoreboard', methods=['GET'])
 def scoreboard():
     conn = sqlite3.connect(DB_FILE)

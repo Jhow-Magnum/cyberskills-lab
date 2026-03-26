@@ -453,9 +453,6 @@
                 } catch (error) {}
                 localStorage.removeItem('ctf_session_id');
             }
-            
-            // Cria usuário desafio final
-            await fetch('/api/create-challenge-user', {method: 'POST'});
         });
         
         // Ao fechar/recarregar página, tenta encerrar sessão (pode não funcionar sempre)

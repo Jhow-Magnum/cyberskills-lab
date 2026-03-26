@@ -35,6 +35,9 @@ wheels/
 *.sqlite3
 ctf_scores.db
 
+# Wordlists
+wordlist.txt
+
 # Logs
 *.log
 /tmp/
